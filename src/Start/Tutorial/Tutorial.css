@@ -1,0 +1,54 @@
+.tutorial {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .tutorial-header {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 40px 100px;
+  }
+  
+  .tutorial-title {
+    font-size: 33px;
+    font-weight: 700;
+    color: #000;
+  }
+  
+  .tutorial-btn {
+    background-color: #000;
+    color: #fff;
+    font-size: 22px;
+    border-radius: 5px;
+    padding: 9px 30px;
+    margin: 0 5px;
+  }
+  
+  .tutorial-main {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    margin-top: 50px;
+  }
+  
+  .tutorial-maintitle {
+    font-size: 50px;
+    font-weight: 600;
+    line-height: 120%;
+  }
+  
+  .tutorial-subtitle {
+    color: var(--gray);
+    font-size: 22px;
+    margin-top: 25px;
+  }
+  
+  .tutorial-img {
+    width: 55%;
+    margin-top: 30px;
+  }
