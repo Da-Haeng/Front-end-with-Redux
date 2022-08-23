@@ -1,5 +1,4 @@
 import { useRef, useState } from "react";
-// import CategoryContent from "./CategoryContent";
 import { useDispatch, useSelector } from "react-redux";
 import { categoryActions } from "../store/category-slice";
 import CategoryContent from "./CategoryContent";
@@ -20,11 +19,11 @@ const Category = (props) => {
   const categoryDataObject = categoryData.reduce((it) => it);
 
   const [Highlight, setHighlight] = useState(1);
-  const [memoId, setMemoId] = useState(1);
+  const [categoryId, setCategoryId] = useState(1);
 
   const onHighlight = (id) => {
     setHighlight(id);
-    setMemoId(id);
+    setCategoryId(id);
   };
 
   const addItemHandler = () => {
@@ -36,7 +35,6 @@ const Category = (props) => {
       })
     );
     dataId.current += 1;
-    console.log(mainItems);
   };
 
   return (
@@ -62,9 +60,11 @@ const Category = (props) => {
       </div>
       <div className="category_context">
         {categoryItems && (
-          <div key={memoId}>
-            <CategoryContent id={memoId} item={categoryDataObject} />
-          </div>
+          <CategoryContent
+            id={id}
+            categoryId={categoryId}
+            item={categoryDataObject}
+          />
         )}
       </div>
     </div>

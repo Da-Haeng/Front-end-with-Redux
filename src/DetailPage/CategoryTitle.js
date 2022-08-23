@@ -1,30 +1,29 @@
-import React, { useState } from "react";
+import { useState } from "react";
+import "./Detail.css";
 
 const CategoryTitle = (props) => {
-  const { id, title } = props.item;
-  const [Highlight, setHighlight] = useState(1);
-  const [memoId, setMemoId] = useState(1);
+  const { categoryId, categoryTitle } = props.item;
 
-  console.log(id);
+  const [memoId, setMemoId] = useState(1);
+  const [Highlight, setHighlight] = useState();
+
   const onHighlight = (id) => {
     setHighlight(id);
     setMemoId(id);
   };
-
-  const doubleClickHandler = () => {
-    console.log(memoId);
-  };
+  console.log(Highlight);
   return (
     <div>
       <span
-        id={id}
+        id={categoryId}
         className={
-          Highlight === id ? "category_title_highlight" : "category_title"
+          Highlight === categoryId
+            ? "category_title_highlight"
+            : "category_title"
         }
-        onClick={() => onHighlight(title)}
-        onDoubleClick={doubleClickHandler}
+        onClick={() => onHighlight(categoryId)}
       >
-        {title}
+        {categoryTitle}
       </span>
     </div>
   );

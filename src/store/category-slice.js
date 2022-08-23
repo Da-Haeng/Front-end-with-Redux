@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import produce from "immer";
+import { act } from "react-dom/test-utils";
 
 const categorySlice = createSlice({
   name: "category",
@@ -32,13 +33,13 @@ const categorySlice = createSlice({
             cell: [
               {
                 id: 1,
-                text: "협재로 가서 숙소 체크인!",
+                text: "안녕하세요",
                 type: "h2",
                 color: "black",
               },
               {
                 id: 2,
-                text: "일단 공항 근처에서 점심먹기 - 돼지국밥!",
+                text: "하이하이루",
                 type: "h2",
                 color: "black",
               },
@@ -94,20 +95,41 @@ const categorySlice = createSlice({
           cell: [],
         });
       });
-
-      // const newItem = action.payload;
-      // const existingItem = state.items.find(
-      //   (item) => item.mainId === newItem.id
-      // );
-      // existingItem.document.push({
-      //   categoryId: newItem.categoryId,
-      //   categoryTitle: newItem.categoryTitle,
-      // });
     },
-    removeItemToMain(state, action) {
-      const id = action.payload;
-      const existingItem = state.items.find((item) => item.id === id);
-      state.items = state.items.filter((item) => item.id !== id);
+    editItemToCategory(state, action) {
+      const newItem = action.payload;
+
+      const find = state.items.find(
+        (item) => parseInt(item.mainId) === parseInt(newItem.mainId)
+      );
+      const category = find.document.find(
+        (item) => parseInt(item.categoryId) === parseInt(newItem.categoryId)
+      );
+      const cell = category.cell.find(
+        (item) => parseInt(item.id) === parseInt(newItem.id)
+      );
+
+      cell.text = newItem.text;
+    },
+    addCellToCategory(state, action) {
+      const newItem = action.payload;
+
+      const find = state.items.find(
+        (item) => parseInt(item.mainId) === parseInt(newItem.mainId)
+      );
+      const category = find.document.find(
+        (item) => parseInt(item.categoryId) === parseInt(newItem.categoryId)
+      );
+      category.cell.push({ id: newItem.id, text: "입력해주세요" });
+    },
+    removeItemToCategory(state, action) {
+      const newItem = action.payload;
+      const find = state.items.find(
+        (item) => parseInt(item.mainId) === parseInt(newItem.mainId)
+      );
+      find.document = find.document.filter(
+        (item) => parseInt(item.categoryId) !== parseInt(newItem.categoryId)
+      );
     },
   },
 });

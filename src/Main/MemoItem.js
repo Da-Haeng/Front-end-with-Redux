@@ -40,8 +40,6 @@ const MemoItem = (props) => {
       })
     );
     event.stopPropagation();
-    console.log(title);
-    console.log(date);
   };
 
   const toggleEditHandler = (event) => {

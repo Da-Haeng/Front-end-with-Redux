@@ -1,10 +1,13 @@
 import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEllipsis } from "@fortawesome/free-solid-svg-icons";
-import "./Detail.css";
 import DetailSetting from "./DetailSetting";
+import { useNavigate } from "react-router-dom";
+import "./Detail.css";
 
 const DetailHeader = ({ title }) => {
+  const navigate = useNavigate();
+
   const [isSetting, setSetting] = useState(false);
   const onSetting = () => {
     setSetting(!isSetting);
@@ -12,7 +15,7 @@ const DetailHeader = ({ title }) => {
 
   return (
     <div className="DatailHeader">
-      <h2>{title}</h2>
+      <h2 onClick={() => navigate("/main")}>{title}</h2>
       <FontAwesomeIcon
         icon={faEllipsis}
         className="memo-setting"
