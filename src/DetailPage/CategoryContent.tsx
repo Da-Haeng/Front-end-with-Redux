@@ -26,7 +26,6 @@ const CategoryContent = (props: CategoryContentProps) => {
 
   const categoryCell = categoryContent?.cell;
 
-  console.log(CategoryCell);
   return (
     <div className="CategoryContent">
       <div className="CategoryCell">

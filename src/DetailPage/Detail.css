@@ -109,6 +109,7 @@
   display: flex;
   width: 70%;
   margin-left: 190px;
+  margin-top: 10px;
 }
 
 /* Detail Set Icon */
@@ -169,7 +170,21 @@
   padding: 0 10px;
 }
 
-.CategoryCell {
+.CategorySetSmall2 {
+  display: flex;
+  width: 70%;
+  padding: 10px 50px;
+  justify-content: flex-start;
+  margin-left: 190px;
+}
+
+.CategorySetSmall2 span {
+  font-size: 13px;
+  opacity: 0.7;
+  padding: 0 10px;
+}
+
+.Category {
   display: flex;
   width: 100%;
   flex-direction: column;
@@ -192,8 +207,13 @@
   padding: 10px 0;
 }
 
-.cellEllipsis {
+.cellEllipsis,
+.cellPlus {
   font-size: 15px;
   opacity: 0.5;
-  padding: 0 10px;
+  padding: 0 6px;
+}
+
+.cellEllipsis {
+  padding-right: 15px;
 }

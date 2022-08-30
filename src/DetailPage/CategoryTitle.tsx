@@ -19,13 +19,13 @@ const CategoryTitle = (props: CategoryTitleProps) => {
 
   const mainId = props.mainId;
 
-  const [Highlight, setHighlight] = useState(0);
-  const [categoryId, setCategoryId] = useState(0);
+  const [Highlight, setHighlight] = useState(categoryIndex.categoryId);
+  const [categoryId, setCategoryId] = useState(categoryIndex.categoryId);
 
-  useEffect(() => {
-    setHighlight(categoryIndex.categoryId);
-    setCategoryId(categoryIndex.categoryId);
-  }, [categoryData]);
+  // useEffect(() => {
+  //   setHighlight(categoryIndex.categoryId);
+  //   setCategoryId(categoryIndex.categoryId);
+  // }, [categoryData]);
 
   const onHighlight = (id: number) => {
     setHighlight(id);
@@ -85,6 +85,9 @@ const CategoryTitle = (props: CategoryTitleProps) => {
       <div className="CategorySetSmall">
         <span>제목 수정</span>
         <span onClick={deleteCategoryHandler}>페이지 삭제</span>
+      </div>
+      <div className="CategorySetSmall2">
+        <span>각 cell 수정 후 Enter를 눌러 저장해주세요</span>
       </div>
 
       <div className="category_context">

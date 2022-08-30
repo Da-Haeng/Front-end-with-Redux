@@ -1,7 +1,6 @@
 import { useDispatch } from "react-redux";
 import { useState, useEffect } from "react";
 import { mainActions, Memo } from "../store/main-slice";
-import { mainEditActions } from "../store/mainEdit-slice";
 import { faPencil, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useNavigate } from "react-router-dom";

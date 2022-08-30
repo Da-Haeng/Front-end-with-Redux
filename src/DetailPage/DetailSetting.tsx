@@ -27,9 +27,7 @@ const DetailSetting = () => {
         open={modalOpen}
         close={closeModal}
         header="'JEJU' 멤버 초대"
-      >
-        다행 웹입니다요
-      </SettingModal>
+      ></SettingModal>
     </div>
   );
 };
