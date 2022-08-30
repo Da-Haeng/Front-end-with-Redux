@@ -4,6 +4,7 @@ import mainEditSlice from "./mainEdit-slice";
 import categorySlice from "./category-slice";
 import todoListSlice from "./todoList-slice";
 import userSlice from "./user-slice";
+import thunkMiddleware from 'redux-thunk';
 
 const store = configureStore({
   reducer: {
@@ -13,7 +14,9 @@ const store = configureStore({
     todoList: todoListSlice.reducer,
     user: userSlice.reducer,
   },
+  middleware: [thunkMiddleware],
 });
 
 export default store;
 export type RootState = ReturnType<typeof store.getState>;
+
