@@ -6,7 +6,7 @@ import { faSignOut } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "./SideBar.css";
 import { useNavigate } from "react-router-dom";
-import SettingModal from "../../DetailPage/DetailSetting/SettingModal";
+import SettingModal from "./setModal";
 
 function SideBar() {
   const navigate = useNavigate();
@@ -19,7 +19,6 @@ function SideBar() {
   const closeModal = () => {
     setModalOpen(false);
   };
-
   return (
     <div className="sidebar">
       <div className="sidebar-profile">
@@ -45,11 +44,7 @@ function SideBar() {
       <div className="sidebar-btn-bottom">
         <FontAwesomeIcon icon={faSignOut} className="sidebar-btn faSignOut" />
       </div>
-      <SettingModal
-        open={modalOpen}
-        close={closeModal}
-        header="계정 설정"
-      ></SettingModal>
+      <SettingModal open={modalOpen} close={closeModal}/>
     </div>
   );
 }

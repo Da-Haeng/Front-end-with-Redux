@@ -1,0 +1,118 @@
+.setModal {
+  display: none;
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 99;
+  background-color: rgba(0, 0, 0, 0.6);
+}
+.setModal button {
+  outline: none;
+  cursor: pointer;
+  border: 0;
+}
+.setModal > section {
+  padding-left: 10px;
+  padding-right: 10px;
+  width: 90%;
+  max-width: 600px;
+  margin: 0 auto;
+  border-radius: 0.3rem;
+  /* 팝업이 열릴때 스르륵 열리는 효과 */
+  animation: modal-show 0.3s;
+  overflow: hidden;
+  background-color: white;
+}
+.setModal > section > header {
+  display: flex;
+  /* justify-content: center;
+      align-content: center; */
+  position: relative;
+  padding: 16px 64px 16px 16px;
+  font-weight: 400;
+  font-size: 17px;
+}
+.setModal > section > header button {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  width: 30px;
+  font-size: 21px;
+  font-weight: 700;
+  text-align: center;
+  background-color: transparent;
+}
+
+.setModal-div {
+  border-top: 1px solid rgb(184, 184, 184);
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  flex-direction: column;
+  padding: 20px 20px;
+}
+
+.setModal-span {
+  /* border: 1px solid rgba(0, 0, 0, 0.2); */
+  font-size: 18px;
+  margin-bottom: 30px;
+}
+.setModal-info {
+  margin-bottom: 20px;
+}
+.setModal-title {
+  font-size: 15px;
+  margin-bottom: 5px;
+}
+.setModal-input {
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  padding: 8px 10px;
+  border-radius: 10px;
+  font-size: 14px;
+  margin-top: 10px;
+  width: 60%;
+}
+.setModal-info button {
+  margin-left: 10px;
+  padding: 8px 10px;
+  border-radius: 10px;
+}
+.setModal-info .logout-btn {
+  margin-left: 10px;
+  padding: 8px 30px;
+  border-radius: 10px;
+  background-color: white;
+  color: rgb(255, 94, 94);
+  border: 1px solid rgb(255, 94, 94);
+}
+
+.setModal-span:focus {
+  outline: 1px solid rgba(0, 0, 0, 0.2);
+}
+
+.setModal.openModal {
+  display: flex;
+  align-items: center;
+  /* 팝업이 열릴때 스르륵 열리는 효과 */
+  animation: modal-bg-show 0.3s;
+}
+@keyframes setModal-show {
+  from {
+    opacity: 0;
+    margin-top: -50px;
+  }
+  to {
+    opacity: 1;
+    margin-top: 0;
+  }
+}
+@keyframes setModal-bg-show {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}

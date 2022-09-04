@@ -20,7 +20,7 @@ const initialState = {
 
 // const UsersInitialState: UsersState = [
 //     {
-//         email: "louisluzet@naver.com",
+//         email: "louis@naver.com",
 //         nickname: 'louis',
 //         password: 'hihijiho1234',
 //         id_token: false,
@@ -56,6 +56,16 @@ export const setUserAsync = createAsyncThunk(
     return response.data;
   }
 );
+
+// //회원 정보 조회
+// export const getUserInfoAsync = createAsyncThunk(
+//   "GET_USERINFO",
+//   async (user: {email: string}) => {
+//     const response = await axios.get("");
+//     return response.data;
+//   }
+// )
+
 
 const userSlice = createSlice({
   name: "user",
