@@ -1,23 +1,26 @@
-import { useDispatch, useSelector } from "react-redux";
-import { useState } from "react";
-import { mainActions } from "../store/main-slice";
-import { mainEditActions } from "../store/mainEdit-slice";
+import { useDispatch } from "react-redux";
+import { useState, useEffect } from "react";
+import { mainActions, Memo } from "../store/main-slice";
 import { faPencil, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useNavigate } from "react-router-dom";
 import "./Main.css";
 
-const MemoItem = (props) => {
+const MemoItem = (props: Memo) => {
   const dispatch = useDispatch();
-  const { id, title, description, date, color } = props.item;
+  const { id, title, description, date, color } = props;
 
   const [newTitle, setNewTitle] = useState(title);
   const [newDescription, setNewDescription] = useState(description);
   const [newColor, setNewColor] = useState(color);
   const [newDate, setNewDate] = useState(date);
 
-  const removeItemHandler = () => {
-    dispatch(mainActions.removeItemToMain(id));
+  useEffect(() => {}, [props]);
+
+  const removeItemHandler = (event: any) => {
+    dispatch(mainActions.removeItemToMain({ id: id }));
+    event.stopPropagation();
+    alert("삭제되었습니다.");
   };
 
   const navigate = useNavigate();
@@ -28,7 +31,7 @@ const MemoItem = (props) => {
   const [isEdit, setEdit] = useState(false);
   const [isColor, setColor] = useState(false);
 
-  const editHandler = (event) => {
+  const editHandler = (event: any) => {
     setEdit(!isEdit);
     dispatch(
       mainActions.editItemToMain({
@@ -42,12 +45,12 @@ const MemoItem = (props) => {
     event.stopPropagation();
   };
 
-  const toggleEditHandler = (event) => {
+  const toggleEditHandler = (event: any) => {
     setEdit(!isEdit);
     event.stopPropagation();
   };
 
-  const handleColor = (e, color) => {
+  const handleColor = (e: any, color: any) => {
     setNewColor(color);
     dispatch(
       mainActions.editItemToMain({
@@ -61,7 +64,7 @@ const MemoItem = (props) => {
     e.stopPropagation();
   };
 
-  const handleToggleColor = (e) => {
+  const handleToggleColor = (e: any) => {
     setColor(!isColor);
     e.stopPropagation();
   };

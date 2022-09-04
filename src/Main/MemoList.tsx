@@ -5,10 +5,11 @@ import "./Main.css";
 import { mainActions } from "../store/main-slice";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
+import { RootState } from "../store";
 
 const MemoList = () => {
   const dataId = useRef(4);
-  const mainItems = useSelector((state) => state.main.items);
+  const mainItems = useSelector((state: RootState) => state.main.items);
   const dispatch = useDispatch();
 
   const addItemHandler = () => {
@@ -30,13 +31,7 @@ const MemoList = () => {
         mainItems.map((item) => (
           <div key={item.id}>
             <MemoItem
-              item={{
-                id: item.id,
-                title: item.title,
-                date: item.date,
-                description: item.description,
-                color: item.color,
-              }}
+              {...item}
             />
           </div>
         ))}

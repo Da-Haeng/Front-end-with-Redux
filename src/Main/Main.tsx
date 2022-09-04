@@ -8,6 +8,7 @@ import TodoContainer from "./TodoList/TodoContainer";
 
 const Main = () => {
   const [addTodo, setAddTodo] = useState(false);
+  const [addCalender, setAddCalender] = useState(false);
   return (
     <div className="main">
       <SideBar />
@@ -24,8 +25,11 @@ const Main = () => {
         </div>
         {addTodo && <TodoContainer />}
         <div className="openTodo">
-          <FontAwesomeIcon icon={faCalendarDays} onClick={() => {}} />
+          <FontAwesomeIcon 
+          icon={faCalendarDays} 
+          onClick={() => setAddCalender(!addCalender)} />
         </div>
+        {/* {addCalender && <Calender />} */}
       </div>
     </div>
   );

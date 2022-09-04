@@ -10,7 +10,7 @@ function Tutorial() {
           DA:HAENG
         </Link>
         <div className="header-button">
-          <Link to="/start" className="tutorial-btn">
+          <Link to="/signup" className="tutorial-btn">
             시작하기
           </Link>
           <Link to="/login" className="tutorial-btn">

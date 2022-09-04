@@ -176,7 +176,12 @@
   font-size: 15px;
   font-weight: 400;
   opacity: 0.9;
-  width: 100%;
+  width: 90%;
+}
+
+.main-memointro {
+  word-wrap: break-word;
+  height: auto;
 }
 
 .main-memodate:focus,
@@ -213,6 +218,7 @@
   font-size: 17px;
   opacity: 0.4;
   cursor: pointer;
+  z-index: 10;
 }
 
 .trash-icon:hover {

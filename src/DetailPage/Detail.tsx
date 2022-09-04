@@ -5,12 +5,18 @@ import SideBar from "../CommonPage/SideBar/SideBar";
 import DetailHeader from "./DetailHeader";
 import Category from "./Category";
 import "./Detail.css";
+import { RootState } from "../store";
+import { Memo, MemosState } from "../store/main-slice";
 
 const Detail = () => {
   const { id } = useParams();
 
-  const mainItems = useSelector((state) => state.main.items);
-  const detailItems = mainItems.find((it) => parseInt(it.id) === parseInt(id));
+  const mainItems: MemosState = useSelector(
+    (state: RootState) => state.main.items
+  );
+  const detailItems: Memo = mainItems.find(
+    (it: Memo) => it.id === parseInt(id!)
+  )!;
 
   const navigate = useNavigate();
 
@@ -28,7 +34,7 @@ const Detail = () => {
           {mainItems && <span>{detailItems.date}</span>}
         </div>
         <div className="memo-category">
-          <Category id={id} />
+          <Category mainId={parseInt(id!)} />
         </div>
       </div>
     </div>

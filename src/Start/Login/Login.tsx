@@ -1,8 +1,38 @@
-import React from "react";
+import React, { ChangeEvent, useState } from "react";
 import "./Login.css";
 import { Link } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { setUserAsync } from "../../store/user-slice";
 
 const Login = () => {
+  const dispatch = useDispatch<any>();
+  const [login, setLogin] = useState({
+    email: "",
+    password: ""
+  });
+
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setLogin({...login, [name]: value});
+  }
+
+  const emailCheck = (email: string) => {
+    const reg = /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
+    return reg.test(email);
+  };
+
+  const handleSubmit = () => {
+    if (!login.email || !login.password) {
+      alert("로그인 정보를 입력해주세요");
+    } else {
+      if (!emailCheck(login.email)) {
+        alert("이메일 형식에 맞게 입력해세요!");
+        return false;
+    } else {
+      dispatch(setUserAsync(login));
+    }
+  }
+}
   return (
     <div className="tutorial">
       <div className="tutorial-header">
@@ -37,10 +67,16 @@ const Login = () => {
             <input
               className="inputBox"
               placeholder="이메일을 입력하세요"
+              value={login.email}
+              name="email"
+              onChange={handleChange}
             ></input>
             <input
               className="inputBox"
               placeholder="비밀번호를 입력하세요"
+              value={login.password}
+              name="password"
+              onChange={handleChange}
             ></input>
             <a style={{ color: "grey" }}>비밀번호 찾기</a>
             <button className="loginBtn">로그인 하기</button>
@@ -49,5 +85,5 @@ const Login = () => {
       </div>
     </div>
   );
-};
+}
 export default Login;
