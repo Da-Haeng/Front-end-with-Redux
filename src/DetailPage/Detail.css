@@ -158,10 +158,16 @@
 
 .CategorySetSmall {
   display: flex;
+<<<<<<< HEAD
+  width: 100%;
+  padding: 10px 5px;
+  justify-content: flex-end;
+=======
   width: 70%;
   padding: 10px 5px;
   justify-content: flex-end;
   margin-left: 190px;
+>>>>>>> a3c0b06c77158f6883f773f4da3cf0f18f9f2acf
 }
 
 .CategorySetSmall span {
@@ -170,6 +176,15 @@
   padding: 0 10px;
 }
 
+<<<<<<< HEAD
+.CategoryCell {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  padding: 40px 0;
+}
+
+=======
 .CategorySetSmall2 {
   display: flex;
   width: 70%;
@@ -191,6 +206,7 @@
   padding: 40px 0;
 }
 
+>>>>>>> a3c0b06c77158f6883f773f4da3cf0f18f9f2acf
 .CategoryCell input {
   border: none;
   width: 90%;
@@ -207,6 +223,12 @@
   padding: 10px 0;
 }
 
+<<<<<<< HEAD
+.cellEllipsis {
+  font-size: 15px;
+  opacity: 0.5;
+  padding: 0 10px;
+=======
 .cellEllipsis,
 .cellPlus {
   font-size: 15px;
@@ -216,4 +238,5 @@
 
 .cellEllipsis {
   padding-right: 15px;
+>>>>>>> a3c0b06c77158f6883f773f4da3cf0f18f9f2acf
 }
