@@ -7,7 +7,7 @@
   align-items: center;
   background-color: hsl(0, 0%, 98%);
   padding: 40px 0;
-  position: fixed;
+  position: absolute;
 }
 
 .sidebar-profile {

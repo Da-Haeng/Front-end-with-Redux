@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useMemo } from "react";
 import { Document } from "../store/category-slice";
 import { useDispatch, useSelector } from "react-redux";
 import { categoryActions, MemoDataState } from "../store/category-slice";
@@ -11,21 +11,26 @@ type CategoryTitleProps = {
 };
 
 const CategoryTitle = (props: CategoryTitleProps) => {
+  const mainItems: MemoDataState = useSelector(
+    (state: RootState) => state.category.items
+  );
+
   const dispatch = useDispatch();
-  const dataId = useRef(4);
 
   const categoryData = props.item;
   const categoryIndex = categoryData[0];
 
   const mainId = props.mainId;
 
+  const categoryItems = mainItems.filter((it) => it.mainId === mainId);
+  const categoryItem = categoryItems.map((it) => it.document);
+  const categoryDataObject = categoryItem.reduce((it) => it);
+  const categoryLength = categoryDataObject.length + 1;
+
+  const dataId = useRef(categoryLength);
+
   const [Highlight, setHighlight] = useState(categoryIndex.categoryId);
   const [categoryId, setCategoryId] = useState(categoryIndex.categoryId);
-
-  // useEffect(() => {
-  //   setHighlight(categoryIndex.categoryId);
-  //   setCategoryId(categoryIndex.categoryId);
-  // }, [categoryData]);
 
   const onHighlight = (id: number) => {
     setHighlight(id);
@@ -40,14 +45,7 @@ const CategoryTitle = (props: CategoryTitleProps) => {
         mainId: mainId,
       })
     );
-    dispatch(
-      categoryActions.addCellToCategory({
-        id: 1,
-        categoryId: dataId.current,
-        mainId: mainId,
-        text: "입력해주세요",
-      })
-    );
+
     dataId.current += 1;
   };
 
@@ -58,6 +56,8 @@ const CategoryTitle = (props: CategoryTitleProps) => {
         mainId: mainId,
       })
     );
+    setHighlight(categoryIndex.categoryId);
+    setCategoryId(categoryIndex.categoryId);
   };
 
   return (
@@ -103,4 +103,4 @@ const CategoryTitle = (props: CategoryTitleProps) => {
   );
 };
 
-export default CategoryTitle;
+export default React.memo(CategoryTitle);

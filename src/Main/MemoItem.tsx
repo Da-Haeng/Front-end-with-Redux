@@ -17,8 +17,10 @@ const MemoItem = (props: Memo) => {
 
   useEffect(() => {}, [props]);
 
-  const removeItemHandler = () => {
+  const removeItemHandler = (event: any) => {
     dispatch(mainActions.removeItemToMain({ id: id }));
+    event.stopPropagation();
+    alert("삭제되었습니다.");
   };
 
   const navigate = useNavigate();

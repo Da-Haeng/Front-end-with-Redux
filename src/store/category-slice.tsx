@@ -31,13 +31,13 @@ const MemoDataInitialState: MemoDataState = [
         cell: [
           {
             id: 1,
-            text: "입력해주세요",
+            text: "협재탕수육",
             type: "h2",
             color: "black",
           },
           {
             id: 2,
-            text: "입력해주세요",
+            text: "제주도흑돼지",
             type: "h2",
             color: "black",
           },
@@ -102,8 +102,42 @@ const MemoDataInitialState: MemoDataState = [
           },
         ],
       },
-      { categoryId: 2, categoryTitle: "DAY2 두번째", cell: [] },
-      { categoryId: 3, categoryTitle: "DAY3 두번째", cell: [] },
+      {
+        categoryId: 2,
+        categoryTitle: "DAY2 두번째",
+        cell: [
+          {
+            id: 1,
+            text: "후하2!",
+            type: "h2",
+            color: "black",
+          },
+          {
+            id: 2,
+            text: "음하하2!",
+            type: "h2",
+            color: "black",
+          },
+        ],
+      },
+      {
+        categoryId: 3,
+        categoryTitle: "DAY3 두번째",
+        cell: [
+          {
+            id: 1,
+            text: "후하3!",
+            type: "h2",
+            color: "black",
+          },
+          {
+            id: 2,
+            text: "음하하3!",
+            type: "h2",
+            color: "black",
+          },
+        ],
+      },
     ],
   },
   {
@@ -148,7 +182,14 @@ const categorySlice = createSlice({
           find.document.push({
             categoryId: newItem.categoryId,
             categoryTitle: newItem.categoryTitle,
-            cell: [],
+            cell: [
+              {
+                id: 1,
+                text: "입력해주세요",
+                type: "h2",
+                color: "black",
+              },
+            ],
           });
         }
       });
@@ -158,6 +199,7 @@ const categorySlice = createSlice({
       {
         payload,
       }: PayloadAction<{
+        index: any;
         id: number;
         categoryId: number;
         mainId: number;
@@ -166,18 +208,20 @@ const categorySlice = createSlice({
     ) => {
       return produce(state, (draft) => {
         const newItem = payload;
-
+        console.log(newItem.index);
         const find = draft.items.find((item) => item.mainId === newItem.mainId);
         const category = find?.document.find(
           (item) => item.categoryId === newItem.categoryId
         );
+
         if (category) {
-          category.cell.push({
-            id: 3,
+          category.cell.splice(newItem.index + 1, 0, {
+            id: newItem.id,
             text: newItem.text,
             type: "h2",
             color: "black",
           });
+          console.log("A");
         }
       });
     },

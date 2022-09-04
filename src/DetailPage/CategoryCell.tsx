@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect, useCallback } from "react";
+import React, { useState, useRef, useEffect, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { categoryActions, MemoDataState } from "../store/category-slice";
 import { faEllipsis } from "@fortawesome/free-solid-svg-icons";
@@ -29,7 +29,17 @@ const CategoryCell = (props: CategoryCellProps) => {
   const [cellType, setCellType] = useState("");
   const [cellColor, setCellColor] = useState("");
 
-  useEffect(() => {
+  const categoryItems = mainItems.filter((it) => it.mainId === mainId);
+
+  const categoryData = categoryItems.map((it) => it.document);
+  const categoryDataObject = categoryData.reduce((it) => it);
+  const categoryContent = categoryDataObject.find(
+    (it) => it.categoryId === categoryId
+  );
+  const cell = categoryContent?.cell;
+  const cellLength = cell!.length;
+
+  useMemo(() => {
     if (props) {
       setCellText(text);
       setCellId(id);
@@ -72,9 +82,12 @@ const CategoryCell = (props: CategoryCellProps) => {
   };
 
   const addCellHandler = () => {
+    const index = cell?.findIndex((it) => it.id === cellId);
+
     dispatch(
       categoryActions.addCellToCategory({
-        id: 3,
+        index: index,
+        id: cellLength + 1,
         categoryId: categoryId,
         mainId: mainId,
         text: "입력해주세요",
