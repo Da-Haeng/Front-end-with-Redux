@@ -8,13 +8,13 @@
   display: flex;
   width: 70%;
   height: 100%;
-  margin-left: 180px;
+  margin-left: 160px;
   flex-direction: column;
-  padding: 60px 100px;
+  padding: 60px;
 }
 
 .main-title {
-  font-size: 33px;
+  font-size: 24px;
   font-weight: 800;
 }
 
@@ -28,18 +28,18 @@
 
 .main-memo {
   display: flex;
-  width: 340px;
-  height: 200px;
-  padding: 25px 22px;
+  width: 272px;
+  height: 160px;
+  padding: 20px 18px;
   justify-content: center;
   align-items: center;
   flex-direction: column;
   background-color: #f3f3f3;
-  border-radius: 14px;
+  border-radius: 12px;
   padding-bottom: 20px;
   cursor: pointer;
   margin-bottom: 30px;
-  margin-right: 40px;
+  margin-right: 35px;
 }
 
 .main-memotitle {
@@ -48,7 +48,7 @@
   width: 100%;
   justify-content: space-between;
   align-items: center;
-  padding-bottom: 10px;
+  padding-bottom: 7px;
   border-bottom: 1px solid rgba(0, 0, 0, 0.2);
   margin-bottom: 10px;
 }
@@ -64,7 +64,7 @@
 
 .main-memotitle_input {
   width: 100%;
-  font-size: 17px;
+  font-size: 14px;
   font-weight: 700;
   margin-right: 8px;
   background-color: transparent;
@@ -72,9 +72,14 @@
 }
 
 .pencil-icon {
-  font-size: 19px;
+  font-size: 15px;
   opacity: 0.5;
   cursor: pointer;
+}
+
+.pencil-icon:hover {
+  color: blue;
+  font-size: 16px;
 }
 
 .pencil-icon-true {
@@ -83,8 +88,9 @@
 }
 
 .main-memotitle-right {
-  width: 16px;
-  height: 16px;
+  width: 14px;
+  height: 14px;
+  margin-left: 6px;
   margin-right: 10px;
   border-radius: 50%;
   background-color: #c5c5c5;
@@ -113,8 +119,8 @@
 
 .main-memotitle-colorwidget {
   display: flex;
-  width: 80px;
-  height: 80px;
+  width: 70px;
+  height: 70px;
   padding: 10px;
   border-radius: 50px;
   position: absolute;
@@ -127,35 +133,35 @@
 .main-memotitle-color-2,
 .main-memotitle-color-3,
 .main-memotitle-color-4 {
-  width: 17px;
-  height: 17px;
+  width: 14px;
+  height: 14px;
   border-radius: 50%;
 }
 
 .main-memotitle-color-1 {
   background-color: #e48c8c;
   position: absolute;
-  bottom: 30px;
+  bottom: 28px;
 }
 
 .main-memotitle-color-2 {
   background-color: #a298dc;
   position: absolute;
-  right: 30.5px;
+  right: 28px;
 }
 
 .main-memotitle-color-3 {
   background-color: #ffee8e;
   position: absolute;
-  bottom: 30px;
-  right: 8px;
+  bottom: 28px;
+  right: 10px;
 }
 
 .main-memotitle-color-4 {
   background-color: #a7bfe2;
   position: absolute;
   bottom: 9px;
-  right: 30.5px;
+  right: 28px;
 }
 
 .main-memocontext {
@@ -173,7 +179,7 @@
   margin-bottom: 3px;
   background-color: transparent;
   border: none;
-  font-size: 15px;
+  font-size: 12px;
   font-weight: 400;
   opacity: 0.9;
   width: 90%;
@@ -215,14 +221,14 @@
 }
 
 .trash-icon {
-  font-size: 17px;
+  font-size: 14px;
   opacity: 0.4;
   cursor: pointer;
   z-index: 10;
 }
 
 .trash-icon:hover {
-  font-size: 15px;
+  font-size: 14px;
   opacity: 0.5;
   color: rgb(255, 0, 0);
 }
@@ -253,7 +259,9 @@
   } */
 
 /* right side with todolist and calender */
-
+.RightSide {
+  padding-top: 30px;
+}
 .main .right_col {
   display: flex;
   width: 20%;
@@ -267,11 +275,12 @@
 }
 
 .RightSide .openTodo {
-  justify-content: end;
-  background: #ff5c00;
+  display: flex;
+  justify-content: center;
+  background: #ff7e34;
   cursor: pointer;
-  width: 50px;
-  height: 50px;
+  width: 40px;
+  height: 40px;
   align-items: center;
   text-align: center;
   transform: translate(-50%, 50%);
@@ -281,4 +290,8 @@
   outline: none;
   font-size: 30px;
   margin-bottom: 10px;
+}
+
+.todoicon {
+  font-size: 20px;
 }

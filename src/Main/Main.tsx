@@ -1,4 +1,7 @@
-import { faCalendarDays, faClipboardList } from "@fortawesome/free-solid-svg-icons";
+import {
+  faCalendarDays,
+  faClipboardList,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
 import SideBar from "../CommonPage/SideBar/SideBar";
@@ -21,13 +24,16 @@ const Main = () => {
           <FontAwesomeIcon
             icon={faClipboardList}
             onClick={() => setAddTodo(!addTodo)}
+            className="todoicon"
           />
         </div>
         {addTodo && <TodoContainer />}
         <div className="openTodo">
-          <FontAwesomeIcon 
-          icon={faCalendarDays} 
-          onClick={() => setAddCalender(!addCalender)} />
+          <FontAwesomeIcon
+            icon={faCalendarDays}
+            className="todoicon"
+            onClick={() => setAddCalender(!addCalender)}
+          />
         </div>
         {/* {addCalender && <Calender />} */}
       </div>

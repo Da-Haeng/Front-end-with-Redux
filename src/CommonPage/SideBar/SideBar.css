@@ -1,6 +1,6 @@
 .sidebar {
   display: flex;
-  width: 180px;
+  width: 140px;
   min-height: 100vh;
   flex-direction: column;
   justify-content: space-between;
@@ -18,18 +18,18 @@
 }
 
 .profile-name {
-  font-size: 30px;
+  font-size: 24px;
   color: #fff;
   background-color: #ff5c00;
   border-radius: 50%;
-  width: 60px;
-  height: 60px;
+  width: 50px;
+  height: 50px;
   text-align: center;
-  line-height: 58px;
+  line-height: 50px;
 }
 
 .profile-info {
-  font-size: 20px;
+  font-size: 16px;
   font-weight: 400;
 }
 
@@ -46,10 +46,10 @@
 
 .sidebar-btn {
   background-color: #e6e6e6;
-  font-size: 28px;
-  padding: 11px;
+  font-size: 22px;
+  padding: 10px;
   border-radius: 12px;
-  margin: 15px 0;
+  margin: 13px 0;
   opacity: 0.7;
   cursor: pointer;
 }
@@ -57,5 +57,5 @@
 .faCog,
 .faBell,
 .faSignOut {
-  width: 31px;
+  width: 24px;
 }

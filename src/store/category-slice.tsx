@@ -33,27 +33,43 @@ const MemoDataInitialState: MemoDataState = [
         cell: [
           {
             id: 1,
-            text: "협재탕수육",
+            text: "아침",
             type: "h1",
-            color: "pink",
-            bgcolor: "yellow_bg",
+            color: "black",
+            bgcolor: "basicbg",
             font: "bold",
           },
           {
             id: 2,
-            text: "제주도흑돼지",
-            type: "h2",
-            color: "green",
-            bgcolor: "yellow_bg",
-            font: "bold",
-          },
-          {
-            id: 2,
-            text: "랜더스도넛",
+            text: "모닝 조깅 후 조식 먹기╰(*°▽°*)",
             type: "h3",
-            color: "blue",
+            color: "black",
+            bgcolor: "purple_bg",
+            font: "basic",
+          },
+          {
+            id: 3,
+            text: "먹은 다음에 바로 커피 마시러 호텔 앞 카페로~╯",
+            type: "h3",
+            color: "black",
             bgcolor: "yellow_bg",
-            font: "bold",
+            font: "basic",
+          },
+          {
+            id: 4,
+            text: "",
+            type: "h3",
+            color: "black",
+            bgcolor: "basicbg",
+            font: "basic",
+          },
+          {
+            id: 5,
+            text: "해녀라면 꿀떡",
+            type: "h3",
+            color: "black",
+            bgcolor: "basicbg",
+            font: "basic",
           },
         ],
       },
@@ -66,7 +82,7 @@ const MemoDataInitialState: MemoDataState = [
             text: "하이!",
             type: "h2",
             color: "black",
-            bgcolor: "yellow_bg",
+            bgcolor: "basicbg",
             font: "bold",
           },
           {
@@ -74,7 +90,7 @@ const MemoDataInitialState: MemoDataState = [
             text: "방가",
             type: "h1",
             color: "black",
-            bgcolor: "yellow_bg",
+            bgcolor: "green_bg",
             font: "bold",
           },
         ],
@@ -222,7 +238,7 @@ const categorySlice = createSlice({
                 text: "입력해주세요",
                 type: "h3",
                 color: "black",
-                bgcolor: "",
+                bgcolor: "basicbg",
                 font: "basic",
               },
             ],
@@ -255,7 +271,7 @@ const categorySlice = createSlice({
             text: newItem.text,
             type: "h3",
             color: "black",
-            bgcolor: "",
+            bgcolor: "basicbg",
             font: "basic",
           });
         }
@@ -280,17 +296,9 @@ const categorySlice = createSlice({
           (item) => item.categoryId === newItem.categoryId
         );
 
-        if (newItem.text.length >= 1) {
-          const cell = category?.cell.find((item) => item.id === newItem.id);
-          if (cell) {
-            cell.text = newItem.text;
-          }
-        } else {
-          if (category) {
-            category.cell = category?.cell.filter(
-              (item) => item.id !== newItem.id
-            );
-          }
+        const cell = category?.cell.find((item) => item.id === newItem.id);
+        if (cell) {
+          cell.text = newItem.text;
         }
       });
     },
@@ -339,6 +347,30 @@ const categorySlice = createSlice({
         const cell = category?.cell.find((item) => item.id === newItem.id);
         if (cell) {
           cell.color = newItem.style;
+        }
+      });
+    },
+    StyleBgColorToCategory: (
+      state,
+      {
+        payload,
+      }: PayloadAction<{
+        id: number;
+        style: string;
+        categoryId: number;
+        mainId: number;
+      }>
+    ) => {
+      return produce(state, (draft) => {
+        const newItem = payload;
+
+        const find = draft.items.find((item) => item.mainId === newItem.mainId);
+        const category = find?.document.find(
+          (item) => item.categoryId === newItem.categoryId
+        );
+        const cell = category?.cell.find((item) => item.id === newItem.id);
+        if (cell) {
+          cell.bgcolor = newItem.style;
         }
       });
     },

@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { categoryActions, MemoDataState } from "../store/category-slice";
-import { faEllipsis } from "@fortawesome/free-solid-svg-icons";
+import { faEllipsis, fas } from "@fortawesome/free-solid-svg-icons";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Cell } from "../store/category-slice";
@@ -45,6 +45,9 @@ const CategoryCell = (props: CategoryCellProps) => {
 
   const [textStyle, setTextStyle] = useState(false);
   const [textColor, setTextColor] = useState(false);
+  const [bgColor, setBgColor] = useState(false);
+
+  const [spanToInput, setSpanToInput] = useState(false);
 
   useMemo(() => {
     if (props) {
@@ -61,11 +64,19 @@ const CategoryCell = (props: CategoryCellProps) => {
   const TextStyletHandler = () => {
     setTextStyle(!textStyle);
     setTextColor(false);
+    setBgColor(false);
   };
 
   const TextColorHandler = () => {
     setTextColor(!textColor);
     setTextStyle(false);
+    setBgColor(false);
+  };
+
+  const BgColorHandler = () => {
+    setTextColor(false);
+    setTextStyle(false);
+    setBgColor(!bgColor);
   };
 
   const onKeyPress = (e: any) => {
@@ -80,6 +91,7 @@ const CategoryCell = (props: CategoryCellProps) => {
       );
       alert("저장되었습니다");
     }
+    setSpanToInput(false);
   };
 
   const addCellHandler = () => {
@@ -116,7 +128,7 @@ const CategoryCell = (props: CategoryCellProps) => {
         mainId: mainId,
       })
     );
-    setCellEffect(true);
+    setCellEffect(false);
     e.preventDefault();
   };
 
@@ -130,7 +142,21 @@ const CategoryCell = (props: CategoryCellProps) => {
         mainId: mainId,
       })
     );
-    setCellEffect(true);
+    setCellEffect(false);
+    e.preventDefault();
+  };
+
+  const styleBgColorHandler = (e: any) => {
+    setCellBgColor(e);
+    dispatch(
+      categoryActions.StyleBgColorToCategory({
+        id: cellId,
+        style: cellBgColor,
+        categoryId: categoryId,
+        mainId: mainId,
+      })
+    );
+    setCellEffect(false);
     e.preventDefault();
   };
 
@@ -172,8 +198,12 @@ const CategoryCell = (props: CategoryCellProps) => {
         mainId: mainId,
       })
     );
-    setCellEffect(true);
+    setCellEffect(false);
     e.preventDefault();
+  };
+
+  const spanToInputHandler = () => {
+    setSpanToInput(true);
   };
 
   return (
@@ -278,6 +308,53 @@ const CategoryCell = (props: CategoryCellProps) => {
                 </span>
               </div>
             )}
+            <span onClick={BgColorHandler}>Bg Color</span>
+            {bgColor && (
+              <div className="bgcolor">
+                <span
+                  className="colorSpan"
+                  onClick={() => styleBgColorHandler("red_bg")}
+                >
+                  <span className="colorA colorA_red">Bg</span>빨간색
+                </span>
+                <span
+                  className="colorSpan"
+                  onClick={() => styleBgColorHandler("yellow_bg")}
+                >
+                  <span className="colorA colorA_yellow">Bg</span>노란색
+                </span>
+                <span
+                  className="colorSpan"
+                  onClick={() => styleBgColorHandler("orange_bg")}
+                >
+                  <span className="colorA colorA_orange">Bg</span>주황색
+                </span>
+                <span
+                  className="colorSpan"
+                  onClick={() => styleBgColorHandler("green_bg")}
+                >
+                  <span className="colorA colorA_green">Bg</span>초록색
+                </span>
+                <span
+                  className="colorSpan"
+                  onClick={() => styleBgColorHandler("blue_bg")}
+                >
+                  <span className="colorA colorA_blue">Bg</span>파란색
+                </span>
+                <span
+                  className="colorSpan"
+                  onClick={() => styleBgColorHandler("purple_bg")}
+                >
+                  <span className="colorA colorA_purple">Bg</span>보라색
+                </span>
+                <span
+                  className="colorSpan"
+                  onClick={() => styleBgColorHandler("pink_bg")}
+                >
+                  <span className="colorA colorA_pink">Bg</span>분홍색
+                </span>
+              </div>
+            )}
           </div>
         )}
         <FontAwesomeIcon
@@ -286,15 +363,25 @@ const CategoryCell = (props: CategoryCellProps) => {
           className="cellEllipsis"
         />
 
-        <input
-          id={String(cellId)}
-          value={cellText}
-          onKeyPress={onKeyPress}
-          onChange={(e) => {
-            setCellText(e.target.value);
-          }}
-          className={`${cellType} ${cellColor} ${cellFont}`}
-        ></input>
+        {spanToInput ? (
+          <input
+            id={String(cellId)}
+            value={cellText}
+            onKeyPress={onKeyPress}
+            onChange={(e) => {
+              setCellText(e.target.value);
+            }}
+            placeholder={"입력해주세요"}
+            className={`${cellType} ${cellColor} ${cellFont} spantoinput`}
+          ></input>
+        ) : (
+          <span
+            onClick={spanToInputHandler}
+            className={`${cellType} ${cellColor} ${cellFont} ${cellBgColor} spantoinput`}
+          >
+            {cellText}
+          </span>
+        )}
       </div>
     </>
   );

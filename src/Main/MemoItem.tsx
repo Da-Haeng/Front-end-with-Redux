@@ -61,6 +61,7 @@ const MemoItem = (props: Memo) => {
         date: newDate,
       })
     );
+    setColor(!isColor);
     e.stopPropagation();
   };
 
