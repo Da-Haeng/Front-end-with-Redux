@@ -217,3 +217,122 @@
 .cellEllipsis {
   padding-right: 15px;
 }
+
+/* cell css */
+
+.cellEffect {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  background-color: #fff;
+  left: 120px;
+  font-size: 15px;
+  border: 0.1px solid rgb(0, 0, 0, 0.1);
+  border-radius: 5px;
+}
+
+.cellEffect span {
+  padding: 5px 15px;
+  border-radius: 3px;
+  border-bottom: 0.1px solid rgb(0, 0, 0, 0.1);
+}
+
+.textstyle {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  background-color: #fff;
+  left: -123px;
+  bottom: 32px;
+  border: 0.1px solid rgb(0, 0, 0, 0.1);
+  border-radius: 5px;
+  padding: 0 3px;
+}
+.textstyle span {
+  padding: 4px 9px;
+}
+
+.textcolor {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  left: -105px;
+  border: 0.1px solid rgb(0, 0, 0, 0.1);
+  border-radius: 5px;
+  padding: 0 5px;
+}
+
+.colorA {
+  padding: 5px 8px !important;
+  padding-left: 0 !important;
+  border-bottom: 0 !important;
+}
+
+.h1 {
+  font-size: 25px;
+}
+.h2 {
+  font-size: 19px;
+}
+.h3 {
+  font-size: 16px;
+}
+.black,
+.colorA_black {
+  color: black;
+}
+.red,
+.colorA_red {
+  color: #ea5e76;
+}
+.blue,
+.colorA_blue {
+  color: #90a7b2;
+}
+.green,
+.colorA_green {
+  color: #7cbfb6;
+}
+.purple,
+.colorA_purple {
+  color: #906fa8;
+}
+.orange,
+.colorA_orange {
+  color: #fcbfb6;
+}
+.yellow,
+.colorA_yellow {
+  color: #f9d877;
+}
+.pink,
+.colorA_pink {
+  color: #f092a5;
+}
+.yellow_bg {
+  background-color: #f9d877;
+}
+.bold,
+.style_bold {
+  font-weight: bold;
+}
+.underline,
+.style_underline {
+  text-decoration: underline;
+}
+.linethrough,
+.style_linethrough {
+  text-decoration: line-through;
+}
+.italic,
+.style_italic {
+  font-style: italic;
+}
+.basic {
+  font-style: normal;
+}

@@ -5,9 +5,16 @@ import {
   emailCertificationAsync,
   User,
 } from "../../store/user-slice";
-import { useDispatch } from "react-redux";
-import { ChangeEvent, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { ChangeEvent, useEffect, useMemo, useState } from "react";
+
 const SignUp = () => {
+  const mainItems = useSelector((state: any) => state.user);
+
+  useEffect(() => {
+    setData(mainItems.checknum);
+  }, [mainItems]);
+
   const [user, setUser] = useState<User>({
     email: "",
     password: "",
@@ -33,7 +40,8 @@ const SignUp = () => {
     setPasswordCheck(e.target.value);
   };
   const emailCheck = (email: string) => {
-    const reg = /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
+    const reg =
+      /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
     return reg.test(email);
   };
 
@@ -46,8 +54,7 @@ const SignUp = () => {
         alert("이메일 형식에 맞게 입력해세요!");
         return false;
       } else {
-        let data = dispatch(emailCertificationAsync(user.email));
-        setData(data);
+        dispatch(emailCertificationAsync(user.email));
       }
     }
   };

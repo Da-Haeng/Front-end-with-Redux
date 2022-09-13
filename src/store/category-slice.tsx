@@ -6,6 +6,8 @@ export type Cell = {
   text: string;
   type: string;
   color: string;
+  bgcolor: string;
+  font: string;
 };
 
 export type Document = {
@@ -32,14 +34,26 @@ const MemoDataInitialState: MemoDataState = [
           {
             id: 1,
             text: "협재탕수육",
-            type: "h2",
-            color: "black",
+            type: "h1",
+            color: "pink",
+            bgcolor: "yellow_bg",
+            font: "bold",
           },
           {
             id: 2,
             text: "제주도흑돼지",
             type: "h2",
-            color: "black",
+            color: "green",
+            bgcolor: "yellow_bg",
+            font: "bold",
+          },
+          {
+            id: 2,
+            text: "랜더스도넛",
+            type: "h3",
+            color: "blue",
+            bgcolor: "yellow_bg",
+            font: "bold",
           },
         ],
       },
@@ -52,12 +66,16 @@ const MemoDataInitialState: MemoDataState = [
             text: "하이!",
             type: "h2",
             color: "black",
+            bgcolor: "yellow_bg",
+            font: "bold",
           },
           {
             id: 2,
             text: "방가",
-            type: "h2",
+            type: "h1",
             color: "black",
+            bgcolor: "yellow_bg",
+            font: "bold",
           },
         ],
       },
@@ -70,12 +88,16 @@ const MemoDataInitialState: MemoDataState = [
             text: "안녕하세요3!",
             type: "h2",
             color: "black",
+            bgcolor: "yellow_bg",
+            font: "bold",
           },
           {
             id: 2,
             text: "방가3",
-            type: "h2",
+            type: "h3",
             color: "black",
+            bgcolor: "yellow_bg",
+            font: "basic",
           },
         ],
       },
@@ -93,12 +115,16 @@ const MemoDataInitialState: MemoDataState = [
             text: "협재로 가서 숙소 체크인22!",
             type: "h2",
             color: "black",
+            bgcolor: "yellow_bg",
+            font: "basic",
           },
           {
             id: 2,
             text: "일단 공항 근처에서 점심먹기22 - 돼지국밥!",
             type: "h2",
             color: "black",
+            bgcolor: "yellow_bg",
+            font: "basic",
           },
         ],
       },
@@ -111,12 +137,16 @@ const MemoDataInitialState: MemoDataState = [
             text: "후하2!",
             type: "h2",
             color: "black",
+            bgcolor: "yellow_bg",
+            font: "italic",
           },
           {
             id: 2,
             text: "음하하2!",
             type: "h2",
             color: "black",
+            bgcolor: "yellow_bg",
+            font: "italic",
           },
         ],
       },
@@ -129,12 +159,16 @@ const MemoDataInitialState: MemoDataState = [
             text: "후하3!",
             type: "h2",
             color: "black",
+            bgcolor: "yellow_bg",
+            font: "bold",
           },
           {
             id: 2,
             text: "음하하3!",
             type: "h2",
             color: "black",
+            bgcolor: "yellow_bg",
+            font: "bold",
           },
         ],
       },
@@ -186,8 +220,10 @@ const categorySlice = createSlice({
               {
                 id: 1,
                 text: "입력해주세요",
-                type: "h2",
+                type: "h3",
                 color: "black",
+                bgcolor: "",
+                font: "basic",
               },
             ],
           });
@@ -208,7 +244,6 @@ const categorySlice = createSlice({
     ) => {
       return produce(state, (draft) => {
         const newItem = payload;
-        console.log(newItem.index);
         const find = draft.items.find((item) => item.mainId === newItem.mainId);
         const category = find?.document.find(
           (item) => item.categoryId === newItem.categoryId
@@ -218,10 +253,11 @@ const categorySlice = createSlice({
           category.cell.splice(newItem.index + 1, 0, {
             id: newItem.id,
             text: newItem.text,
-            type: "h2",
+            type: "h3",
             color: "black",
+            bgcolor: "",
+            font: "basic",
           });
-          console.log("A");
         }
       });
     },
@@ -255,6 +291,78 @@ const categorySlice = createSlice({
               (item) => item.id !== newItem.id
             );
           }
+        }
+      });
+    },
+    StyleSizeToCategory: (
+      state,
+      {
+        payload,
+      }: PayloadAction<{
+        id: number;
+        style: string;
+        categoryId: number;
+        mainId: number;
+      }>
+    ) => {
+      return produce(state, (draft) => {
+        const newItem = payload;
+
+        const find = draft.items.find((item) => item.mainId === newItem.mainId);
+        const category = find?.document.find(
+          (item) => item.categoryId === newItem.categoryId
+        );
+        const cell = category?.cell.find((item) => item.id === newItem.id);
+        if (cell) {
+          cell.type = newItem.style;
+        }
+      });
+    },
+    StyleColorToCategory: (
+      state,
+      {
+        payload,
+      }: PayloadAction<{
+        id: number;
+        style: string;
+        categoryId: number;
+        mainId: number;
+      }>
+    ) => {
+      return produce(state, (draft) => {
+        const newItem = payload;
+
+        const find = draft.items.find((item) => item.mainId === newItem.mainId);
+        const category = find?.document.find(
+          (item) => item.categoryId === newItem.categoryId
+        );
+        const cell = category?.cell.find((item) => item.id === newItem.id);
+        if (cell) {
+          cell.color = newItem.style;
+        }
+      });
+    },
+    StyleFontToCategory: (
+      state,
+      {
+        payload,
+      }: PayloadAction<{
+        id: number;
+        style: string;
+        categoryId: number;
+        mainId: number;
+      }>
+    ) => {
+      return produce(state, (draft) => {
+        const newItem = payload;
+
+        const find = draft.items.find((item) => item.mainId === newItem.mainId);
+        const category = find?.document.find(
+          (item) => item.categoryId === newItem.categoryId
+        );
+        const cell = category?.cell.find((item) => item.id === newItem.id);
+        if (cell) {
+          cell.font = newItem.style;
         }
       });
     },

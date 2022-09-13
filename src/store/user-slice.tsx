@@ -10,6 +10,7 @@ export type User = {
 
 const initialState = {
   emailCheck: false,
+  checknum: "",
   loading: false,
   userInfo: {},
   error: null,
@@ -41,9 +42,20 @@ export const addUserAsync = createAsyncThunk("ADD_USER", async (user: User) => {
 
 // 이메일 인증 요청 보내는 api 만들기
 export const emailCertificationAsync = createAsyncThunk(
-  "user/EMAIL_CERTIFICATION",
+  "user/emailCertificationAsync",
   async (email: string) => {
-    const response = await axios.post("", email);
+    return await fetch("http://localhost:8080/user/mail-authentication", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ email }),
+    }).then((res) => res.json());
+    const response = await axios.post(
+      "http://localhost:8080/user/mail-authentication",
+      email
+    );
+    console.log(response.data);
     return response.data;
   }
 );
@@ -51,7 +63,10 @@ export const emailCertificationAsync = createAsyncThunk(
 // 추가되면 로그인
 export const setUserAsync = createAsyncThunk(
   "SET_USER",
-  async (user: {email: string, password: string}): Promise<{email: string, password: string}> => {
+  async (user: {
+    email: string;
+    password: string;
+  }): Promise<{ email: string; password: string }> => {
     const response = await axios.get("");
     return response.data;
   }
@@ -66,7 +81,6 @@ export const setUserAsync = createAsyncThunk(
 //   }
 // )
 
-
 const userSlice = createSlice({
   name: "user",
   initialState: initialState,
@@ -75,14 +89,16 @@ const userSlice = createSlice({
     builder
       .addCase(emailCertificationAsync.fulfilled, (state, action) => {
         state.emailCheck = true;
+        state.checknum = action.payload.checkNum;
+        console.log(action.payload);
       })
       .addCase(addUserAsync.fulfilled, (state, action) => {
         state.loading = true;
-        state.userInfo = {...action.payload};
+        state.userInfo = { ...action.payload };
       })
       .addCase(setUserAsync.fulfilled, (state, action) => {
         state.success = true;
-        state.userInfo = {...action.payload};
+        state.userInfo = { ...action.payload };
       });
   },
 });
