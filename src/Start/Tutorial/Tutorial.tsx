@@ -1,8 +1,12 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { User } from "../../store/user-slice";
+import { useDispatch, useSelector } from "react-redux";
 import "./Tutorial.css";
 
 function Tutorial() {
+  const joinState = useSelector((state: any) => state.user.join);
+
   return (
     <div className="tutorial">
       <div className="tutorial-header">
@@ -10,12 +14,21 @@ function Tutorial() {
           DA:HAENG
         </Link>
         <div className="header-button">
-          <Link to="/signup" className="tutorial-btn">
-            시작하기
-          </Link>
-          <Link to="/login" className="tutorial-btn">
-            로그인
-          </Link>
+          {joinState === false && (
+            <Link to="/signup" className="tutorial-btn">
+              시작하기
+            </Link>
+          )}
+          {joinState === false && (
+            <Link to="/login" className="tutorial-btn">
+              로그인
+            </Link>
+          )}
+          {joinState && (
+            <Link to="/main" className="tutorial-btn">
+              다행 메모장
+            </Link>
+          )}
         </div>
       </div>
       <div className="tutorial-main">

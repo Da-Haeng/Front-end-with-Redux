@@ -5,12 +5,13 @@ export type User = {
   email: string;
   nickname: string;
   password: string;
-  id_token: boolean;
+  // id_token: boolean;
 };
 
 const initialState = {
   emailCheck: false,
   checknum: "",
+  join: false,
   loading: false,
   userInfo: {},
   error: null,
@@ -35,10 +36,23 @@ const initialState = {
 // ]
 
 // 회원추가
-export const addUserAsync = createAsyncThunk("ADD_USER", async (user: User) => {
-  const response = await axios.post("", user);
-  return response.data;
-});
+export const addUserAsync = createAsyncThunk(
+  "user/addUserAsync",
+  async (user: User) => {
+    console.log(user);
+    return await fetch("http://localhost:8080/user/join", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        email: user.email,
+        nickname: user.nickname,
+        password: user.password,
+      }),
+    }).then((res) => res);
+  }
+);
 
 // 이메일 인증 요청 보내는 api 만들기
 export const emailCertificationAsync = createAsyncThunk(
@@ -51,12 +65,20 @@ export const emailCertificationAsync = createAsyncThunk(
       },
       body: JSON.stringify({ email }),
     }).then((res) => res.json());
-    const response = await axios.post(
-      "http://localhost:8080/user/mail-authentication",
-      email
-    );
-    console.log(response.data);
-    return response.data;
+  }
+);
+
+//이메일 중복 확인
+export const emailOverlapAsync = createAsyncThunk(
+  "user/emailOverlap",
+  async (email: string) => {
+    return await fetch("http://localhost:8080/user/check-mail", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ email }),
+    }).then((res) => res);
   }
 );
 
@@ -88,13 +110,17 @@ const userSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(emailCertificationAsync.fulfilled, (state, action) => {
-        state.emailCheck = true;
+        console.log(action.payload.checkNum);
         state.checknum = action.payload.checkNum;
-        console.log(action.payload);
+      })
+      .addCase(emailOverlapAsync.fulfilled, (state, action) => {
+        state.emailCheck = true;
       })
       .addCase(addUserAsync.fulfilled, (state, action) => {
-        state.loading = true;
-        state.userInfo = { ...action.payload };
+        state.join = true;
+      })
+      .addCase(addUserAsync.rejected, (state, action) => {
+        console.log("error");
       })
       .addCase(setUserAsync.fulfilled, (state, action) => {
         state.success = true;

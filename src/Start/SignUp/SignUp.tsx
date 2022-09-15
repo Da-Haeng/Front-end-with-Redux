@@ -1,31 +1,49 @@
 import "./SignUp.css";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   addUserAsync,
   emailCertificationAsync,
+  emailOverlapAsync,
   User,
 } from "../../store/user-slice";
 import { useDispatch, useSelector } from "react-redux";
-import { ChangeEvent, useEffect, useMemo, useState } from "react";
+import React, { ChangeEvent, useEffect, useMemo, useState } from "react";
+import { spawn } from "child_process";
+
+import Main from "../../Main/Main";
 
 const SignUp = () => {
-  const mainItems = useSelector((state: any) => state.user);
+  const navigate = useNavigate();
 
-  useEffect(() => {
-    setData(mainItems.checknum);
-  }, [mainItems]);
+  const mainItems = useSelector((state: any) => state.user);
+  const { emailcheck, checknum, join, loading, userInfo, error, success } =
+    useSelector((state: any) => ({
+      emailcheck: state.user.emailCheck,
+      checknum: state.user.checknum,
+      join: state.user.join,
+      loading: state.user.loading,
+      userInfo: state.user.userInfo,
+      error: state.user.error,
+      success: state.user.success,
+    }));
 
   const [user, setUser] = useState<User>({
     email: "",
     password: "",
     nickname: "",
-    id_token: false,
+    // id_token: false,
   });
 
   const [code, setCode] = useState("");
-  const [data, setData] = useState("");
   const [passwordCheck, setPasswordCheck] = useState("");
   const [certification, setCertification] = useState(false);
+  const [joinState, setJoinState] = useState(false);
+
+  useMemo(() => {
+    // {
+    //   join && navigate("/main", { replace: true });
+    // }
+  }, [mainItems]);
 
   const dispatch = useDispatch<any>();
 
@@ -54,7 +72,9 @@ const SignUp = () => {
         alert("이메일 형식에 맞게 입력해세요!");
         return false;
       } else {
+        // dispatch(emailOverlapAsync(user.email));
         dispatch(emailCertificationAsync(user.email));
+        alert("인증번호가 전송되었습니다");
       }
     }
   };
@@ -63,7 +83,7 @@ const SignUp = () => {
     if (!code) {
       alert("인증 코드를 입력해주세요.");
     } else {
-      if (data === code) {
+      if (checknum === code) {
         setCertification(true);
       } else {
         alert("인증코드가 올바르지 않습니다.");
@@ -75,6 +95,7 @@ const SignUp = () => {
   const handleSubmit = () => {
     if (user.password === passwordCheck) {
       dispatch(addUserAsync(user));
+      console.log(joinState);
     } else {
       alert("비밀번호가 동일하지 않습니다.");
     }
@@ -99,7 +120,6 @@ const SignUp = () => {
         <div className="tutorial-start">
           <span className="tutorial-maintitle">시작하기</span>
           <br></br>
-
           <div className="loginBox">
             <button className="btn-social">
               <img className="google-img" src="image/google.png" />
@@ -113,6 +133,7 @@ const SignUp = () => {
           {!certification && (
             <div className="loginBox">
               <input
+                type="email"
                 className="inputBox"
                 placeholder="이메일을 입력하세요"
                 value={user.email}
@@ -133,11 +154,11 @@ const SignUp = () => {
               </button>
             </div>
           )}
-
           {certification && (
             <div className="loginBox">
               <span className="tutorial-maintitle">인증완료</span>
               <input
+                type="text"
                 className="inputNextBox"
                 placeholder="닉네임을 입력하세요"
                 value={user.nickname}
@@ -145,6 +166,7 @@ const SignUp = () => {
                 onChange={handleChange}
               ></input>
               <input
+                type="password"
                 className="inputNextBox"
                 placeholder="비밀번호를 입력하세요"
                 value={user.password}
@@ -152,6 +174,7 @@ const SignUp = () => {
                 onChange={handleChange}
               ></input>
               <input
+                type="password"
                 className="inputNextBox"
                 placeholder="비밀번호 확인"
                 value={passwordCheck}
