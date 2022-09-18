@@ -1,15 +1,33 @@
-import React, { ChangeEvent, useState } from "react";
+import React, { ChangeEvent, useEffect, useState } from "react";
 import "./Login.css";
-import { Link } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { setUserAsync } from "../../store/user-slice";
+import { Link, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { loginUser, setUserAsync } from "../../store/user-slice";
 
 const Login = () => {
+  const navigate = useNavigate();
   const dispatch = useDispatch<any>();
   const [login, setLogin] = useState({
     email: "",
     password: ""
   });
+
+  const { userInfo, error, success } =
+    useSelector((state: any) => ({
+      userInfo: state.user.userInfo,
+      error: state.user.error,
+      success: state.user.success,
+    }));
+
+    useEffect(() => {
+      if(Object.keys(userInfo).length > 1) {
+        console.log(userInfo);
+        alert("로그인 되었습니다.");
+        navigate('/main', {replace: true});
+      } else {
+        console.log("비었음");
+      }
+    }, [userInfo]);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -79,7 +97,7 @@ const Login = () => {
               onChange={handleChange}
             ></input>
             <a style={{ color: "grey" }}>비밀번호 찾기</a>
-            <button className="loginBtn">로그인 하기</button>
+            <button className="loginBtn" onClick={handleSubmit}>로그인 하기</button>
           </div>
         </div>
       </div>

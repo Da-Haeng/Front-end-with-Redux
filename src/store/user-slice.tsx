@@ -1,5 +1,4 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import axios from "axios";
 
 export type User = {
   email: string;
@@ -8,8 +7,18 @@ export type User = {
   // id_token: boolean;
 };
 
+export type loginUser = {
+  email: string;
+  password: string;
+};
+
+export type editNickname = {
+  email: string;
+  nickname: string;
+};
+
 const initialState = {
-  emailCheck: false,
+  emailCheck: "",
   checknum: "",
   join: false,
   loading: false,
@@ -18,28 +27,11 @@ const initialState = {
   success: false,
 };
 
-// export type UsersState = User[];
-
-// const UsersInitialState: UsersState = [
-//     {
-//         email: "louis@naver.com",
-//         nickname: 'louis',
-//         password: 'hihijiho1234',
-//         id_token: false,
-//     },
-//     {
-//         email: "JJangYunji@naver.com",
-//         nickname: 'JJangYunji',
-//         password: 'JJangYunji1234',
-//         id_token: false,
-//     }
-// ]
 
 // 회원추가
 export const addUserAsync = createAsyncThunk(
   "user/addUserAsync",
   async (user: User) => {
-    console.log(user);
     return await fetch("http://localhost:8080/user/join", {
       method: "POST",
       headers: {
@@ -49,8 +41,25 @@ export const addUserAsync = createAsyncThunk(
         email: user.email,
         nickname: user.nickname,
         password: user.password,
-      }),
+      })
     }).then((res) => res);
+  }
+);
+
+// 로그인
+export const setUserAsync = createAsyncThunk(
+  "user/setUserAsync",
+  async (user: loginUser) => {
+    return await fetch("http://localhost:8080/user/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        email: user.email,
+        password: user.password,
+      })
+    }).then((res) => res.json());
   }
 );
 
@@ -78,21 +87,27 @@ export const emailOverlapAsync = createAsyncThunk(
         "Content-Type": "application/json",
       },
       body: JSON.stringify({ email }),
+    }).then((res) => res.json());
+  }
+);
+
+// 닉네임 변경
+export const editUserNicknameAsync = createAsyncThunk(
+  "user/editUserNicknameAsync",
+  async (user: editNickname) => {
+    return await fetch("http://localhost:8080/user/edit-nickname", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        email: user.email,
+        nickname: user.nickname,
+      })
     }).then((res) => res);
   }
 );
 
-// 추가되면 로그인
-export const setUserAsync = createAsyncThunk(
-  "SET_USER",
-  async (user: {
-    email: string;
-    password: string;
-  }): Promise<{ email: string; password: string }> => {
-    const response = await axios.get("");
-    return response.data;
-  }
-);
 
 // //회원 정보 조회
 // export const getUserInfoAsync = createAsyncThunk(
@@ -114,7 +129,7 @@ const userSlice = createSlice({
         state.checknum = action.payload.checkNum;
       })
       .addCase(emailOverlapAsync.fulfilled, (state, action) => {
-        state.emailCheck = true;
+        state.emailCheck = action.payload.result;
       })
       .addCase(addUserAsync.fulfilled, (state, action) => {
         state.join = true;
@@ -124,7 +139,7 @@ const userSlice = createSlice({
       })
       .addCase(setUserAsync.fulfilled, (state, action) => {
         state.success = true;
-        state.userInfo = { ...action.payload };
+        state.userInfo = {...action.payload}
       });
   },
 });
