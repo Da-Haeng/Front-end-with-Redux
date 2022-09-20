@@ -8,6 +8,7 @@ import "./Detail.css";
 type DatailHeaderProps = {
   title: string;
 };
+
 const DetailHeader = ({ title }: DatailHeaderProps) => {
   const navigate = useNavigate();
 

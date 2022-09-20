@@ -277,6 +277,10 @@ const categorySlice = createSlice({
         text: string;
         categoryId: number;
         mainId: number;
+        type: string;
+        color: string;
+        bgcolor: string;
+        font: string;
       }>
     ) => {
       return produce(state, (draft) => {
@@ -290,9 +294,38 @@ const categorySlice = createSlice({
         const cell = category?.cell.find((item) => item.id === newItem.id);
         if (cell) {
           cell.text = newItem.text;
+          cell.type = newItem.type;
+          cell.color = newItem.color;
+          cell.bgcolor = newItem.bgcolor;
+          cell.font = newItem.font;
         }
       });
     },
+
+    bulletPointToCell: (
+      state,
+      {
+        payload,
+      }: PayloadAction<{
+        id: number;
+        categoryId: number;
+        mainId: number;
+      }>
+    ) => {
+      return produce(state, (draft) => {
+        const newItem = payload;
+
+        const find = draft.items.find((item) => item.mainId === newItem.mainId);
+        const category = find?.document.find(
+          (item) => item.categoryId === newItem.categoryId
+        );
+        const cell = category?.cell.find((item) => item.id === newItem.id);
+        if (cell) {
+          cell.text = "• ".concat(cell.text);
+        }
+      });
+    },
+
     deleteCellToCategory: (
       state,
       {
@@ -317,102 +350,7 @@ const categorySlice = createSlice({
         }
       });
     },
-    StyleSizeToCategory: (
-      state,
-      {
-        payload,
-      }: PayloadAction<{
-        id: number;
-        style: string;
-        categoryId: number;
-        mainId: number;
-      }>
-    ) => {
-      return produce(state, (draft) => {
-        const newItem = payload;
 
-        const find = draft.items.find((item) => item.mainId === newItem.mainId);
-        const category = find?.document.find(
-          (item) => item.categoryId === newItem.categoryId
-        );
-        const cell = category?.cell.find((item) => item.id === newItem.id);
-        if (cell) {
-          cell.type = newItem.style;
-        }
-      });
-    },
-    StyleColorToCategory: (
-      state,
-      {
-        payload,
-      }: PayloadAction<{
-        id: number;
-        style: string;
-        categoryId: number;
-        mainId: number;
-      }>
-    ) => {
-      return produce(state, (draft) => {
-        const newItem = payload;
-
-        const find = draft.items.find((item) => item.mainId === newItem.mainId);
-        const category = find?.document.find(
-          (item) => item.categoryId === newItem.categoryId
-        );
-        const cell = category?.cell.find((item) => item.id === newItem.id);
-        if (cell) {
-          cell.color = newItem.style;
-        }
-      });
-    },
-    StyleBgColorToCategory: (
-      state,
-      {
-        payload,
-      }: PayloadAction<{
-        id: number;
-        style: string;
-        categoryId: number;
-        mainId: number;
-      }>
-    ) => {
-      return produce(state, (draft) => {
-        const newItem = payload;
-
-        const find = draft.items.find((item) => item.mainId === newItem.mainId);
-        const category = find?.document.find(
-          (item) => item.categoryId === newItem.categoryId
-        );
-        const cell = category?.cell.find((item) => item.id === newItem.id);
-        if (cell) {
-          cell.bgcolor = newItem.style;
-        }
-      });
-    },
-    StyleFontToCategory: (
-      state,
-      {
-        payload,
-      }: PayloadAction<{
-        id: number;
-        style: string;
-        categoryId: number;
-        mainId: number;
-      }>
-    ) => {
-      return produce(state, (draft) => {
-        const newItem = payload;
-
-        const find = draft.items.find((item) => item.mainId === newItem.mainId);
-        const category = find?.document.find(
-          (item) => item.categoryId === newItem.categoryId
-        );
-        const cell = category?.cell.find((item) => item.id === newItem.id);
-        if (cell) {
-          cell.font = newItem.style;
-        }
-      });
-    },
     removeItemToCateogory: (
       state,
       {

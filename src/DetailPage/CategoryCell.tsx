@@ -43,11 +43,28 @@ const CategoryCell = (props: CategoryCellProps) => {
   const cell = categoryContent?.cell;
   const cellLength = cell!.length;
 
+  const [cellItem, setCellItem] = useState(cell);
+
   const [textStyle, setTextStyle] = useState(false);
   const [textColor, setTextColor] = useState(false);
   const [bgColor, setBgColor] = useState(false);
 
   const [spanToInput, setSpanToInput] = useState(false);
+
+  useEffect(() => {
+    dispatch(
+      categoryActions.editCellToCategory({
+        id: cellId,
+        text: cellText,
+        categoryId: categoryId,
+        mainId: mainId,
+        type: cellType,
+        color: cellColor,
+        bgcolor: cellBgColor,
+        font: cellFont,
+      })
+    );
+  }, [cellText, cellType, cellColor, cellBgColor, cellFont]);
 
   useMemo(() => {
     if (props) {
@@ -79,18 +96,20 @@ const CategoryCell = (props: CategoryCellProps) => {
     setBgColor(!bgColor);
   };
 
+  console.log(cell);
+
   const onKeyPress = (e: any) => {
     if (e.key === "Enter") {
       setSpanToInput(false);
+      const index = cell?.findIndex((it) => it.id === cellId);
       dispatch(
-        categoryActions.editCellToCategory({
-          id: cellId,
-          text: cellText,
+        categoryActions.addCellToCategory({
+          index: index,
+          id: cellLength + 1,
           categoryId: categoryId,
           mainId: mainId,
         })
       );
-      alert("저장되었습니다");
     }
     if (e.key === "Backspace" && cellText.length === 0) {
       dispatch(
@@ -128,42 +147,18 @@ const CategoryCell = (props: CategoryCellProps) => {
 
   const styleSizeHandler = (e: any) => {
     setCellType(e);
-    dispatch(
-      categoryActions.StyleSizeToCategory({
-        id: cellId,
-        style: cellType,
-        categoryId: categoryId,
-        mainId: mainId,
-      })
-    );
     setCellEffect(false);
     e.preventDefault();
   };
 
   const styleColorHandler = (e: any) => {
     setCellColor(e);
-    dispatch(
-      categoryActions.StyleColorToCategory({
-        id: cellId,
-        style: cellColor,
-        categoryId: categoryId,
-        mainId: mainId,
-      })
-    );
     setCellEffect(false);
     e.preventDefault();
   };
 
   const styleBgColorHandler = (e: any) => {
     setCellBgColor(e);
-    dispatch(
-      categoryActions.StyleBgColorToCategory({
-        id: cellId,
-        style: cellBgColor,
-        categoryId: categoryId,
-        mainId: mainId,
-      })
-    );
     setCellEffect(false);
     e.preventDefault();
   };
@@ -197,17 +192,18 @@ const CategoryCell = (props: CategoryCellProps) => {
         setCellFont(e);
       }
     }
+    setCellEffect(false);
+    e.preventDefault();
+  };
 
+  const BulletPointHandler = () => {
     dispatch(
-      categoryActions.StyleFontToCategory({
+      categoryActions.bulletPointToCell({
         id: cellId,
-        style: cellFont,
         categoryId: categoryId,
         mainId: mainId,
       })
     );
-    setCellEffect(false);
-    e.preventDefault();
   };
 
   const spanToInputHandler = () => {
@@ -367,6 +363,7 @@ const CategoryCell = (props: CategoryCellProps) => {
                 </span>
               </div>
             )}
+            <span onClick={BulletPointHandler}>글머리 기호</span>
           </div>
         )}
         <FontAwesomeIcon
@@ -380,9 +377,7 @@ const CategoryCell = (props: CategoryCellProps) => {
             id={String(cellId)}
             value={cellText}
             onKeyDown={onKeyPress}
-            onChange={(e) => {
-              setCellText(e.target.value);
-            }}
+            onChange={(e) => setCellText(e.target.value)}
             className={`${cellType} ${cellColor} ${cellFont} spantoinput`}
             autoFocus
           ></input>
