@@ -5,7 +5,10 @@ import { useDispatch, useSelector } from "react-redux";
 import "./Tutorial.css";
 
 function Tutorial() {
-  const joinState = useSelector((state: any) => state.user.join);
+  const { success } = useSelector((state: any) => ({
+    success: state.user.success,
+  }));
+  console.log(success);
 
   return (
     <div className="tutorial">
@@ -14,17 +17,17 @@ function Tutorial() {
           DA:HAENG
         </Link>
         <div className="header-button">
-          {joinState === false && (
+          {success === false && (
             <Link to="/signup" className="tutorial-btn">
               시작하기
             </Link>
           )}
-          {joinState === false && (
+          {success === false && (
             <Link to="/login" className="tutorial-btn">
               로그인
             </Link>
           )}
-          {joinState && (
+          {success && (
             <Link to="/main" className="tutorial-btn">
               다행 메모장
             </Link>

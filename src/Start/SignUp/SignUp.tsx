@@ -15,7 +15,6 @@ import Main from "../../Main/Main";
 const SignUp = () => {
   const navigate = useNavigate();
 
-  const mainItems = useSelector((state: any) => state.user);
   const { emailcheck, checknum, join, loading, userInfo, error, success } =
     useSelector((state: any) => ({
       emailcheck: state.user.emailCheck,
@@ -37,13 +36,23 @@ const SignUp = () => {
   const [code, setCode] = useState("");
   const [passwordCheck, setPasswordCheck] = useState("");
   const [certification, setCertification] = useState(false);
-  const [joinState, setJoinState] = useState(false);
+  const [joinState, setJoinState] = useState(join);
 
-  useMemo(() => {
+  useEffect(() => {
+    if (join === false && emailcheck === "EXIST") {
+      setUser({ ...user, email: "" });
+      alert("이미 등록된 이메일입니다");
+    } else if (join === false && emailcheck === "NOT EXIST") {
+      dispatch(emailCertificationAsync(user.email));
+      alert("인증번호가 전송되었습니다");
+    }
+    if (join === true && emailcheck === "NOT EXIST") {
+      navigate("/login", { replace: true });
+    }
     // {
     //   join && navigate("/main", { replace: true });
     // }
-  }, [mainItems]);
+  }, [emailcheck, join]);
 
   const dispatch = useDispatch<any>();
 
@@ -63,7 +72,7 @@ const SignUp = () => {
     return reg.test(email);
   };
 
-  const handleCertification = () => {
+  const handleCertification = async () => {
     if (!user.email) {
       alert("이메일을 입력해주세요.");
       return false;
@@ -72,9 +81,7 @@ const SignUp = () => {
         alert("이메일 형식에 맞게 입력해세요!");
         return false;
       } else {
-        // dispatch(emailOverlapAsync(user.email));
-        dispatch(emailCertificationAsync(user.email));
-        alert("인증번호가 전송되었습니다");
+        dispatch(emailOverlapAsync(user.email));
       }
     }
   };
@@ -95,7 +102,6 @@ const SignUp = () => {
   const handleSubmit = () => {
     if (user.password === passwordCheck) {
       dispatch(addUserAsync(user));
-      console.log(joinState);
     } else {
       alert("비밀번호가 동일하지 않습니다.");
     }

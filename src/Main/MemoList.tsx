@@ -12,6 +12,7 @@ const MemoList = () => {
   const mainItems = useSelector((state: RootState) => state.main.items);
   const dispatch = useDispatch();
 
+  console.log(mainItems);
   const addItemHandler = () => {
     dispatch(
       mainActions.addItemToMain({
@@ -30,9 +31,7 @@ const MemoList = () => {
       {mainItems &&
         mainItems.map((item) => (
           <div key={item.id}>
-            <MemoItem
-              {...item}
-            />
+            <MemoItem {...item} />
           </div>
         ))}
 

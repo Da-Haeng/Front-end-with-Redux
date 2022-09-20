@@ -81,6 +81,7 @@ const CategoryCell = (props: CategoryCellProps) => {
 
   const onKeyPress = (e: any) => {
     if (e.key === "Enter") {
+      setSpanToInput(false);
       dispatch(
         categoryActions.editCellToCategory({
           id: cellId,
@@ -91,7 +92,15 @@ const CategoryCell = (props: CategoryCellProps) => {
       );
       alert("저장되었습니다");
     }
-    setSpanToInput(false);
+    if (e.key === "Backspace" && cellText.length === 0) {
+      dispatch(
+        categoryActions.deleteCellToCategory({
+          id: cellId,
+          categoryId: categoryId,
+          mainId: mainId,
+        })
+      );
+    }
   };
 
   const addCellHandler = () => {
@@ -103,7 +112,6 @@ const CategoryCell = (props: CategoryCellProps) => {
         id: cellLength + 1,
         categoryId: categoryId,
         mainId: mainId,
-        text: "입력해주세요",
       })
     );
   };
@@ -204,6 +212,10 @@ const CategoryCell = (props: CategoryCellProps) => {
 
   const spanToInputHandler = () => {
     setSpanToInput(true);
+
+    if (cellText === "입력해주세요") {
+      setCellText("");
+    }
   };
 
   return (
@@ -367,12 +379,12 @@ const CategoryCell = (props: CategoryCellProps) => {
           <input
             id={String(cellId)}
             value={cellText}
-            onKeyPress={onKeyPress}
+            onKeyDown={onKeyPress}
             onChange={(e) => {
               setCellText(e.target.value);
             }}
-            placeholder={"입력해주세요"}
             className={`${cellType} ${cellColor} ${cellFont} spantoinput`}
+            autoFocus
           ></input>
         ) : (
           <span

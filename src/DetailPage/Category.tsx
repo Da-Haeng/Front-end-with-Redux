@@ -17,7 +17,6 @@ const Category = (props: CategoryProps) => {
     (state: RootState) => state.category.items
   );
   const categoryItems = mainItems.filter((it) => it.mainId === mainId);
-
   const categoryData = categoryItems.map((it) => it.document);
   const categoryDataObject = categoryData.reduce((it) => it);
 

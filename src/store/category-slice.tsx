@@ -57,14 +57,6 @@ const MemoDataInitialState: MemoDataState = [
           },
           {
             id: 4,
-            text: "",
-            type: "h3",
-            color: "black",
-            bgcolor: "basicbg",
-            font: "basic",
-          },
-          {
-            id: 5,
             text: "해녀라면 꿀떡",
             type: "h3",
             color: "black",
@@ -255,7 +247,6 @@ const categorySlice = createSlice({
         id: number;
         categoryId: number;
         mainId: number;
-        text: string;
       }>
     ) => {
       return produce(state, (draft) => {
@@ -268,7 +259,7 @@ const categorySlice = createSlice({
         if (category) {
           category.cell.splice(newItem.index + 1, 0, {
             id: newItem.id,
-            text: newItem.text,
+            text: "입력해주세요",
             type: "h3",
             color: "black",
             bgcolor: "basicbg",
@@ -299,6 +290,30 @@ const categorySlice = createSlice({
         const cell = category?.cell.find((item) => item.id === newItem.id);
         if (cell) {
           cell.text = newItem.text;
+        }
+      });
+    },
+    deleteCellToCategory: (
+      state,
+      {
+        payload,
+      }: PayloadAction<{
+        id: number;
+        categoryId: number;
+        mainId: number;
+      }>
+    ) => {
+      return produce(state, (draft) => {
+        const newItem = payload;
+
+        const find = draft.items.find((item) => item.mainId === newItem.mainId);
+        const category = find?.document.find(
+          (item) => item.categoryId === newItem.categoryId
+        );
+        if (category) {
+          category.cell = category.cell.filter(
+            (item) => item.id !== newItem.id
+          );
         }
       });
     },

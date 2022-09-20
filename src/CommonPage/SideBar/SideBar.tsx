@@ -7,9 +7,14 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "./SideBar.css";
 import { useNavigate } from "react-router-dom";
 import SettingModal from "./setModal";
+import { useDispatch, useSelector } from "react-redux";
 
 function SideBar() {
   const navigate = useNavigate();
+
+  const { userInfo } = useSelector((state: any) => ({
+    userInfo: state.user.userInfo,
+  }));
 
   const [modalOpen, setModalOpen] = useState<boolean>(false);
 
@@ -23,7 +28,9 @@ function SideBar() {
     <div className="sidebar">
       <div className="sidebar-profile">
         <span className="profile-name">가</span>
-        <span className="profile-info profile-info-top">짱윤지님의</span>
+        {/* {userInfo.nickname.charAt(0)} */}
+        <span className="profile-info profile-info-top">짱융지님의</span>
+        {/* {userInfo.nickname} */}
         <span className="profile-info">다행 :)</span>
       </div>
       <div className="sidebar-btn-top">
@@ -44,7 +51,7 @@ function SideBar() {
       <div className="sidebar-btn-bottom">
         <FontAwesomeIcon icon={faSignOut} className="sidebar-btn faSignOut" />
       </div>
-      <SettingModal open={modalOpen} close={closeModal}/>
+      <SettingModal open={modalOpen} close={closeModal} />
     </div>
   );
 }

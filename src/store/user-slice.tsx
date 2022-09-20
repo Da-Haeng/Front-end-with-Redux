@@ -8,14 +8,20 @@ export type User = {
   // id_token: boolean;
 };
 
+export type loginUser = {
+  email: string;
+  password: string;
+};
+
 const initialState = {
-  emailCheck: false,
+  emailCheck: "",
   checknum: "",
   join: false,
   loading: false,
   userInfo: {},
   error: null,
   success: false,
+  emailSelect: [],
 };
 
 // export type UsersState = User[];
@@ -78,19 +84,38 @@ export const emailOverlapAsync = createAsyncThunk(
         "Content-Type": "application/json",
       },
       body: JSON.stringify({ email }),
-    }).then((res) => res);
+    }).then((res) => res.json());
   }
 );
 
-// 추가되면 로그인
+// 로그인
 export const setUserAsync = createAsyncThunk(
-  "SET_USER",
-  async (user: {
-    email: string;
-    password: string;
-  }): Promise<{ email: string; password: string }> => {
-    const response = await axios.get("");
-    return response.data;
+  "user/setUserAsync",
+  async (user: loginUser) => {
+    return await fetch("http://localhost:8080/user/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        email: user.email,
+        password: user.password,
+      }),
+    }).then((res) => res.json());
+  }
+);
+
+//멤버추가
+export const memberAddAsync = createAsyncThunk(
+  "user/memberAddAsync",
+  async (email: string) => {
+    return await fetch("http://localhost:8080/user/find-member", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ email }),
+    }).then((res) => res.json());
   }
 );
 
@@ -114,19 +139,40 @@ const userSlice = createSlice({
         state.checknum = action.payload.checkNum;
       })
       .addCase(emailOverlapAsync.fulfilled, (state, action) => {
-        state.emailCheck = true;
+        console.log(action.payload.result);
+        state.emailCheck = action.payload.result;
+      })
+      .addCase(emailOverlapAsync.rejected, (state, action) => {
+        console.log(action);
       })
       .addCase(addUserAsync.fulfilled, (state, action) => {
         state.join = true;
       })
       .addCase(addUserAsync.rejected, (state, action) => {
-        console.log("error");
+        console.log("catch");
       })
       .addCase(setUserAsync.fulfilled, (state, action) => {
         state.success = true;
         state.userInfo = { ...action.payload };
+      })
+      .addCase(memberAddAsync.fulfilled, (state, action) => {
+        console.log(action);
+        state.emailSelect = action.payload;
       });
   },
+  // extraReducers: {
+  //   [emailCertificationAsync.pending.type]: (state, action) => {
+  //     console.log("emailCertification_pending");
+  //   },
+  //   [emailCertificationAsync.fulfilled.type]: (state, action) => {
+  //     console.log("emailCertification_fulfilled");
+  //     console.log(action.payload.checkNum);
+  //     state.checknum = action.payload.checkNum;
+  //   },
+  //   [emailCertificationAsync.rejected.type]: (state, action) => {
+  //     console.log("emailCertification_rejected");
+  //   },
+  // },
 });
 
 export const userActions = userSlice.actions;
