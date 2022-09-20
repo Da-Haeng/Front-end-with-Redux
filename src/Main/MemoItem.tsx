@@ -1,31 +1,38 @@
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useState, useEffect } from "react";
-import { mainActions, Memo } from "../store/main-slice";
+import { mainActions, Memo, removeMemoAsync } from "../store/main-slice";
 import { faPencil, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useNavigate } from "react-router-dom";
 import "./Main.css";
 
-const MemoItem = (props: Memo) => {
-  const dispatch = useDispatch();
-  const { id, title, description, date, color } = props;
+const MemoItem = (props: any) => {
+  const dispatch = useDispatch<any>();
+  // const { id, title, description, date, color } = props;
 
-  const [newTitle, setNewTitle] = useState(title);
-  const [newDescription, setNewDescription] = useState(description);
-  const [newColor, setNewColor] = useState(color);
-  const [newDate, setNewDate] = useState(date);
+  const [newTitle, setNewTitle] = useState(props.noteName);
+  const [newDescription, setNewDescription] = useState(props.noteDescription);
+  const [newColor, setNewColor] = useState(props.noteColor);
+  const [newDate, setNewDate] = useState(props.noteDate);
 
-  useEffect(() => {}, [props]);
+  const { userInfo } = useSelector((state: any) => ({
+    userInfo: state.user.userInfo,
+  }));
+
+  useEffect(() => {
+
+  }, [props, userInfo]);
 
   const removeItemHandler = (event: any) => {
-    dispatch(mainActions.removeItemToMain({ id: id }));
-    event.stopPropagation();
-    alert("삭제되었습니다.");
+    // dispatch(mainActions.removeItemToMain({ id: id }));
+    // event.stopPropagation();
+    // alert("삭제되었습니다.");
+    dispatch(removeMemoAsync({memoId: props.noteId, email: userInfo.email}));
   };
 
   const navigate = useNavigate();
   const goDetail = () => {
-    navigate(`/detail/${id}`);
+    navigate(`/detail/${props.noteId}`);
   };
 
   const [isEdit, setEdit] = useState(false);
@@ -33,15 +40,16 @@ const MemoItem = (props: Memo) => {
 
   const editHandler = (event: any) => {
     setEdit(!isEdit);
-    dispatch(
-      mainActions.editItemToMain({
-        id,
-        title: newTitle,
-        description: newDescription,
-        color: newColor,
-        date: newDate,
-      })
-    );
+    // dispatch(
+    //   mainActions.editItemToMain({
+    //     user: "",
+    //     id,
+    //     title: newTitle,
+    //     description: newDescription,
+    //     color: newColor,
+    //     date: newDate,
+    //   })
+    // );
     event.stopPropagation();
   };
 
@@ -52,15 +60,16 @@ const MemoItem = (props: Memo) => {
 
   const handleColor = (e: any, color: any) => {
     setNewColor(color);
-    dispatch(
-      mainActions.editItemToMain({
-        id,
-        title: newTitle,
-        description: newDescription,
-        color: newColor,
-        date: newDate,
-      })
-    );
+    // dispatch(
+    //   mainActions.editItemToMain({
+    //     user: "",
+    //     id,
+    //     title: newTitle,
+    //     description: newDescription,
+    //     color: newColor,
+    //     date: newDate,
+    //   })
+    // );
     setColor(!isColor);
     e.stopPropagation();
   };
@@ -95,7 +104,7 @@ const MemoItem = (props: Memo) => {
             <input
               type="text"
               className="main-memotitle_input"
-              value={title}
+              value={props.noteName}
               readOnly
             />
             <FontAwesomeIcon
@@ -157,11 +166,11 @@ const MemoItem = (props: Memo) => {
         </div>
       ) : (
         <div className="main-memocontext">
-          <input type="text" className="main-memodate" value={date} readOnly />
+          <input type="text" className="main-memodate" value={props.setDate} readOnly />
           <input
             type="text"
             className="main-memointro"
-            value={description}
+            value={props.noteDescription}
             readOnly
           />
         </div>

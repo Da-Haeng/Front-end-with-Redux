@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { faHome } from "@fortawesome/free-solid-svg-icons";
 import { faCog } from "@fortawesome/free-solid-svg-icons";
 import { faBell } from "@fortawesome/free-solid-svg-icons";
@@ -7,7 +7,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "./SideBar.css";
 import { useNavigate } from "react-router-dom";
 import SettingModal from "./setModal";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 
 function SideBar() {
   const navigate = useNavigate();
@@ -15,6 +15,8 @@ function SideBar() {
   const { userInfo } = useSelector((state: any) => ({
     userInfo: state.user.userInfo,
   }));
+
+  useEffect(() => {}, [userInfo]);
 
   const [modalOpen, setModalOpen] = useState<boolean>(false);
 
@@ -51,7 +53,8 @@ function SideBar() {
       <div className="sidebar-btn-bottom">
         <FontAwesomeIcon icon={faSignOut} className="sidebar-btn faSignOut" />
       </div>
-      <SettingModal open={modalOpen} close={closeModal} />
+
+      <SettingModal open={modalOpen} close={closeModal} userInfo={userInfo} />
     </div>
   );
 }

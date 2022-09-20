@@ -1,36 +1,75 @@
 import { useDispatch, useSelector } from "react-redux";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import MemoItem from "./MemoItem";
 import "./Main.css";
-import { mainActions } from "../store/main-slice";
+import {
+  addMemoAsync,
+  getMemoListAsync,
+  mainActions,
+  Memo,
+} from "../store/main-slice";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { RootState } from "../store";
 
 const MemoList = () => {
   const dataId = useRef(4);
-  const mainItems = useSelector((state: RootState) => state.main.items);
-  const dispatch = useDispatch();
+  // const mainItems = useSelector((state: RootState) => state.main);
+  const mainItems = [
+    {
+      user: "",
+      id: 2,
+      title: "JAPAN🍜",
+      date: "MAY 25 ~ MAY 28",
+      description: "셤끝나고 일본 여행",
+      color: 2,
+    },
+  ];
+  const dispatch = useDispatch<any>();
+
+  const { userInfo } = useSelector((state: any) => ({
+    userInfo: state.user.userInfo,
+  }));
+  const memoData = useSelector((state: any) => ({
+    memoData: state.main.memoData,
+  }));
+
+  useEffect(() => {
+    defaultData.user = userInfo.email;
+    console.log(memoData);
+  }, [userInfo, memoData]);
+
+  let defaultData: Memo = {
+    user: userInfo.email,
+    id: dataId.current,
+    title: "메모장 이름",
+    date: "지정 날짜",
+    description: "메모장 소개",
+    color: 0,
+  };
 
   console.log(mainItems);
   const addItemHandler = () => {
-    dispatch(
-      mainActions.addItemToMain({
-        id: dataId.current,
-        title: "메모장 이름",
-        date: "지정 날짜",
-        description: "메모장 소개",
-        color: 0,
-      })
-    );
+    // dispatch(
+    //   mainActions.addItemToMain({
+    //     user: "",
+    //     id: dataId.current,
+    //     title: "메모장 이름",
+    //     date: "지정 날짜",
+    //     description: "메모장 소개",
+    //     color: 0,
+    //   })
+    // );
+
+    dispatch(addMemoAsync(defaultData));
     dataId.current += 1;
   };
 
   return (
     <div className="main-memolist">
-      {mainItems &&
-        mainItems.map((item) => (
-          <div key={item.id}>
+      {memoData &&
+        memoData.memoData.map((item: Memo, index: number) => (
+          <div key={index}>
             <MemoItem {...item} />
           </div>
         ))}

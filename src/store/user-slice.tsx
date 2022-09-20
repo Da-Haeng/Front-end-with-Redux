@@ -1,5 +1,4 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import axios from "axios";
 
 export type User = {
   email: string;
@@ -13,6 +12,11 @@ export type loginUser = {
   password: string;
 };
 
+export type editNickname = {
+  email: string;
+  nickname: string;
+};
+
 const initialState = {
   emailCheck: "",
   checknum: "",
@@ -24,28 +28,10 @@ const initialState = {
   emailSelect: [],
 };
 
-// export type UsersState = User[];
-
-// const UsersInitialState: UsersState = [
-//     {
-//         email: "louis@naver.com",
-//         nickname: 'louis',
-//         password: 'hihijiho1234',
-//         id_token: false,
-//     },
-//     {
-//         email: "JJangYunji@naver.com",
-//         nickname: 'JJangYunji',
-//         password: 'JJangYunji1234',
-//         id_token: false,
-//     }
-// ]
-
 // 회원추가
 export const addUserAsync = createAsyncThunk(
   "user/addUserAsync",
   async (user: User) => {
-    console.log(user);
     return await fetch("http://localhost:8080/user/join", {
       method: "POST",
       headers: {
@@ -57,6 +43,23 @@ export const addUserAsync = createAsyncThunk(
         password: user.password,
       }),
     }).then((res) => res);
+  }
+);
+
+// 로그인
+export const setUserAsync = createAsyncThunk(
+  "user/setUserAsync",
+  async (user: loginUser) => {
+    return await fetch("http://localhost:8080/user/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        email: user.email,
+        password: user.password,
+      }),
+    }).then((res) => res.json());
   }
 );
 
@@ -88,20 +91,20 @@ export const emailOverlapAsync = createAsyncThunk(
   }
 );
 
-// 로그인
-export const setUserAsync = createAsyncThunk(
-  "user/setUserAsync",
-  async (user: loginUser) => {
-    return await fetch("http://localhost:8080/user/login", {
+// 닉네임 변경
+export const editUserNicknameAsync = createAsyncThunk(
+  "user/editUserNicknameAsync",
+  async (user: editNickname) => {
+    return await fetch("http://localhost:8080/user/edit-nickname", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
         email: user.email,
-        password: user.password,
+        nickname: user.nickname,
       }),
-    }).then((res) => res.json());
+    }).then((res) => res);
   }
 );
 
@@ -142,9 +145,6 @@ const userSlice = createSlice({
         console.log(action.payload.result);
         state.emailCheck = action.payload.result;
       })
-      .addCase(emailOverlapAsync.rejected, (state, action) => {
-        console.log(action);
-      })
       .addCase(addUserAsync.fulfilled, (state, action) => {
         state.join = true;
       })
@@ -158,6 +158,7 @@ const userSlice = createSlice({
       .addCase(memberAddAsync.fulfilled, (state, action) => {
         console.log(action);
         state.emailSelect = action.payload;
+        state.userInfo = { ...action.payload };
       });
   },
   // extraReducers: {

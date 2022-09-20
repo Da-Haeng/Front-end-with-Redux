@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from "react";
 import "./Detail.css";
-import SettingModal from "./DetailSetting/SettingModal";
+import SettingModal from "../DetailPage/DetailSetting/SettingModal";
 
 const DetailSetting = () => {
   const [modalOpen, setModalOpen] = useState<boolean>(false);

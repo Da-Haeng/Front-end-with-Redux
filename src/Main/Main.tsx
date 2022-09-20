@@ -3,9 +3,11 @@ import {
   faClipboardList,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useEffect, useMemo, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import SideBar from "../CommonPage/SideBar/SideBar";
+import { getMemoListAsync } from "../store/main-slice";
 import "./Main.css";
 import MemoList from "./MemoList";
 import TodoContainer from "./TodoList/TodoContainer";
@@ -13,12 +15,24 @@ import TodoContainer from "./TodoList/TodoContainer";
 const Main = () => {
   const navigate = useNavigate();
 
-  const [addTodo, setAddTodo] = useState(false);
-  const [addCalender, setAddCalender] = useState(false);
-
   const tutorialGo = () => {
     navigate("/");
   };
+
+  const dispatch = useDispatch<any>();
+  const [addTodo, setAddTodo] = useState(false);
+  const [addCalender, setAddCalender] = useState(false);
+
+  const { memoData } = useSelector((state: any) => ({
+    memoData: state.main.memoData,
+  }));
+  const { userInfo } = useSelector((state: any) => ({
+    userInfo: state.user.userInfo,
+  }));
+  useEffect(() => {
+    dispatch(getMemoListAsync(userInfo.email));
+  }, [userInfo]);
+
   return (
     <div className="main">
       <SideBar />
