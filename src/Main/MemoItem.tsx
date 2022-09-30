@@ -1,6 +1,11 @@
 import { useDispatch, useSelector } from "react-redux";
 import { useState, useEffect } from "react";
-import { mainActions, Memo, removeMemoAsync } from "../store/main-slice";
+import {
+  mainActions,
+  Memo,
+  removeMemoAsync,
+  editMemoAsync,
+} from "../store/main-slice";
 import { faPencil, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useNavigate } from "react-router-dom";
@@ -13,21 +18,21 @@ const MemoItem = (props: any) => {
   const [newTitle, setNewTitle] = useState(props.noteName);
   const [newDescription, setNewDescription] = useState(props.noteDescription);
   const [newColor, setNewColor] = useState(props.noteColor);
-  const [newDate, setNewDate] = useState(props.noteDate);
+  const [newDate, setNewDate] = useState(props.setDate);
 
   const { userInfo } = useSelector((state: any) => ({
     userInfo: state.user.userInfo,
   }));
 
-  useEffect(() => {
+  console.log(props);
 
-  }, [props, userInfo]);
+  useEffect(() => {}, [props, userInfo]);
 
   const removeItemHandler = (event: any) => {
     // dispatch(mainActions.removeItemToMain({ id: id }));
     // event.stopPropagation();
     // alert("삭제되었습니다.");
-    dispatch(removeMemoAsync({memoId: props.noteId, email: userInfo.email}));
+    dispatch(removeMemoAsync({ memoId: props.noteId, email: userInfo.email }));
   };
 
   const navigate = useNavigate();
@@ -51,6 +56,15 @@ const MemoItem = (props: any) => {
     //   })
     // );
     event.stopPropagation();
+    dispatch(
+      editMemoAsync({
+        noteId: props.noteId,
+        noteName: newTitle,
+        setDate: newDate,
+        noteDescription: newDescription,
+        noteColor: newColor,
+      })
+    );
   };
 
   const toggleEditHandler = (event: any) => {
@@ -166,7 +180,12 @@ const MemoItem = (props: any) => {
         </div>
       ) : (
         <div className="main-memocontext">
-          <input type="text" className="main-memodate" value={props.setDate} readOnly />
+          <input
+            type="text"
+            className="main-memodate"
+            value={props.setDate}
+            readOnly
+          />
           <input
             type="text"
             className="main-memointro"

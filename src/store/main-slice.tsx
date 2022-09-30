@@ -4,18 +4,18 @@ import produce from "immer";
 
 export type Memo = {
   user: string;
-  id: number;
-  title: string;
-  date: string;
-  description: string;
-  color: number;
+  noteId: number;
+  noteName: string;
+  setDate: string;
+  noteDescription: string;
+  noteColor: number;
 };
 
 const initialState = {
   join: false,
   error: null,
   memoData: [],
-  success: false,
+  update: false,
 };
 
 export type MemosState = Memo[];
@@ -46,7 +46,7 @@ const MemosInitialState: MemosState = [
 ];
 // (/main) 모든 메모 조회
 export const getMemoListAsync = createAsyncThunk(
-  "note/getMemoListAsync",
+  "main/getMemoListAsync",
   async (userEmail: string) => {
     return await fetch("http://localhost:8080/note/list", {
       method: "POST",
@@ -54,15 +54,15 @@ export const getMemoListAsync = createAsyncThunk(
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        email: userEmail
-      })
+        email: userEmail,
+      }),
     }).then((res) => res.json());
   }
 );
 
-// (/main) 메모 추가 
+// (/main) 메모 추가
 export const addMemoAsync = createAsyncThunk(
-  "note/addMemoAsync",
+  "main/addMemoAsync",
   async (memo: Memo) => {
     return await fetch("http://localhost:8080/note/insert", {
       method: "POST",
@@ -71,59 +71,55 @@ export const addMemoAsync = createAsyncThunk(
       },
       body: JSON.stringify({
         email: memo.user,
-        noteId: memo.id,
-        noteName: memo.title,
-        setDate: memo.date,
-        noteDescription: memo.description,
-        noteColor: memo.color
-      })
+        noteName: memo.noteName,
+        setDate: memo.setDate,
+        noteDescription: memo.noteDescription,
+        noteColor: memo.noteColor,
+      }),
     }).then((res) => res);
   }
 );
 
 // 수정 param = memo(객체)
 export const editMemoAsync = createAsyncThunk(
-  "note/editMemoAsync",
-  async (memo: Memo) => {
-    return await fetch("http://localhost:8080/note/delete", {
+  "main/editMemoAsync",
+  async (updateMemo: any) => {
+    return await fetch("http://localhost:8080/note/update", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        email: memo.user,
-        noteId: memo.id,
-        noteName: memo.title,
-        noteDate: memo.date,
-        noteDescription: memo.description,
-        noteColor: memo.color
-      })
-    }).then((res) => res);
+        noteId: updateMemo.noteId,
+        noteName: updateMemo.noteName,
+        noteDescription: updateMemo.noteDescription,
+        noteColor: updateMemo.noteColor,
+        setDate: updateMemo.setDate,
+      }),
+    }).then((res) => res.json());
   }
 );
 type deleteProps = {
-  memoId: number,
-  email: string
-}
+  memoId: number;
+  email: string;
+};
 
 // (/main) 삭제 param = memoID
 export const removeMemoAsync = createAsyncThunk(
-  "note/removeMemoAsync",
+  "main/removeMemoAsync",
   async (data: deleteProps) => {
-    return await fetch("http://localhost:8080/member/delete", {
+    console.log(data.memoId);
+    return await fetch("http://localhost:8080/note/deleteCompletely", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        email: data.email,
-        noteId: data.memoId
-      })
-    }).then((res) => res);
+        noteId: data.memoId,
+      }),
+    }).then((res) => res.json());
   }
 );
-
-
 
 const mainSlice = createSlice({
   name: "main",
@@ -166,7 +162,6 @@ const mainSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(getMemoListAsync.fulfilled, (state, action) => {
-        state.success = true;
         state.memoData = action.payload;
       })
       .addCase(addMemoAsync.fulfilled, (state, action) => {
@@ -174,11 +169,13 @@ const mainSlice = createSlice({
       })
       .addCase(removeMemoAsync.fulfilled, (state, action) => {
         // state.join = true;
+        console.log(action.payload);
       })
       .addCase(editMemoAsync.fulfilled, (state, action) => {
-        // state.join = true;
-      })
-  }
+        state.update = !state.update;
+        console.log(action.payload);
+      });
+  },
 });
 
 export const mainActions = mainSlice.actions;

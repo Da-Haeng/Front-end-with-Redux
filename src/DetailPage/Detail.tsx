@@ -11,13 +11,14 @@ import { Memo, MemosState } from "../store/main-slice";
 const Detail = () => {
   const { id } = useParams();
 
-  // const mainItems: MemosState = useSelector(
-  //   (state: RootState) => state.main.items
-  // );
-  // const detailItems: Memo = mainItems.find(
-  //   (it: Memo) => it.id === parseInt(id!)
-  // )!;
+  const mainItems: MemosState = useSelector(
+    (state: RootState) => state.main.memoData
+  );
 
+  console.log(id);
+
+  const detailItems = mainItems.find((it) => it.noteId === parseInt(id!))!;
+  console.log(detailItems);
   const navigate = useNavigate();
 
   return (
@@ -26,15 +27,15 @@ const Detail = () => {
         <SideBar />
       </div>
       <div className="memo-container">
-        {/* <div className="memo-header">
-          {mainItems && <DetailHeader title={detailItems.title} />}
-        </div> */}
-        {/* <div className="memo-content">
-          {mainItems && <h1>{detailItems.title}</h1>}
-          {mainItems && <span>{detailItems.date}</span>}
-        </div> */}
+        <div className="memo-header">
+          {mainItems && <DetailHeader title={detailItems.noteName} />}
+        </div>
+        <div className="memo-content">
+          {mainItems && <h1>{detailItems.noteName}</h1>}
+          {mainItems && <span>{detailItems.setDate}</span>}
+        </div>
         <div className="memo-category">
-          <Category mainId={parseInt(id!)} />
+          <Category mainId={1} />
         </div>
       </div>
     </div>

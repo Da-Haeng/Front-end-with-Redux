@@ -14,7 +14,7 @@ import { RootState } from "../store";
 
 const MemoList = () => {
   const dataId = useRef(4);
-  // const mainItems = useSelector((state: RootState) => state.main);
+
   const mainItems = [
     {
       user: "",
@@ -34,21 +34,20 @@ const MemoList = () => {
     memoData: state.main.memoData,
   }));
 
-  useEffect(() => {
-    defaultData.user = userInfo.email;
-    console.log(memoData);
-  }, [userInfo, memoData]);
-
   let defaultData: Memo = {
     user: userInfo.email,
-    id: dataId.current,
-    title: "메모장 이름",
-    date: "지정 날짜",
-    description: "메모장 소개",
-    color: 0,
+    noteId: dataId.current,
+    noteName: "메모장 이름",
+    setDate: "지정 날짜",
+    noteDescription: "메모장 소개",
+    noteColor: 0,
   };
 
-  console.log(mainItems);
+  useEffect(() => {
+    defaultData.user = userInfo.email;
+    console.log(memoData.memoData);
+  }, [userInfo, memoData.memoData]);
+
   const addItemHandler = () => {
     // dispatch(
     //   mainActions.addItemToMain({
@@ -60,7 +59,7 @@ const MemoList = () => {
     //     color: 0,
     //   })
     // );
-
+    console.log(defaultData);
     dispatch(addMemoAsync(defaultData));
     dataId.current += 1;
   };

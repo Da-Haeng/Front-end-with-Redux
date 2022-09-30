@@ -26,6 +26,7 @@ const Main = () => {
   const { memoData } = useSelector((state: any) => ({
     memoData: state.main.memoData,
   }));
+
   const { userInfo } = useSelector((state: any) => ({
     userInfo: state.user.userInfo,
   }));
