@@ -5,6 +5,7 @@ import {
   Memo,
   removeMemoAsync,
   editMemoAsync,
+  getMemoListAsync,
 } from "../store/main-slice";
 import { faPencil, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -20,19 +21,24 @@ const MemoItem = (props: any) => {
   const [newColor, setNewColor] = useState(props.noteColor);
   const [newDate, setNewDate] = useState(props.setDate);
 
+  const [update, setUpdate] = useState(false);
+
   const { userInfo } = useSelector((state: any) => ({
     userInfo: state.user.userInfo,
   }));
 
   console.log(props);
 
-  useEffect(() => {}, [props, userInfo]);
+  useEffect(() => {
+    dispatch(getMemoListAsync(userInfo.email));
+  }, [userInfo, update]);
 
-  const removeItemHandler = (event: any) => {
-    // dispatch(mainActions.removeItemToMain({ id: id }));
-    // event.stopPropagation();
-    // alert("삭제되었습니다.");
-    dispatch(removeMemoAsync({ memoId: props.noteId, email: userInfo.email }));
+  const removeItemHandler = async (event: any) => {
+    event.stopPropagation();
+    await dispatch(
+      removeMemoAsync({ memoId: props.noteId, email: userInfo.email })
+    );
+    setUpdate(!update);
   };
 
   const navigate = useNavigate();
@@ -43,7 +49,7 @@ const MemoItem = (props: any) => {
   const [isEdit, setEdit] = useState(false);
   const [isColor, setColor] = useState(false);
 
-  const editHandler = (event: any) => {
+  const editHandler = async (event: any) => {
     setEdit(!isEdit);
     // dispatch(
     //   mainActions.editItemToMain({
@@ -56,7 +62,7 @@ const MemoItem = (props: any) => {
     //   })
     // );
     event.stopPropagation();
-    dispatch(
+    await dispatch(
       editMemoAsync({
         noteId: props.noteId,
         noteName: newTitle,
@@ -65,6 +71,7 @@ const MemoItem = (props: any) => {
         noteColor: newColor,
       })
     );
+    setUpdate(!update);
   };
 
   const toggleEditHandler = (event: any) => {
@@ -74,16 +81,6 @@ const MemoItem = (props: any) => {
 
   const handleColor = (e: any, color: any) => {
     setNewColor(color);
-    // dispatch(
-    //   mainActions.editItemToMain({
-    //     user: "",
-    //     id,
-    //     title: newTitle,
-    //     description: newDescription,
-    //     color: newColor,
-    //     date: newDate,
-    //   })
-    // );
     setColor(!isColor);
     e.stopPropagation();
   };
@@ -105,6 +102,7 @@ const MemoItem = (props: any) => {
               onChange={(e) => {
                 setNewTitle(e.target.value);
               }}
+              placeholder="메모장 이름"
               onClick={(e) => e.stopPropagation()}
             />
             <FontAwesomeIcon
@@ -120,6 +118,7 @@ const MemoItem = (props: any) => {
               className="main-memotitle_input"
               value={props.noteName}
               readOnly
+              placeholder="메모장 이름"
             />
             <FontAwesomeIcon
               icon={faPencil}
@@ -167,6 +166,7 @@ const MemoItem = (props: any) => {
             type="text"
             className="main-memodate"
             value={newDate}
+            placeholder="지정 날짜"
             onChange={(e) => setNewDate(e.target.value)}
             onClick={(e) => e.stopPropagation()}
           />
@@ -174,6 +174,7 @@ const MemoItem = (props: any) => {
             type="text"
             className="main-memointro"
             value={newDescription}
+            placeholder="메모장 소개"
             onChange={(e) => setNewDescription(e.target.value)}
             onClick={(e) => e.stopPropagation()}
           />
@@ -184,12 +185,14 @@ const MemoItem = (props: any) => {
             type="text"
             className="main-memodate"
             value={props.setDate}
+            placeholder="지정 날짜"
             readOnly
           />
           <input
             type="text"
             className="main-memointro"
             value={props.noteDescription}
+            placeholder="메모장 소개"
             readOnly
           />
         </div>

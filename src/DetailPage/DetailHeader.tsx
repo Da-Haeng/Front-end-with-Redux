@@ -5,11 +5,11 @@ import DetailSetting from "./DetailSetting";
 import { useNavigate } from "react-router-dom";
 import "./Detail.css";
 
-type DatailHeaderProps = {
+type DetailHeaderProps = {
   title: string;
 };
 
-const DetailHeader = ({ title }: DatailHeaderProps) => {
+const DetailHeader = ({ title }: DetailHeaderProps) => {
   const navigate = useNavigate();
 
   const [isSetting, setSetting] = useState(false);
@@ -18,7 +18,7 @@ const DetailHeader = ({ title }: DatailHeaderProps) => {
   };
 
   return (
-    <div className="DatailHeader">
+    <div className="DetailHeader">
       <h2 onClick={() => navigate("/main")}>{title}</h2>
       <FontAwesomeIcon
         icon={faEllipsis}

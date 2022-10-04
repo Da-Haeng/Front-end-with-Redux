@@ -6,7 +6,7 @@ import { faSignOut } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "./SideBar.css";
 import { useNavigate } from "react-router-dom";
-import SettingModal from "./setModal";
+import SetModal from "./setModal";
 import { useSelector } from "react-redux";
 
 function SideBar() {
@@ -29,10 +29,12 @@ function SideBar() {
   return (
     <div className="sidebar">
       <div className="sidebar-profile">
-        <span className="profile-name">가</span>
-        {/* {userInfo.nickname.charAt(0)} */}
-        <span className="profile-info profile-info-top">짱융지님의</span>
-        {/* {userInfo.nickname} */}
+        <span className="profile-name">{userInfo.nickname.charAt(0)}</span>
+        {/*  */}
+        <span className="profile-info profile-info-top">
+          {userInfo.nickname}님의
+        </span>
+        {/*  */}
         <span className="profile-info">다행 :)</span>
       </div>
       <div className="sidebar-btn-top">
@@ -54,7 +56,7 @@ function SideBar() {
         <FontAwesomeIcon icon={faSignOut} className="sidebar-btn faSignOut" />
       </div>
 
-      <SettingModal open={modalOpen} close={closeModal} userInfo={userInfo} />
+      <SetModal open={modalOpen} close={closeModal} userInfo={userInfo} />
     </div>
   );
 }

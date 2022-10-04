@@ -32,7 +32,6 @@
   align-content: center;
   position: relative;
   padding: 16px 64px 16px 16px;
-  background-color: #f1f1f1;
   font-weight: 700;
   font-size: 15px;
 }
@@ -44,7 +43,6 @@
   font-size: 21px;
   font-weight: 700;
   text-align: center;
-  color: #999;
   background-color: transparent;
 }
 .modal-div {

@@ -17,6 +17,11 @@ export type editNickname = {
   nickname: string;
 };
 
+export type editPassword = {
+  email: string;
+  password: string;
+};
+
 const initialState = {
   emailCheck: "",
   checknum: "",
@@ -108,6 +113,23 @@ export const editUserNicknameAsync = createAsyncThunk(
   }
 );
 
+//비번 수정
+export const editUserPassWordAsync = createAsyncThunk(
+  "user/editUserPassWordAsync",
+  async (user: editPassword) => {
+    return await fetch("http://localhost:8080/user/edit-password", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        email: user.email,
+        password: user.password,
+      }),
+    }).then((res) => res);
+  }
+);
+
 //멤버추가
 export const memberAddAsync = createAsyncThunk(
   "user/memberAddAsync",
@@ -159,8 +181,13 @@ const userSlice = createSlice({
         console.log(action);
         state.emailSelect = action.payload;
         state.userInfo = { ...action.payload };
+      })
+      .addCase(editUserNicknameAsync.fulfilled, (state, action) => {})
+      .addCase(editUserPassWordAsync.fulfilled, (state, action) => {
+        console.log("g");
       });
   },
+
   // extraReducers: {
   //   [emailCertificationAsync.pending.type]: (state, action) => {
   //     console.log("emailCertification_pending");

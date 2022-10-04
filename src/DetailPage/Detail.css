@@ -9,7 +9,7 @@
       height: 20%;
       width: 100%;
     }
-    .DatailHeader {
+    .DetailHeader {
       padding: 20px;
       margin-left: 190px;
     } */
@@ -32,7 +32,7 @@
   padding-top: 10px;
 }
 
-.DatailHeader {
+.DetailHeader {
   display: flex;
   flex-direction: row;
   width: 100%;
@@ -42,15 +42,17 @@
   justify-content: space-between;
   align-items: center;
 }
-.DatailHeader h2 {
+.DetailHeader h2 {
   margin-left: 10px;
   margin-top: 10px;
   font-size: 16px;
+  cursor: pointer;
 }
-.DatailHeader .memo-setting {
+.DetailHeader .memo-setting {
   font-size: 24px;
   cursor: pointer;
 }
+
 .memo-container .memo-content {
   height: 80%;
   padding-top: 100px;

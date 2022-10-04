@@ -3,7 +3,7 @@ import "./Login.css";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { loginUser, setUserAsync } from "../../store/user-slice";
-
+import { getMemoListAsync } from "../../store/main-slice";
 const Login = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch<any>();
@@ -90,6 +90,7 @@ const Login = () => {
               onChange={handleChange}
             ></input>
             <input
+              type="password"
               className="inputBox"
               placeholder="비밀번호를 입력하세요"
               value={login.password}

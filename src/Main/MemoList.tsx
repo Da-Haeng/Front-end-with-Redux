@@ -1,6 +1,7 @@
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import MemoItem from "./MemoItem";
+import { useNavigate } from "react-router-dom";
 import "./Main.css";
 import {
   addMemoAsync,
@@ -9,11 +10,13 @@ import {
   Memo,
 } from "../store/main-slice";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus } from "@fortawesome/free-solid-svg-icons";
+import { faL, faPlus } from "@fortawesome/free-solid-svg-icons";
 import { RootState } from "../store";
+import { useMemo } from "react";
 
 const MemoList = () => {
   const dataId = useRef(4);
+  const navigate = useNavigate();
 
   const mainItems = [
     {
@@ -25,43 +28,39 @@ const MemoList = () => {
       color: 2,
     },
   ];
+
   const dispatch = useDispatch<any>();
 
   const { userInfo } = useSelector((state: any) => ({
     userInfo: state.user.userInfo,
   }));
+
   const memoData = useSelector((state: any) => ({
     memoData: state.main.memoData,
   }));
 
-  let defaultData: Memo = {
-    user: userInfo.email,
-    noteId: dataId.current,
-    noteName: "메모장 이름",
-    setDate: "지정 날짜",
-    noteDescription: "메모장 소개",
-    noteColor: 0,
-  };
+  const [update, setUpdate] = useState(false);
 
   useEffect(() => {
     defaultData.user = userInfo.email;
-    console.log(memoData.memoData);
-  }, [userInfo, memoData.memoData]);
+    dispatch(getMemoListAsync(userInfo.email));
+  }, [userInfo, update]);
 
-  const addItemHandler = () => {
-    // dispatch(
-    //   mainActions.addItemToMain({
-    //     user: "",
-    //     id: dataId.current,
-    //     title: "메모장 이름",
-    //     date: "지정 날짜",
-    //     description: "메모장 소개",
-    //     color: 0,
-    //   })
-    // );
-    console.log(defaultData);
-    dispatch(addMemoAsync(defaultData));
+  const addItemHandler = async () => {
+    await dispatch(addMemoAsync(defaultData));
+    setUpdate(!update);
     dataId.current += 1;
+  };
+
+  console.log(memoData);
+
+  let defaultData: Memo = {
+    user: userInfo.email,
+    noteId: dataId.current,
+    noteName: "",
+    setDate: "",
+    noteDescription: "",
+    noteColor: 0,
   };
 
   return (
@@ -79,4 +78,4 @@ const MemoList = () => {
     </div>
   );
 };
-export default MemoList;
+export default React.memo(MemoList);

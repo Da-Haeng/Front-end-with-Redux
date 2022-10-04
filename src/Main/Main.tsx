@@ -30,6 +30,7 @@ const Main = () => {
   const { userInfo } = useSelector((state: any) => ({
     userInfo: state.user.userInfo,
   }));
+
   useEffect(() => {
     dispatch(getMemoListAsync(userInfo.email));
   }, [userInfo]);

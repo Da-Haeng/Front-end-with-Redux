@@ -15,10 +15,10 @@ const DetailSetting = () => {
   return (
     <div className="DetailSetIcon">
       <div className="detailsetting">
-        <span>페이지 삭제</span>
+        <span onClick={openModal}>멤버 추가</span>
       </div>
       <div className="detailsetting">
-        <span onClick={openModal}>멤버 추가</span>
+        <span>메모장 탈퇴</span>
       </div>
       <div className="detailsetting detailsetting_none">
         <span>PDF 내보내기</span>
