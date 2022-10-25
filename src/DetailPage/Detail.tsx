@@ -15,8 +15,6 @@ const Detail = () => {
     (state: RootState) => state.main.memoData
   );
 
-  console.log(id);
-
   const detailItems = mainItems.find((it) => it.noteId === parseInt(id!))!;
   console.log(detailItems);
   const navigate = useNavigate();

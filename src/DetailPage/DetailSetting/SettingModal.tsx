@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 import "./Modal.css";
 import { useDispatch, useSelector } from "react-redux";
-import { memberAddAsync } from "../../store/user-slice";
+import { memberFindAsync, memberInviteAsync } from "../../store/user-slice";
 
 type ModalDefaultType = {
   open: boolean;
@@ -10,6 +11,9 @@ type ModalDefaultType = {
 };
 
 const SettingModal = (props: ModalDefaultType) => {
+  const { id } = useParams();
+  const navigate = useNavigate();
+
   const { emailSelect } = useSelector((state: any) => ({
     emailSelect: state.user.emailSelect,
   }));
@@ -22,20 +26,40 @@ const SettingModal = (props: ModalDefaultType) => {
   const [email, setEmail] = useState("");
   const [showNickname, setShowNickName] = useState("");
   const [show, setShow] = useState(false);
+  const [memNone, setMemNone] = useState(false);
 
   const emailList = emailSelect.map((it: any) => it.email);
-  console.log(emailList);
 
   useEffect(() => {
     // setShowNickName(emaillist);
+    // setShow(showState);
+    // setMemNone(memNoneState);
+    if (emailSelect.length == 0) {
+      setMemNone(true);
+    } else {
+      setMemNone(false);
+    }
   }, [emailSelect]);
+
+  useEffect(() => {
+    setShow(false);
+    setMemNone(false);
+  }, [open]);
 
   const onKeyPress = (e: any) => {
     if (e.key === "Enter") {
-      dispatch(memberAddAsync(email));
+      dispatch(memberFindAsync(email));
       setShow(true);
       setEmail("");
     }
+  };
+
+  const inviteHandler = (email: any) => {
+    const noteId = parseInt(id!);
+    console.log(email);
+    dispatch(memberInviteAsync({ email: email, noteId: noteId }));
+    alert("멤버를 추가하였습니다.");
+    close();
   };
 
   return (
@@ -43,12 +67,13 @@ const SettingModal = (props: ModalDefaultType) => {
     <div className={open ? "openModal modal" : "modal"}>
       {open ? (
         <section>
-          <header>
+          <div className="memberHeader">
+            <button className="closeNone">&times;</button>
             {header}
             <button className="close" onClick={close}>
               &times;
             </button>
-          </header>
+          </div>
           <div className="modal-div">
             <input
               placeholder="EMAIL을 검색해주세요"
@@ -60,23 +85,34 @@ const SettingModal = (props: ModalDefaultType) => {
               onKeyPress={onKeyPress}
             ></input>
 
-            {show ? (
-              emailSelect.map((it: any) => (
+            {show && memNone == false ? (
+              emailList.map((it: any) => (
                 <div className="modal-list modal-list-line">
                   <div className="modal-list">
                     <img
                       className="userimg"
                       src={process.env.PUBLIC_URL + "/userimg.png"}
                     ></img>
-                    <span>{it.email}</span>
+                    <span>{it}</span>
                   </div>
                   <div>
-                    <span className="user-invite">초대하기</span>
+                    <span
+                      className="user-invite"
+                      onClick={() => inviteHandler(it)}
+                    >
+                      초대하기
+                    </span>
                   </div>
                 </div>
               ))
+            ) : show && memNone ? (
+              <div className="memberNone">
+                <span className="memberSpan">가입된 멤버가 없습니다.</span>
+              </div>
             ) : (
-              <span>초대할 멤버를 검색해주세요</span>
+              <div className="memberNone">
+                <span className="memberSpan">초대할 멤버를 검색해주세요</span>
+              </div>
             )}
           </div>
         </section>

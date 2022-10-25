@@ -35,6 +35,7 @@ const SetModal = (props: PropsType) => {
     dispatch(
       editUserNicknameAsync({ email: props.userInfo.email, nickname: nickname })
     );
+    alert("닉네임이 변경되었습니다.");
   };
 
   const changePassWord = () => {
@@ -47,6 +48,7 @@ const SetModal = (props: PropsType) => {
     }
     setPw("");
     setRePW("");
+    alert("비밀번호가 변경되었습니다.");
   };
 
   return (
@@ -54,12 +56,13 @@ const SetModal = (props: PropsType) => {
     <div className={open ? "openModal setModal" : "setModal"}>
       {open ? (
         <section>
-          <header>
+          <div className="memberHeader">
+            <button className="closeNone">&times;</button>
             계정
             <button className="close" onClick={close}>
               &times;
             </button>
-          </header>
+          </div>
           <div className="setModal-div">
             <span className="setModal-span">개인정보</span>
             <div className="setModal-info">

@@ -26,24 +26,24 @@
   overflow: hidden;
   overflow-y: auto;
 }
-.setModal > section > header {
+.memberHeader {
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-content: center;
-  position: relative;
-  padding: 16px 64px 16px 16px;
+  padding: 18px 20px;
   font-weight: 700;
   font-size: 15px;
 }
-.setModal > section > header button {
-  position: absolute;
-  top: 15px;
-  right: 15px;
+.memberHeader button {
   width: 30px;
-  font-size: 21px;
+  font-size: 17px;
   font-weight: 700;
   text-align: center;
   background-color: transparent;
+}
+
+.closeNone {
+  visibility: hidden;
 }
 
 .setModal-div {

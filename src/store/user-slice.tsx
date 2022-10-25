@@ -22,6 +22,11 @@ export type editPassword = {
   password: string;
 };
 
+export type memberInvite = {
+  email: string;
+  noteId: number;
+};
+
 const initialState = {
   emailCheck: "",
   checknum: "",
@@ -84,8 +89,9 @@ export const emailCertificationAsync = createAsyncThunk(
 
 //이메일 중복 확인
 export const emailOverlapAsync = createAsyncThunk(
-  "user/emailOverlap",
+  "user/emailOverlapAsync",
   async (email: string) => {
+    console.log(email);
     return await fetch("http://localhost:8080/user/check-mail", {
       method: "POST",
       headers: {
@@ -130,9 +136,9 @@ export const editUserPassWordAsync = createAsyncThunk(
   }
 );
 
-//멤버추가
-export const memberAddAsync = createAsyncThunk(
-  "user/memberAddAsync",
+//멤버 검색
+export const memberFindAsync = createAsyncThunk(
+  "user/memberFindAsync",
   async (email: string) => {
     return await fetch("http://localhost:8080/user/find-member", {
       method: "POST",
@@ -140,6 +146,34 @@ export const memberAddAsync = createAsyncThunk(
         "Content-Type": "application/json",
       },
       body: JSON.stringify({ email }),
+    }).then((res) => res.json());
+  }
+);
+
+//멤버 초대
+export const memberInviteAsync = createAsyncThunk(
+  "user/memberInviteAsync",
+  async (member: memberInvite) => {
+    return await fetch("http://localhost:8080/member/insert", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ email: member.email, noteId: member.noteId }),
+    }).then((res) => res.json());
+  }
+);
+
+//멤버 나가기
+export const memberExitAsync = createAsyncThunk(
+  "user/memberExitAsync",
+  async (member: memberInvite) => {
+    return await fetch("http://localhost:8080/member/delete", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ email: member.email, noteId: member.noteId }),
     }).then((res) => res.json());
   }
 );
@@ -167,6 +201,9 @@ const userSlice = createSlice({
         console.log(action.payload.result);
         state.emailCheck = action.payload.result;
       })
+      .addCase(emailOverlapAsync.rejected, (state, action) => {
+        console.log("no");
+      })
       .addCase(addUserAsync.fulfilled, (state, action) => {
         state.join = true;
       })
@@ -177,12 +214,14 @@ const userSlice = createSlice({
         state.success = true;
         state.userInfo = { ...action.payload };
       })
-      .addCase(memberAddAsync.fulfilled, (state, action) => {
-        console.log(action);
+      .addCase(memberFindAsync.fulfilled, (state, action) => {
         state.emailSelect = action.payload;
-        state.userInfo = { ...action.payload };
+      })
+      .addCase(memberInviteAsync.fulfilled, (state, action) => {
+        console.log("memberInvite");
       })
       .addCase(editUserNicknameAsync.fulfilled, (state, action) => {})
+      .addCase(memberExitAsync.fulfilled, (state, action) => {})
       .addCase(editUserPassWordAsync.fulfilled, (state, action) => {
         console.log("g");
       });

@@ -81,6 +81,7 @@ const SignUp = () => {
         alert("이메일 형식에 맞게 입력해세요!");
         return false;
       } else {
+        console.log(user.email);
         dispatch(emailOverlapAsync(user.email));
       }
     }
