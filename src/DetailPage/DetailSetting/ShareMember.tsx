@@ -30,9 +30,16 @@ const ShareMember = (props: ModalDefaultType) => {
     <div className={open ? "openModal modal" : "modal"}>
       {open ? (
         <section>
-          <div>
+          <div className="memberHeader">
+            <button className="closeNone">&times;</button>
+            {header}
+            <button className="close" onClick={close}>
+              &times;
+            </button>
+          </div>
+          <div className="shareMembermodal-div">
             {MemberList.map((it: any) => (
-              <div className="modal-list">
+              <div className="modal-list modal-list-line">
                 <img
                   className="userimg"
                   src={process.env.PUBLIC_URL + "/userimg.png"}

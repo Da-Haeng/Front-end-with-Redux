@@ -67,23 +67,12 @@ const Login = () => {
           </span>
           <img className="tutorial-img" src="image/tutorial.png" />
         </div>
-        <div className="tutorial-start">
-          <span className="tutorial-maintitle">시작하기</span>
-          <br></br>
-          <div className="loginBox">
-            <button className="btn-social">
-              <img className="google-img" src="image/google.png" />
-              구글로 시작하기
-            </button>
-            <button className="btn-social">
-              <img className="naver-img" src="image/naver-icon-file.png" />
-              네이버로 시작하기
-            </button>
-          </div>
-          <br></br>
+        <div className="tutorial-start login-start">
+          <span className="tutorial-maintitle signupTitle">로그인</span>
+
           <div className="loginBox">
             <input
-              className="inputBox"
+              className="inputBox emailLoginBox"
               placeholder="이메일을 입력하세요"
               value={login.email}
               name="email"
@@ -97,8 +86,7 @@ const Login = () => {
               name="password"
               onChange={handleChange}
             ></input>
-            <a style={{ color: "grey" }}>비밀번호 찾기</a>
-
+            <span className="passwordFind">비밀번호 찾기</span>
             <button className="loginBtn" onClick={handleSubmit}>
               로그인 하기
             </button>

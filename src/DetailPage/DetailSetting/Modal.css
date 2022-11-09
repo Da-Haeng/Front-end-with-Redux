@@ -110,6 +110,13 @@
 .memberSpan {
   width: auto !important;
 }
+
+.shareMembermodal-div {
+  display: flex;
+  flex-direction: column;
+  margin: 30px;
+}
+
 @keyframes modal-show {
   from {
     opacity: 0;

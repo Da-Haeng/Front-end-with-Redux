@@ -38,6 +38,7 @@ const SignUp = () => {
   const [certification, setCertification] = useState(false);
   const [joinState, setJoinState] = useState(join);
   const [emailcheckState, setEmailCheckState] = useState(true);
+  const [snsNickname, setSnsNickname] = useState(false);
 
   useEffect(() => {
     // {
@@ -113,6 +114,11 @@ const SignUp = () => {
     }
   };
 
+  //sns로그인 시 닉네임 넘어가기
+  const snsNicknameHandler = () => {
+    setSnsNickname(true);
+  };
+
   return (
     <div className="tutorial">
       <div className="tutorial-header">
@@ -130,20 +136,19 @@ const SignUp = () => {
           <img className="tutorial-img" src="image/tutorial.png" />
         </div>
         <div className="tutorial-start">
-          <span className="tutorial-maintitle">시작하기</span>
-          <br></br>
+          <span className="tutorial-maintitle signupTitle">회원가입</span>
           <div className="loginBox">
-            <button className="btn-social">
+            <div className="btn-social" onClick={snsNicknameHandler}>
               <img className="google-img" src="image/google.png" />
-              구글로 시작하기
-            </button>
-            <button className="btn-social">
+              <span>구글로 시작하기</span>
+            </div>
+            <div className="btn-social" onClick={snsNicknameHandler}>
               <img className="naver-img" src="image/naver-icon-file.png" />
-              네이버로 시작하기
-            </button>
+              <span>네이버로 시작하기</span>
+            </div>
           </div>
-          {!certification && (
-            <div className="loginBox">
+          {!certification && snsNickname === false && (
+            <div className="loginBox signupBox">
               <input
                 type="email"
                 className="inputBox"
@@ -166,31 +171,48 @@ const SignUp = () => {
               </button>
             </div>
           )}
-          {certification && (
+          {certification && snsNickname === false && (
             <div className="loginBox">
-              <span className="tutorial-maintitle">인증완료</span>
+              <span className="tutorial-maintitle signupTitle">인증완료</span>
+              <div className="loginBox">
+                <input
+                  type="text"
+                  className="inputNextBox"
+                  placeholder="닉네임을 입력하세요"
+                  value={user.nickname}
+                  name="nickname"
+                  onChange={handleChange}
+                ></input>
+                <input
+                  type="password"
+                  className="inputNextBox"
+                  placeholder="비밀번호를 입력하세요"
+                  value={user.password}
+                  name="password"
+                  onChange={handleChange}
+                ></input>
+                <input
+                  type="password"
+                  className="inputNextBox"
+                  placeholder="비밀번호 확인"
+                  value={passwordCheck}
+                  onChange={handlePasswordChange}
+                ></input>
+                <button className="getStart" onClick={handleSubmit}>
+                  시작하기
+                </button>
+              </div>
+            </div>
+          )}
+          {snsNickname && (
+            <div className="loginBox">
               <input
                 type="text"
-                className="inputNextBox"
+                className="inputNextBox nicknameBox"
                 placeholder="닉네임을 입력하세요"
                 value={user.nickname}
                 name="nickname"
                 onChange={handleChange}
-              ></input>
-              <input
-                type="password"
-                className="inputNextBox"
-                placeholder="비밀번호를 입력하세요"
-                value={user.password}
-                name="password"
-                onChange={handleChange}
-              ></input>
-              <input
-                type="password"
-                className="inputNextBox"
-                placeholder="비밀번호 확인"
-                value={passwordCheck}
-                onChange={handlePasswordChange}
               ></input>
               <button className="getStart" onClick={handleSubmit}>
                 시작하기
