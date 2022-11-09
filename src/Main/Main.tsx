@@ -42,6 +42,7 @@ const Main = () => {
         <h1 className="main-title" onClick={tutorialGo}>
           DA : HAENG
         </h1>
+
         <MemoList />
       </div>
       <div className="RightSide">

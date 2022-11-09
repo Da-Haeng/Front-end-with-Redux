@@ -36,6 +36,7 @@ const initialState = {
   error: null,
   success: false,
   emailSelect: [],
+  shareMember: [],
 };
 
 // 회원추가
@@ -115,7 +116,7 @@ export const editUserNicknameAsync = createAsyncThunk(
         email: user.email,
         nickname: user.nickname,
       }),
-    }).then((res) => res);
+    }).then((res) => res.json());
   }
 );
 
@@ -164,6 +165,20 @@ export const memberInviteAsync = createAsyncThunk(
   }
 );
 
+//공유멤버 확인
+export const memberShareAsync = createAsyncThunk(
+  "user/memberShareAsync",
+  async (noteId: any) => {
+    return await fetch("http://localhost:8080/user/memberlist", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ noteId }),
+    }).then((res) => res.json());
+  }
+);
+
 //멤버 나가기
 export const memberExitAsync = createAsyncThunk(
   "user/memberExitAsync",
@@ -198,8 +213,8 @@ const userSlice = createSlice({
         state.checknum = action.payload.checkNum;
       })
       .addCase(emailOverlapAsync.fulfilled, (state, action) => {
-        console.log(action.payload.result);
         state.emailCheck = action.payload.result;
+        console.log(state.emailCheck);
       })
       .addCase(emailOverlapAsync.rejected, (state, action) => {
         console.log("no");
@@ -220,7 +235,16 @@ const userSlice = createSlice({
       .addCase(memberInviteAsync.fulfilled, (state, action) => {
         console.log("memberInvite");
       })
-      .addCase(editUserNicknameAsync.fulfilled, (state, action) => {})
+      .addCase(memberShareAsync.fulfilled, (state, action) => {
+        state.shareMember = action.payload;
+        console.log("memberShare");
+      })
+      .addCase(editUserNicknameAsync.fulfilled, (state, action) => {
+        state.userInfo = {
+          ...state.userInfo,
+          nickname: action.payload.nickname,
+        };
+      })
       .addCase(memberExitAsync.fulfilled, (state, action) => {})
       .addCase(editUserPassWordAsync.fulfilled, (state, action) => {
         console.log("g");

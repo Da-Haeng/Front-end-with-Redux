@@ -6,7 +6,8 @@ export type Memo = {
   user: string;
   noteId: number;
   noteName: string;
-  setDate: string;
+  startDate: Date;
+  endDate: Date;
   noteDescription: string;
   noteColor: number;
 };
@@ -72,7 +73,8 @@ export const addMemoAsync = createAsyncThunk(
       body: JSON.stringify({
         email: memo.user,
         noteName: memo.noteName,
-        setDate: memo.setDate,
+        startDate: memo.startDate,
+        endDate: memo.endDate,
         noteDescription: memo.noteDescription,
         noteColor: memo.noteColor,
       }),
@@ -94,7 +96,8 @@ export const editMemoAsync = createAsyncThunk(
         noteName: updateMemo.noteName,
         noteDescription: updateMemo.noteDescription,
         noteColor: updateMemo.noteColor,
-        setDate: updateMemo.setDate,
+        startDate: updateMemo.startDate,
+        endDate: updateMemo.endDate,
       }),
     }).then((res) => res.json());
   }

@@ -30,7 +30,10 @@ const Detail = () => {
         </div>
         <div className="memo-content">
           {mainItems && <h1>{detailItems.noteName}</h1>}
-          {mainItems && <span>{detailItems.setDate}</span>}
+          {/* <div>
+            {mainItems && <span>{detailItems.startDate.toString()}</span>}
+            {mainItems && <span>{detailItems.endDate.toString()}</span>}
+          </div> */}
         </div>
         <div className="memo-category">
           <Category mainId={1} />

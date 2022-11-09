@@ -30,7 +30,7 @@ function SideBar() {
     <div className="sidebar">
       <div className="sidebar-profile">
         <span className="profile-name">{userInfo.nickname.charAt(0)}</span>
-        {/*  */}
+        {/* userInfo.nickname.charAt(0) */}
         <span className="profile-info profile-info-top">
           {userInfo.nickname}님의
         </span>

@@ -11,6 +11,9 @@ import { faPencil, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useNavigate } from "react-router-dom";
 import "./Main.css";
+import DatePicker from "react-datepicker";
+import { ko } from "date-fns/esm/locale";
+import "react-datepicker/dist/react-datepicker.css";
 
 const MemoItem = (props: any) => {
   const dispatch = useDispatch<any>();
@@ -19,9 +22,9 @@ const MemoItem = (props: any) => {
   const [newTitle, setNewTitle] = useState(props.noteName);
   const [newDescription, setNewDescription] = useState(props.noteDescription);
   const [newColor, setNewColor] = useState(props.noteColor);
-  const [newDate, setNewDate] = useState(props.setDate);
-
   const [update, setUpdate] = useState(false);
+  const [startDate, setStartDate] = useState(new Date());
+  const [endDate, setEndDate] = useState(new Date());
 
   const { userInfo } = useSelector((state: any) => ({
     userInfo: state.user.userInfo,
@@ -66,7 +69,8 @@ const MemoItem = (props: any) => {
       editMemoAsync({
         noteId: props.noteId,
         noteName: newTitle,
-        setDate: newDate,
+        startDate: startDate,
+        endDate: endDate,
         noteDescription: newDescription,
         noteColor: newColor,
       })
@@ -162,14 +166,31 @@ const MemoItem = (props: any) => {
 
       {isEdit ? (
         <div className="main-memocontext">
-          <input
-            type="text"
-            className="main-memodate"
-            value={newDate}
-            placeholder="지정 날짜"
-            onChange={(e) => setNewDate(e.target.value)}
+          <div
+            className="custom-react-datepicker__wrapper"
             onClick={(e) => e.stopPropagation()}
-          />
+          >
+            <DatePicker
+              selected={startDate}
+              onChange={(date: Date) => setStartDate(date)}
+              selectsStart
+              startDate={startDate}
+              endDate={endDate}
+              locale={ko}
+              dateFormat="yyyy/MM/dd"
+            />
+            <span className="datePickSpan">~</span>
+            <DatePicker
+              selected={endDate}
+              onChange={(date: Date) => setEndDate(date)}
+              selectsEnd
+              startDate={startDate}
+              endDate={endDate}
+              locale={ko}
+              dateFormat="yyyy/MM/dd"
+            />
+          </div>
+
           <input
             type="text"
             className="main-memointro"
@@ -181,13 +202,54 @@ const MemoItem = (props: any) => {
         </div>
       ) : (
         <div className="main-memocontext">
-          <input
-            type="text"
-            className="main-memodate"
-            value={props.setDate}
-            placeholder="지정 날짜"
-            readOnly
-          />
+          {/* <div className="dateDiv">
+            <input
+              type="text"
+              className="main-memodate"
+              value={newDate}
+              placeholder="지정 날짜"
+              onChange={(e) => setNewDate(e.target.value)}
+              onClick={(e) => e.stopPropagation()}
+              readOnly
+            />
+            <span className="datePickSpan">~</span>
+            <input
+              type="text"
+              className="main-memodate"
+              value={newDate}
+              placeholder="지정 날짜"
+              onChange={(e) => setNewDate(e.target.value)}
+              onClick={(e) => e.stopPropagation()}
+              readOnly
+            />
+          </div> */}
+          <div
+            className="custom-react-datepicker__wrapper"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <DatePicker
+              selected={startDate}
+              onChange={(date: Date) => setStartDate(date)}
+              selectsStart
+              startDate={startDate}
+              endDate={endDate}
+              locale={ko}
+              dateFormat="yyyy/MM/dd"
+              readOnly
+            />
+            <span className="datePickSpan">~</span>
+            <DatePicker
+              selected={endDate}
+              onChange={(date: Date) => setEndDate(date)}
+              selectsEnd
+              startDate={startDate}
+              endDate={endDate}
+              locale={ko}
+              dateFormat="yyyy/MM/dd"
+              readOnly
+            />
+          </div>
+
           <input
             type="text"
             className="main-memointro"

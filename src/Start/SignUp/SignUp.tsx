@@ -37,8 +37,14 @@ const SignUp = () => {
   const [passwordCheck, setPasswordCheck] = useState("");
   const [certification, setCertification] = useState(false);
   const [joinState, setJoinState] = useState(join);
+  const [emailcheckState, setEmailCheckState] = useState(true);
 
   useEffect(() => {
+    // {
+    //   join && navigate("/main", { replace: true });
+    // }
+    console.log("join", join);
+    console.log(emailcheck);
     if (join === false && emailcheck === "EXIST") {
       setUser({ ...user, email: "" });
       alert("이미 등록된 이메일입니다");
@@ -49,10 +55,7 @@ const SignUp = () => {
     if (join === true && emailcheck === "NOT EXIST") {
       navigate("/login", { replace: true });
     }
-    // {
-    //   join && navigate("/main", { replace: true });
-    // }
-  }, [emailcheck, join]);
+  }, [emailcheckState]);
 
   const dispatch = useDispatch<any>();
 
@@ -82,7 +85,8 @@ const SignUp = () => {
         return false;
       } else {
         console.log(user.email);
-        dispatch(emailOverlapAsync(user.email));
+        await dispatch(emailOverlapAsync(user.email));
+        setEmailCheckState(!emailcheckState);
       }
     }
   };
@@ -97,6 +101,7 @@ const SignUp = () => {
         alert("인증코드가 올바르지 않습니다.");
       }
     }
+    console.log(user);
   };
 
   //최종회원가입

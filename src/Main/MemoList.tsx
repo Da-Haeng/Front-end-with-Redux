@@ -18,6 +18,9 @@ const MemoList = () => {
   const dataId = useRef(4);
   const navigate = useNavigate();
 
+  const [startDate, setStartDate] = useState(new Date());
+  const [endDate, setEndDate] = useState(new Date());
+
   const mainItems = [
     {
       user: "",
@@ -58,7 +61,8 @@ const MemoList = () => {
     user: userInfo.email,
     noteId: dataId.current,
     noteName: "",
-    setDate: "",
+    startDate: startDate,
+    endDate: endDate,
     noteDescription: "",
     noteColor: 0,
   };

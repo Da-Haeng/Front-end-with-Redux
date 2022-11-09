@@ -2,7 +2,11 @@ import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import "./Modal.css";
 import { useDispatch, useSelector } from "react-redux";
-import { memberFindAsync, memberInviteAsync } from "../../store/user-slice";
+import {
+  memberFindAsync,
+  memberInviteAsync,
+  memberShareAsync,
+} from "../../store/user-slice";
 
 type ModalDefaultType = {
   open: boolean;
