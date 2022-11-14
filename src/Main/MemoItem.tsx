@@ -14,6 +14,7 @@ import "./Main.css";
 import DatePicker from "react-datepicker";
 import { ko } from "date-fns/esm/locale";
 import "react-datepicker/dist/react-datepicker.css";
+import { getCategoryListAsync } from "../store/category-slice";
 
 const MemoItem = (props: any) => {
   const dispatch = useDispatch<any>();
@@ -45,7 +46,8 @@ const MemoItem = (props: any) => {
   };
 
   const navigate = useNavigate();
-  const goDetail = () => {
+  const goDetail = async () => {
+    await dispatch(getCategoryListAsync(props.noteId));
     navigate(`/detail/${props.noteId}`);
   };
 

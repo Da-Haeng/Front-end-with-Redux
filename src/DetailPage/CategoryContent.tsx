@@ -7,30 +7,33 @@ import { Document } from "../store/category-slice";
 import "./Detail.css";
 
 type CategoryContentProps = {
-  mainId: number;
+  noteId: number;
   categoryId: number;
-  item: Document[];
 };
 
 const CategoryContent = (props: CategoryContentProps) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const mainId = props.mainId;
-  const categoryItem = props.item;
+  const cellItems = useSelector((state: any) => state.category.cell);
+
+  const noteId = props.noteId;
   const categoryId = props.categoryId;
 
-  const categoryContent = categoryItem.find(
-    (it: Document) => it.categoryId === categoryId
-  );
-
-  const categoryCell = categoryContent?.cell;
+  const categoryContent = cellItems?.cell;
+  const categoryLength = categoryContent?.length;
+  console.log(categoryContent);
 
   return (
     <div className="CategoryContent">
       <div className="CategoryCell">
-        {categoryCell?.map((it) => (
-          <CategoryCell mainId={mainId} item={it} categoryId={categoryId} />
+        {categoryContent?.map((it: any) => (
+          <CategoryCell
+            noteId={noteId}
+            item={it}
+            categoryId={categoryId}
+            categoryLength={categoryLength}
+          />
         ))}
       </div>
     </div>

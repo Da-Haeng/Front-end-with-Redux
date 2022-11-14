@@ -45,6 +45,7 @@ const MemosInitialState: MemosState = [
   //   color: 3,
   // },
 ];
+
 // (/main) 모든 메모 조회
 export const getMemoListAsync = createAsyncThunk(
   "main/getMemoListAsync",
@@ -102,6 +103,7 @@ export const editMemoAsync = createAsyncThunk(
     }).then((res) => res.json());
   }
 );
+
 type deleteProps = {
   memoId: number;
   email: string;
@@ -127,41 +129,7 @@ export const removeMemoAsync = createAsyncThunk(
 const mainSlice = createSlice({
   name: "main",
   initialState: initialState,
-  reducers: {
-    // addItemToMain: (state, { payload }: PayloadAction<Memo>) => {
-    //   state.items.push({
-    //     user: "louisluzet@naver.com",
-    //     id: payload.id,
-    //     title: payload.title,
-    //     date: payload.date,
-    //     description: payload.description,
-    //     color: payload.color,
-    //   });
-    // },
-    // editItemToMain: (state, { payload }: PayloadAction<Memo>) => {
-    //   const newItem = state.items.find((it) => it.id === payload.id);
-    //   if (newItem) {
-    //     const idx = state.items.findIndex((it) => it.id === newItem.id);
-    //     state.items[idx].title = payload.title;
-    //     state.items[idx].date = payload.date;
-    //     state.items[idx].description = payload.description;
-    //     state.items[idx].color = payload.color;
-    //   }
-    // },
-    // removeItemToMain: (
-    //   state,
-    //   {
-    //     payload,
-    //   }: PayloadAction<{
-    //     id: number;
-    //   }>
-    // ) => {
-    //   const newItem = payload;
-    //   return produce(state, (draft) => {
-    //     draft.items = draft.items.filter((item) => item.id !== newItem.id);
-    //   });
-    // },
-  },
+  reducers: {},
   extraReducers: (builder) => {
     builder
       .addCase(getMemoListAsync.fulfilled, (state, action) => {

@@ -7,9 +7,11 @@ import Category from "./Category";
 import "./Detail.css";
 import { RootState } from "../store";
 import { Memo, MemosState } from "../store/main-slice";
+import { getCellListAsync } from "../store/category-slice";
 
 const Detail = () => {
   const { id } = useParams();
+  const dispatch = useDispatch<any>();
 
   const mainItems: MemosState = useSelector(
     (state: RootState) => state.main.memoData
@@ -36,7 +38,7 @@ const Detail = () => {
           </div> */}
         </div>
         <div className="memo-category">
-          <Category mainId={1} />
+          <Category noteId={parseInt(id!)} />
         </div>
       </div>
     </div>

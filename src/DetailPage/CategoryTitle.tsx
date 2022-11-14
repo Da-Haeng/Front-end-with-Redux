@@ -1,37 +1,30 @@
 import React, { useState, useRef, useEffect, useMemo } from "react";
 import { Document } from "../store/category-slice";
 import { useDispatch, useSelector } from "react-redux";
-import { categoryActions, MemoDataState } from "../store/category-slice";
 import { RootState } from "../store";
 import CategoryContent from "./CategoryContent";
+import { getCellListAsync } from "../store/category-slice";
 
 type CategoryTitleProps = {
   mainId: number;
   item: Document[];
 };
 
-const CategoryTitle = (props: CategoryTitleProps) => {
-  const mainItems: MemoDataState = useSelector(
-    (state: RootState) => state.category.items
-  );
+const CategoryTitle = (props: any) => {
+  const dispatch = useDispatch<any>();
 
-  const dispatch = useDispatch();
-
-  const categoryData = props.item;
+  const categoryData = props.categoryItems;
   const categoryIndex = categoryData[0];
 
-  const mainId = props.mainId;
+  const noteId = props.noteId;
 
-  const categoryItems = mainItems.filter((it) => it.mainId === mainId);
-  const categoryItem = categoryItems.map((it) => it.document);
-  const categoryDataObject = categoryItem.reduce((it) => it);
-  const categoryLength = categoryDataObject.length + 1;
+  const categoryLength = categoryData.length + 1;
 
   const dataId = useRef(categoryLength);
 
   const [Highlight, setHighlight] = useState(categoryIndex.categoryId);
   const [categoryId, setCategoryId] = useState(categoryIndex.categoryId);
-  const [categeoryTitle, setCategoryTitle] = useState("");
+  const [categoryName, setCategoryName] = useState("");
   const [editTitle, setEditTitle] = useState(false);
 
   useEffect(() => {
@@ -39,38 +32,39 @@ const CategoryTitle = (props: CategoryTitleProps) => {
     setCategoryId(categoryIndex.categoryId);
   }, [categoryData]);
 
-  const onHighlight = (id: number) => {
+  const onHighlight = async (id: number) => {
     setHighlight(id);
     setCategoryId(id);
-    console.log(categoryId);
+    await dispatch(getCellListAsync(id));
   };
 
   useEffect(() => {
-    const title = categoryDataObject.find((it) => it.categoryId === categoryId);
+    const title = categoryData.find((it: any) => it.categoryId === categoryId);
     if (title) {
-      setCategoryTitle(title.categoryTitle);
+      setCategoryName(title.categoryName);
     }
   }, [categoryId]);
 
   const addItemHandler = () => {
-    dispatch(
-      categoryActions.addItemToCategory({
-        categoryId: dataId.current,
-        categoryTitle: "카테고리명",
-        mainId: mainId,
-      })
-    );
+    // dispatch(
+    //   categoryActions.addItemToCategory({
+    //     categoryId: dataId.current,
+    //     categoryTitle: "카테고리명",
+    //     mainId: mainId,
+    //   })
+    // );
+    // dispatch(addItemToCategoryAsync({ noteId:noteId}));
 
     dataId.current += 1;
   };
 
   const deleteCategoryHandler = () => {
-    dispatch(
-      categoryActions.removeItemToCateogory({
-        categoryId: categoryId,
-        mainId: mainId,
-      })
-    );
+    // dispatch(
+    //   categoryActions.removeItemToCateogory({
+    //     categoryId: categoryId,
+    //     mainId: mainId,
+    //   })
+    // );
     setHighlight(categoryIndex.categoryId);
     setCategoryId(categoryIndex.categoryId);
   };
@@ -84,7 +78,7 @@ const CategoryTitle = (props: CategoryTitleProps) => {
     <>
       <div className="category_container">
         {categoryData &&
-          categoryData.map((it) => (
+          categoryData.map((it: any) => (
             <>
               <span
                 id={String(it.categoryId)}
@@ -95,7 +89,7 @@ const CategoryTitle = (props: CategoryTitleProps) => {
                 }
                 onClick={() => onHighlight(it.categoryId)}
               >
-                {it.categoryTitle}
+                {it.categoryName}
               </span>
             </>
           ))}
@@ -112,7 +106,7 @@ const CategoryTitle = (props: CategoryTitleProps) => {
         <div className="edittitle_box">
           <input
             type="text"
-            value={categeoryTitle}
+            value={categoryTitle}
             autoFocus
             className="edittitle"
             size={10}
@@ -123,11 +117,7 @@ const CategoryTitle = (props: CategoryTitleProps) => {
 
       <div className="category_context">
         {categoryData && (
-          <CategoryContent
-            mainId={mainId}
-            categoryId={categoryId}
-            item={categoryData}
-          />
+          <CategoryContent noteId={noteId} categoryId={categoryId} />
         )}
       </div>
     </>
