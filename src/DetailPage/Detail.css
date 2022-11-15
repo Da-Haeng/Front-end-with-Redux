@@ -121,7 +121,10 @@
 .edittitle {
   outline: none;
   border: none;
-  margin-bottom: 20px;
+  font-size: 14px;
+  background-color: #a9bac3;
+  padding: 3px 10px;
+  border-radius: 5px;
 }
 
 /* Detail Set Icon */
@@ -170,10 +173,11 @@
 
 .CategorySetSmall {
   display: flex;
-  width: 70%;
   padding: 10px 5px;
-  justify-content: flex-end;
-  margin-left: 160px;
+  justify-content: center;
+  align-items: flex-end;
+  margin-right: 270px;
+  flex-direction: column;
 }
 
 .CategorySetSmall span {
@@ -397,4 +401,17 @@
 
 .ImageBtn {
   display: none;
+}
+
+.edittitle_box {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  top: 10px;
+}
+
+.edittitle_box span {
+  font-weight: bold;
 }

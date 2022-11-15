@@ -5,6 +5,7 @@ import {
   emailCertificationAsync,
   emailOverlapAsync,
   User,
+  naverLoginAsync,
 } from "../../store/user-slice";
 import { useDispatch, useSelector } from "react-redux";
 import React, { ChangeEvent, useEffect, useMemo, useState } from "react";
@@ -15,16 +16,25 @@ import Main from "../../Main/Main";
 const SignUp = () => {
   const navigate = useNavigate();
 
-  const { emailcheck, checknum, join, loading, userInfo, error, success } =
-    useSelector((state: any) => ({
-      emailcheck: state.user.emailCheck,
-      checknum: state.user.checknum,
-      join: state.user.join,
-      loading: state.user.loading,
-      userInfo: state.user.userInfo,
-      error: state.user.error,
-      success: state.user.success,
-    }));
+  const {
+    emailcheck,
+    checknum,
+    join,
+    loading,
+    userInfo,
+    error,
+    success,
+    apiURL,
+  } = useSelector((state: any) => ({
+    emailcheck: state.user.emailCheck,
+    checknum: state.user.checknum,
+    join: state.user.join,
+    loading: state.user.loading,
+    userInfo: state.user.userInfo,
+    error: state.user.error,
+    success: state.user.success,
+    apiURL: state.user.apiURL,
+  }));
 
   const [user, setUser] = useState<User>({
     email: "",
@@ -39,12 +49,12 @@ const SignUp = () => {
   const [joinState, setJoinState] = useState(join);
   const [emailcheckState, setEmailCheckState] = useState(true);
   const [snsNickname, setSnsNickname] = useState(false);
+  const [snsLogin, setSnsLogin] = useState(false);
 
   useEffect(() => {
     // {
     //   join && navigate("/main", { replace: true });
     // }
-    console.log("join", join);
     console.log(emailcheck);
     if (join === false && emailcheck === "EXIST") {
       setUser({ ...user, email: "" });
@@ -57,6 +67,18 @@ const SignUp = () => {
       navigate("/login", { replace: true });
     }
   }, [emailcheckState]);
+
+  const loginHandler = () => {
+    window.location.href = apiURL;
+  };
+
+  useEffect(() => {
+    if (snsLogin == true) {
+      loginHandler();
+      const code = new URL(window.location.href).searchParams.get("code");
+      console.log(code);
+    }
+  }, [snsLogin]);
 
   const dispatch = useDispatch<any>();
 
@@ -119,6 +141,11 @@ const SignUp = () => {
     setSnsNickname(true);
   };
 
+  const naverHandler = async () => {
+    await dispatch(naverLoginAsync());
+    setSnsLogin(true);
+  };
+
   return (
     <div className="tutorial">
       <div className="tutorial-header">
@@ -142,7 +169,23 @@ const SignUp = () => {
               <img className="google-img" src="image/google.png" />
               <span>구글로 시작하기</span>
             </div>
-            <div className="btn-social" onClick={snsNicknameHandler}>
+            {/* <div
+              id="g_id_onload"
+              data-client_id="337820958103-d43avd5b12sbr020j8q26jpflvsq53ng.apps.googleusercontent.com"
+              data-ux_mode="popup"
+              data-auto_select="true"
+              data-login_uri="http://localhost:8080/google"
+            ></div>
+            <div
+              className="g_id_signin"
+              data-type="standard"
+              data-size="large"
+              data-theme="outline"
+              data-text="sign_in_with"
+              data-shape="rectangular"
+              data-logo_alignment="left"
+            ></div> */}
+            <div className="btn-social" onClick={naverHandler}>
               <img className="naver-img" src="image/naver-icon-file.png" />
               <span>네이버로 시작하기</span>
             </div>

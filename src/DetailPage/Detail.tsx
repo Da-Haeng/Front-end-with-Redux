@@ -8,6 +8,7 @@ import "./Detail.css";
 import { RootState } from "../store";
 import { Memo, MemosState } from "../store/main-slice";
 import { getCellListAsync } from "../store/category-slice";
+import moment from "moment";
 
 const Detail = () => {
   const { id } = useParams();
@@ -32,10 +33,15 @@ const Detail = () => {
         </div>
         <div className="memo-content">
           {mainItems && <h1>{detailItems.noteName}</h1>}
-          {/* <div>
-            {mainItems && <span>{detailItems.startDate.toString()}</span>}
-            {mainItems && <span>{detailItems.endDate.toString()}</span>}
-          </div> */}
+          <div>
+            {mainItems && (
+              <span>{moment(detailItems.startDate).format("YYYY/MM/DD")}</span>
+            )}
+            <span>~</span>
+            {mainItems && (
+              <span>{moment(detailItems.endDate).format("YYYY/MM/DD")}</span>
+            )}
+          </div>
         </div>
         <div className="memo-category">
           <Category noteId={parseInt(id!)} />

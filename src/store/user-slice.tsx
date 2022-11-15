@@ -37,6 +37,7 @@ const initialState = {
   success: false,
   emailSelect: [],
   shareMember: [],
+  apiURL: "",
 };
 
 // 회원추가
@@ -193,6 +194,19 @@ export const memberExitAsync = createAsyncThunk(
   }
 );
 
+//네이버 로그인
+export const naverLoginAsync = createAsyncThunk(
+  "user/naverLoginAsync",
+  async () => {
+    return await fetch("http://localhost:8080/getNaverAuth", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }).then((res) => res.json());
+  }
+);
+
 // //회원 정보 조회
 // export const getUserInfoAsync = createAsyncThunk(
 //   "GET_USERINFO",
@@ -248,6 +262,10 @@ const userSlice = createSlice({
       .addCase(memberExitAsync.fulfilled, (state, action) => {})
       .addCase(editUserPassWordAsync.fulfilled, (state, action) => {
         console.log("g");
+      })
+      .addCase(naverLoginAsync.fulfilled, (state, action) => {
+        state.apiURL = action.payload.apiURL;
+        console.log(state.apiURL);
       });
   },
 

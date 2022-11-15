@@ -2,7 +2,7 @@ import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
 import produce from "immer";
 
 export type Cell = {
-  id: number;
+  lineId: number;
   text: string;
   type: string;
   color: string;
@@ -10,9 +10,15 @@ export type Cell = {
   font: string;
 };
 
-export type Document = {
-  categoryId: number;
-  categoryTitle: string;
+export type Document = [
+  {
+    categoryId: number;
+    categoryName: string;
+    noteId: number;
+  }
+];
+
+export type CellItem = {
   cell: Cell[];
 };
 
@@ -22,15 +28,46 @@ export type Item = {
 };
 
 export type Category = {
-  noteId: number;
   categoryId: number;
-  categoryTitle: string;
-  id: number;
+  categoryName: string;
+  lineId: number;
   text: string;
   type: string;
   color: string;
   bgcolor: string;
   font: string;
+};
+
+export type CategoryTitle = {
+  categoryId: number;
+  categoryName: string;
+};
+
+export type CellEdit = {
+  categoryId: number;
+  lineId: number;
+  text: string;
+  type: string;
+  color: string;
+  bgcolor: string;
+  font: string;
+};
+
+export type CellAdd = {
+  index: number;
+  lineId: number;
+  categoryId: number;
+};
+
+export type CellDelete = {
+  lineId: number;
+  categoryId: number;
+};
+
+export type BulletAdd = {
+  lineId: number;
+  categoryId: number;
+  text: string;
 };
 
 const initialState = {
@@ -250,10 +287,9 @@ export const addItemToCategoryAsync = createAsyncThunk(
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        noteId: category.noteId,
         categoryId: category.categoryId,
-        categoryTitle: category.categoryTitle,
-        id: category.id,
+        categoryName: category.categoryName,
+        lineId: category.lineId,
         text: category.text,
         type: category.type,
         color: category.color,
@@ -267,15 +303,31 @@ export const addItemToCategoryAsync = createAsyncThunk(
 // category 삭제
 export const removeItemToCategoryAsync = createAsyncThunk(
   "category/removeItemToCategoryAsync",
-  async (category: Category) => {
+  async (categoryId: number) => {
     return await fetch("http://localhost:8080/category/delete", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        noteId: category.noteId,
+        categoryId,
+      }),
+    }).then((res) => res.json());
+  }
+);
+
+// category 타이틀 수정
+export const editTitletoCategoryAsync = createAsyncThunk(
+  "category/editTitletoCategoryAsync",
+  async (category: CategoryTitle) => {
+    return await fetch("http://localhost:8080/category/update", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
         categoryId: category.categoryId,
+        categoryName: category.categoryName,
       }),
     }).then((res) => res.json());
   }
@@ -284,21 +336,16 @@ export const removeItemToCategoryAsync = createAsyncThunk(
 // cell 추가
 export const addItemToCellAsync = createAsyncThunk(
   "category/addItemToCellAsync",
-  async (category: Category) => {
-    return await fetch("http://localhost:8080/line/insert", {
+  async (cell: CellAdd) => {
+    return await fetch("http://localhost:8080/", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        noteId: category.noteId,
-        categoryId: category.categoryId,
-        id: category.id,
-        text: category.text,
-        type: category.type,
-        color: category.color,
-        bgcolor: category.bgcolor,
-        font: category.font,
+        index: cell.index,
+        lineId: cell.lineId,
+        categoryId: cell.categoryId,
       }),
     }).then((res) => res.json());
   }
@@ -307,21 +354,20 @@ export const addItemToCellAsync = createAsyncThunk(
 // cell 수정
 export const editCellToCategoryAsync = createAsyncThunk(
   "category/editCellToCategoryAsync",
-  async (category: Category) => {
+  async (cell: CellEdit) => {
     return await fetch("http://localhost:8080/line/update", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        noteId: category.noteId,
-        categoryId: category.categoryId,
-        id: category.id,
-        text: category.text,
-        type: category.type,
-        color: category.color,
-        bgcolor: category.bgcolor,
-        font: category.font,
+        categoryId: cell.categoryId,
+        lineId: cell.lineId,
+        text: cell.text,
+        type: cell.type,
+        color: cell.color,
+        bgcolor: cell.bgcolor,
+        font: cell.font,
       }),
     }).then((res) => res.json());
   }
@@ -330,16 +376,33 @@ export const editCellToCategoryAsync = createAsyncThunk(
 // cell 삭제
 export const deleteCellToCategoryAsync = createAsyncThunk(
   "category/deleteCellToCategoryAsync",
-  async (category: Category) => {
+  async (cell: CellDelete) => {
     return await fetch("http://localhost:8080/line/update", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        noteId: category.noteId,
-        categoryId: category.categoryId,
-        id: category.id,
+        categoryId: cell.categoryId,
+        lineId: cell.lineId,
+      }),
+    }).then((res) => res.json());
+  }
+);
+
+// cell 글머리 추가
+export const BulletPointAsync = createAsyncThunk(
+  "category/BulletPointAsync",
+  async (cell: BulletAdd) => {
+    return await fetch("http://localhost:8080/line/update", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        categoryId: cell.categoryId,
+        lineId: cell.lineId,
+        text: cell.text,
       }),
     }).then((res) => res.json());
   }

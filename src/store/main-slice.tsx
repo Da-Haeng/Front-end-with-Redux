@@ -104,6 +104,23 @@ export const editMemoAsync = createAsyncThunk(
   }
 );
 
+// 메모장 색상 변경
+export const editMemoColorAsync = createAsyncThunk(
+  "main/editMemoColorAsync",
+  async (updateMemo: any) => {
+    return await fetch("http://localhost:8080/note/update", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        noteId: updateMemo.noteId,
+        noteColor: updateMemo.noteColor,
+      }),
+    }).then((res) => res.json());
+  }
+);
+
 type deleteProps = {
   memoId: number;
   email: string;

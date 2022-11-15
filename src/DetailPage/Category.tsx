@@ -18,7 +18,9 @@ const Category = (props: CategoryProps) => {
   const noteId = props.noteId;
   const dispatch = useDispatch<any>();
 
-  const categoryItems = useSelector((state: any) => state.category.document);
+  const categoryItems: Document = useSelector(
+    (state: any) => state.category.document
+  );
   const categoryIndex = categoryItems[0]?.categoryId;
 
   useEffect(() => {

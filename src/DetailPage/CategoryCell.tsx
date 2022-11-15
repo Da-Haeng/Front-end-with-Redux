@@ -1,10 +1,17 @@
 import React, { useState, useRef, useEffect, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {} from "../store/category-slice";
 import { faEllipsis, fas } from "@fortawesome/free-solid-svg-icons";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Cell } from "../store/category-slice";
+import {
+  Cell,
+  CellItem,
+  editCellToCategoryAsync,
+  deleteCellToCategoryAsync,
+  addItemToCellAsync,
+  BulletPointAsync,
+  getCellListAsync,
+} from "../store/category-slice";
 import { RootState } from "../store";
 
 type CategoryCellProps = {
@@ -15,13 +22,13 @@ type CategoryCellProps = {
 };
 
 const CategoryCell = (props: CategoryCellProps) => {
-  const { id, text, type, color, bgcolor, font } = props.item;
+  const { lineId, text, type, color, bgcolor, font } = props.item;
 
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<any>();
 
-  const cellItems = useSelector((state: any) => state.category.cell);
+  const cellItems: CellItem = useSelector((state: any) => state.category.cell);
 
-  const cell = cellItems.cell;
+  const cell = cellItems?.cell;
 
   const categoryId = props.categoryId;
   const noteId = props.noteId;
@@ -45,24 +52,24 @@ const CategoryCell = (props: CategoryCellProps) => {
   const [spanToInput, setSpanToInput] = useState(false);
 
   useEffect(() => {
-    // dispatch(
-    //   categoryActions.editCellToCategory({
-    //     id: cellId,
-    //     text: cellText,
-    //     categoryId: categoryId,
-    //     noteId: noteId,
-    //     type: cellType,
-    //     color: cellColor,
-    //     bgcolor: cellBgColor,
-    //     font: cellFont,
-    //   })
-    // );
+    dispatch(
+      editCellToCategoryAsync({
+        categoryId: categoryId,
+        lineId: cellId,
+        text: cellText,
+        type: cellType,
+        color: cellColor,
+        bgcolor: cellBgColor,
+        font: cellFont,
+      })
+    );
+    dispatch(getCellListAsync(categoryId));
   }, [cellText, cellType, cellColor, cellBgColor, cellFont]);
 
   useMemo(() => {
     if (props) {
       setCellText(text);
-      setCellId(id);
+      setCellId(lineId);
       setCellType(type);
       setCellColor(color);
       setCellBgColor(bgcolor);
@@ -94,38 +101,34 @@ const CategoryCell = (props: CategoryCellProps) => {
   const onKeyPress = (e: any) => {
     if (e.key === "Enter") {
       setSpanToInput(false);
-      const index = cell?.findIndex((it: any) => it.id === cellId);
-      //   dispatch(
-      //     categoryActions.addCellToCategory({
-      //       index: index,
-      //       id: cellLength + 1,
-      //       categoryId: categoryId,
-      //       noteId: noteId,
-      //     })
-      //   );
+      const index = cell?.findIndex((it) => it.lineId === cellId);
+      dispatch(
+        addItemToCellAsync({
+          index: index,
+          lineId: categoryLength + 1,
+          categoryId: categoryId,
+        })
+      );
+      dispatch(getCellListAsync(categoryId));
     }
     if (e.key === "Backspace" && cellText.length === 0) {
-      //   dispatch(
-      //     categoryActions.deleteCellToCategory({
-      //       id: cellId,
-      //       categoryId: categoryId,
-      //       noteId: noteId,
-      //     })
-      //   );
+      dispatch(
+        deleteCellToCategoryAsync({ lineId: cellId, categoryId: categoryId })
+      );
+      dispatch(getCellListAsync(categoryId));
     }
   };
 
   const addCellHandler = () => {
-    const index = cell?.findIndex((it: any) => it.id === cellId);
-
-    // dispatch(
-    //   categoryActions.addCellToCategory({
-    //     index: index,
-    //     id: cellLength + 1,
-    //     categoryId: categoryId,
-    //     noteId: noteId,
-    //   })
-    // );
+    const index = cell?.findIndex((it) => it.lineId === cellId);
+    dispatch(
+      addItemToCellAsync({
+        index: index,
+        lineId: categoryLength + 1,
+        categoryId: categoryId,
+      })
+    );
+    dispatch(getCellListAsync(categoryId));
   };
 
   const effectCellHandler = () => {
@@ -190,13 +193,15 @@ const CategoryCell = (props: CategoryCellProps) => {
   };
 
   const BulletPointHandler = () => {
-    // dispatch(
-    //   categoryActions.bulletPointToCell({
-    //     id: cellId,
-    //     categoryId: categoryId,
-    //     noteId: noteId,
-    //   })
-    // );
+    const bulletText = "• ".concat(cellText);
+    dispatch(
+      BulletPointAsync({
+        categoryId: categoryId,
+        lineId: cellId,
+        text: bulletText,
+      })
+    );
+    dispatch(getCellListAsync(categoryId));
   };
 
   const spanToInputHandler = () => {

@@ -1,20 +1,23 @@
 import React, { useState, useRef, useEffect, useMemo } from "react";
-import { Document } from "../store/category-slice";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../store";
 import CategoryContent from "./CategoryContent";
-import { getCellListAsync } from "../store/category-slice";
-
-type CategoryTitleProps = {
-  mainId: number;
-  item: Document[];
-};
+import {
+  getCellListAsync,
+  Category,
+  addItemToCategoryAsync,
+  removeItemToCategoryAsync,
+  Document,
+  getCategoryListAsync,
+  editTitletoCategoryAsync,
+} from "../store/category-slice";
 
 const CategoryTitle = (props: any) => {
   const dispatch = useDispatch<any>();
 
-  const categoryData = props.categoryItems;
+  const categoryData: Document = props.categoryItems;
   const categoryIndex = categoryData[0];
+  console.log(categoryIndex);
 
   const noteId = props.noteId;
 
@@ -39,46 +42,55 @@ const CategoryTitle = (props: any) => {
   };
 
   useEffect(() => {
-    const title = categoryData.find((it: any) => it.categoryId === categoryId);
+    const title = categoryData.find((it) => it.categoryId === categoryId);
     if (title) {
       setCategoryName(title.categoryName);
     }
   }, [categoryId]);
 
-  const addItemHandler = () => {
-    // dispatch(
-    //   categoryActions.addItemToCategory({
-    //     categoryId: dataId.current,
-    //     categoryTitle: "카테고리명",
-    //     mainId: mainId,
-    //   })
-    // );
-    // dispatch(addItemToCategoryAsync({ noteId:noteId}));
+  let defaultData: Category = {
+    categoryId: dataId.current,
+    categoryName: "카테고리명",
+    lineId: 1,
+    text: "입력해주세요",
+    type: "h3",
+    color: "black",
+    bgcolor: "basicbg",
+    font: "basic",
+  };
 
+  const addItemHandler = () => {
+    dispatch(addItemToCategoryAsync(defaultData));
     dataId.current += 1;
   };
 
-  const deleteCategoryHandler = () => {
-    // dispatch(
-    //   categoryActions.removeItemToCateogory({
-    //     categoryId: categoryId,
-    //     mainId: mainId,
-    //   })
-    // );
-    setHighlight(categoryIndex.categoryId);
-    setCategoryId(categoryIndex.categoryId);
+  const deleteCategoryHandler = async () => {
+    await dispatch(removeItemToCategoryAsync(categoryId));
+    await dispatch(getCategoryListAsync(noteId));
+    // setHighlight(categoryIndex.categoryId);
+    // setCategoryId(categoryIndex.categoryId);
   };
 
   const editTitleHandler = () => {
     setEditTitle(!editTitle);
-    console.log(editTitle);
+  };
+
+  const editTitlecomplete = () => {
+    setEditTitle(!editTitle);
+    console.log(categoryName);
+    dispatch(
+      editTitletoCategoryAsync({
+        categoryId: categoryId,
+        categoryName: categoryName,
+      })
+    );
   };
 
   return (
     <>
       <div className="category_container">
         {categoryData &&
-          categoryData.map((it: any) => (
+          categoryData.map((it) => (
             <>
               <span
                 id={String(it.categoryId)}
@@ -99,21 +111,25 @@ const CategoryTitle = (props: any) => {
       </div>
 
       <div className="CategorySetSmall">
-        <span onClick={editTitleHandler}>제목 수정</span>
-        <span onClick={deleteCategoryHandler}>페이지 삭제</span>
-      </div>
-      {/* {editTitle && (
-        <div className="edittitle_box">
-          <input
-            type="text"
-            value={categoryTitle}
-            autoFocus
-            className="edittitle"
-            size={10}
-            onChange={(e) => setCategoryTitle(e.target.value)}
-          />
+        <div className="editTitle">
+          <span onClick={editTitleHandler}>제목 수정</span>
+          <span onClick={deleteCategoryHandler}>페이지 삭제</span>
         </div>
-      )} */}
+
+        {editTitle && (
+          <div className="edittitle_box">
+            <input
+              type="text"
+              value={categoryName}
+              autoFocus
+              className="edittitle"
+              size={10}
+              onChange={(e) => setCategoryName(e.target.value)}
+            />
+            <span onClick={editTitlecomplete}>수정 완료</span>
+          </div>
+        )}
+      </div>
 
       <div className="category_context">
         {categoryData && (

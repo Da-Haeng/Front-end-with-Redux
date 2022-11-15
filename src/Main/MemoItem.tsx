@@ -5,6 +5,7 @@ import {
   Memo,
   removeMemoAsync,
   editMemoAsync,
+  editMemoColorAsync,
   getMemoListAsync,
 } from "../store/main-slice";
 import { faPencil, faTrash } from "@fortawesome/free-solid-svg-icons";
@@ -56,16 +57,6 @@ const MemoItem = (props: any) => {
 
   const editHandler = async (event: any) => {
     setEdit(!isEdit);
-    // dispatch(
-    //   mainActions.editItemToMain({
-    //     user: "",
-    //     id,
-    //     title: newTitle,
-    //     description: newDescription,
-    //     color: newColor,
-    //     date: newDate,
-    //   })
-    // );
     event.stopPropagation();
     await dispatch(
       editMemoAsync({
@@ -89,6 +80,14 @@ const MemoItem = (props: any) => {
     setNewColor(color);
     setColor(!isColor);
     e.stopPropagation();
+    console.log(newColor);
+    dispatch(
+      editMemoColorAsync({
+        noteId: props.noteId,
+        noteColor: newColor,
+      })
+    );
+    setUpdate(!update);
   };
 
   const handleToggleColor = (e: any) => {
