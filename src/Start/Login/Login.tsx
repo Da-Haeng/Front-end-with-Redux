@@ -2,8 +2,15 @@ import React, { ChangeEvent, useEffect, useState } from "react";
 import "./Login.css";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { loginUser, setUserAsync } from "../../store/user-slice";
+import {
+  loginUser,
+  setUserAsync,
+  getUserInfoAtLocal,
+} from "../../store/user-slice";
 import { getMemoListAsync } from "../../store/main-slice";
+import NaverLogin from "../SignUp/Naver";
+import { loginSuccess } from "../../store/user-slice";
+
 const Login = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch<any>();
@@ -21,6 +28,7 @@ const Login = () => {
   useEffect(() => {
     if (Object.keys(userInfo).length > 1) {
       console.log(userInfo);
+      dispatch(loginSuccess(true));
       alert("로그인 되었습니다.");
       navigate("/main", { replace: true });
     } else {
@@ -51,6 +59,7 @@ const Login = () => {
       }
     }
   };
+
   return (
     <div className="tutorial">
       <div className="tutorial-header">
@@ -67,9 +76,12 @@ const Login = () => {
           </span>
           <img className="tutorial-img" src="image/tutorial.png" />
         </div>
+
         <div className="tutorial-start login-start">
           <span className="tutorial-maintitle signupTitle">로그인</span>
-
+          <div className="loginBox snsBox">
+            <NaverLogin />
+          </div>
           <div className="loginBox">
             <input
               className="inputBox emailLoginBox"

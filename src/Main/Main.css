@@ -16,6 +16,7 @@
 .main-title {
   font-size: 24px;
   font-weight: 800;
+  cursor: pointer;
 }
 
 .main-memolist {

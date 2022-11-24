@@ -355,7 +355,7 @@ export const addItemToCellAsync = createAsyncThunk(
 export const editCellToCategoryAsync = createAsyncThunk(
   "category/editCellToCategoryAsync",
   async (cell: CellEdit) => {
-    return await fetch("http://localhost:8080/line/update", {
+    return await fetch("http://localhost:8080/", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -377,7 +377,7 @@ export const editCellToCategoryAsync = createAsyncThunk(
 export const deleteCellToCategoryAsync = createAsyncThunk(
   "category/deleteCellToCategoryAsync",
   async (cell: CellDelete) => {
-    return await fetch("http://localhost:8080/line/update", {
+    return await fetch("http://localhost:8080/", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -394,7 +394,7 @@ export const deleteCellToCategoryAsync = createAsyncThunk(
 export const BulletPointAsync = createAsyncThunk(
   "category/BulletPointAsync",
   async (cell: BulletAdd) => {
-    return await fetch("http://localhost:8080/line/update", {
+    return await fetch("http://localhost:8080/", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -575,6 +575,7 @@ const categorySlice = createSlice({
       })
       .addCase(getCellListAsync.fulfilled, (state, action) => {
         state.cell = action.payload;
+        console.log(action.payload);
       });
   },
 });

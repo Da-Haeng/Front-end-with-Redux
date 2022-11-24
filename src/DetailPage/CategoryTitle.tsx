@@ -17,7 +17,6 @@ const CategoryTitle = (props: any) => {
 
   const categoryData: Document = props.categoryItems;
   const categoryIndex = categoryData[0];
-  console.log(categoryIndex);
 
   const noteId = props.noteId;
 

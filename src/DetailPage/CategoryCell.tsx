@@ -96,8 +96,6 @@ const CategoryCell = (props: CategoryCellProps) => {
     setBgColor(!bgColor);
   };
 
-  console.log(cell);
-
   const onKeyPress = (e: any) => {
     if (e.key === "Enter") {
       setSpanToInput(false);

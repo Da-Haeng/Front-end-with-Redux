@@ -7,6 +7,16 @@ export type User = {
   // id_token: boolean;
 };
 
+export type NaverUser = {
+  token: string;
+  nickname: string;
+};
+
+export type NaverCheck = {
+  code: string;
+  state: string;
+};
+
 export type loginUser = {
   email: string;
   password: string;
@@ -37,7 +47,7 @@ const initialState = {
   success: false,
   emailSelect: [],
   shareMember: [],
-  apiURL: "",
+  snsNickname: false,
 };
 
 // 회원추가
@@ -55,6 +65,42 @@ export const addUserAsync = createAsyncThunk(
         password: user.password,
       }),
     }).then((res) => res);
+  }
+);
+
+// sns 회원가입 (닉네임,토큰)
+export const addUserNaverLoginAsync = createAsyncThunk(
+  "user/addUserNaverLoginAsync",
+  async (NaverUser: NaverUser) => {
+    return await fetch("http://localhost:8080/user/join", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        token: NaverUser.token,
+        nickname: NaverUser.nickname,
+      }),
+    }).then((res) => res);
+    // 유저정보 다 받아오기
+  }
+);
+
+// sns 로그인 가입여부 확인 (토큰보내서)
+export const snsLoginCheckAsync = createAsyncThunk(
+  "user/snsLoginCheckAsync",
+  async (NaverCheck: NaverCheck) => {
+    return await fetch("http://localhost:8080/naver/callback", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        code: NaverCheck.code,
+        state: NaverCheck.state,
+      }),
+    }).then((res) => res.json());
+    // 유저정보 다 받아오기
   }
 );
 
@@ -194,19 +240,6 @@ export const memberExitAsync = createAsyncThunk(
   }
 );
 
-//네이버 로그인
-export const naverLoginAsync = createAsyncThunk(
-  "user/naverLoginAsync",
-  async () => {
-    return await fetch("http://localhost:8080/getNaverAuth", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    }).then((res) => res.json());
-  }
-);
-
 // //회원 정보 조회
 // export const getUserInfoAsync = createAsyncThunk(
 //   "GET_USERINFO",
@@ -219,7 +252,41 @@ export const naverLoginAsync = createAsyncThunk(
 const userSlice = createSlice({
   name: "user",
   initialState: initialState,
-  reducers: {},
+  reducers: {
+    naverLoginToken(state, action) {
+      state.userInfo = {
+        ...state.userInfo,
+        token: action.payload,
+      };
+      state.snsNickname = true;
+    },
+    naverLoginEmail(state, action) {
+      state.userInfo = {
+        ...state.userInfo,
+        email: action.payload,
+      };
+    },
+    // naverLoginNickname(state, action) {
+    //   state.userInfo = {
+    //     ...state.userInfo,
+    //     nickname: action.payload,
+    //   };
+    // },
+    loginSuccess(state, action) {
+      state.success = action.payload;
+    },
+    getUserInfoAtLocal(state) {
+      state.userInfo = {
+        ...state.userInfo,
+        email: localStorage.getItem("email"),
+        nickname: localStorage.getItem("nickname"),
+        id_token: localStorage.getItem("id_token"),
+        notificationCheck: localStorage.getItem("notificationCheck"),
+        password: localStorage.getItem("password"),
+      };
+      state.success = true;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(emailCertificationAsync.fulfilled, (state, action) => {
@@ -242,6 +309,16 @@ const userSlice = createSlice({
       .addCase(setUserAsync.fulfilled, (state, action) => {
         state.success = true;
         state.userInfo = { ...action.payload };
+        localStorage.setItem("email", action.payload.email);
+        localStorage.setItem("nickname", action.payload.nickname);
+        localStorage.setItem("id_token", action.payload.id_token);
+        localStorage.setItem(
+          "notificationCheck",
+          action.payload.notificationCheck
+        );
+        localStorage.setItem("password", action.payload.password);
+
+        console.log(action.payload);
       })
       .addCase(memberFindAsync.fulfilled, (state, action) => {
         state.emailSelect = action.payload;
@@ -263,9 +340,8 @@ const userSlice = createSlice({
       .addCase(editUserPassWordAsync.fulfilled, (state, action) => {
         console.log("g");
       })
-      .addCase(naverLoginAsync.fulfilled, (state, action) => {
-        state.apiURL = action.payload.apiURL;
-        console.log(state.apiURL);
+      .addCase(snsLoginCheckAsync.fulfilled, (state, action) => {
+        console.log(action);
       });
   },
 
@@ -283,6 +359,12 @@ const userSlice = createSlice({
   //   },
   // },
 });
-
+export let {
+  naverLoginToken,
+  naverLoginEmail,
+  getUserInfoAtLocal,
+  // naverLoginNickname,
+  loginSuccess,
+} = userSlice.actions;
 export const userActions = userSlice.actions;
 export default userSlice;

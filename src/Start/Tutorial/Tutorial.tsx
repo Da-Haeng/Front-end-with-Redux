@@ -1,14 +1,18 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { User } from "../../store/user-slice";
 import { useDispatch, useSelector } from "react-redux";
 import "./Tutorial.css";
 
 function Tutorial() {
-  const { success } = useSelector((state: any) => ({
+  const dispatch = useDispatch<any>();
+
+  const { success, userInfo } = useSelector((state: any) => ({
     success: state.user.success,
+    userInfo: state.user.userInfo,
   }));
   console.log(success);
+  console.log(userInfo);
 
   return (
     <div className="tutorial">
@@ -19,7 +23,7 @@ function Tutorial() {
         <div className="header-button">
           {success === false && (
             <Link to="/signup" className="tutorial-btn">
-              시작하기
+              가입하기
             </Link>
           )}
           {success === false && (

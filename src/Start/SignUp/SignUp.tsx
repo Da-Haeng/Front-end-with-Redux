@@ -5,16 +5,19 @@ import {
   emailCertificationAsync,
   emailOverlapAsync,
   User,
-  naverLoginAsync,
+  loginSuccess,
+  addUserNaverLoginAsync,
 } from "../../store/user-slice";
 import { useDispatch, useSelector } from "react-redux";
 import React, { ChangeEvent, useEffect, useMemo, useState } from "react";
 import { spawn } from "child_process";
+import NaverLogin from "./Naver";
 
 import Main from "../../Main/Main";
 
 const SignUp = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch<any>();
 
   const {
     emailcheck,
@@ -24,7 +27,7 @@ const SignUp = () => {
     userInfo,
     error,
     success,
-    apiURL,
+    snsNickname,
   } = useSelector((state: any) => ({
     emailcheck: state.user.emailCheck,
     checknum: state.user.checknum,
@@ -33,7 +36,7 @@ const SignUp = () => {
     userInfo: state.user.userInfo,
     error: state.user.error,
     success: state.user.success,
-    apiURL: state.user.apiURL,
+    snsNickname: state.user.snsNickname,
   }));
 
   const [user, setUser] = useState<User>({
@@ -43,13 +46,12 @@ const SignUp = () => {
     // id_token: false,
   });
 
+  console.log(success);
   const [code, setCode] = useState("");
   const [passwordCheck, setPasswordCheck] = useState("");
   const [certification, setCertification] = useState(false);
   const [joinState, setJoinState] = useState(join);
   const [emailcheckState, setEmailCheckState] = useState(true);
-  const [snsNickname, setSnsNickname] = useState(false);
-  const [snsLogin, setSnsLogin] = useState(false);
 
   useEffect(() => {
     // {
@@ -68,19 +70,14 @@ const SignUp = () => {
     }
   }, [emailcheckState]);
 
-  const loginHandler = () => {
-    window.location.href = apiURL;
-  };
-
+  // sns로그인 후 유저정보 확인하고 닉네임 쓸지말지
   useEffect(() => {
-    if (snsLogin == true) {
-      loginHandler();
-      const code = new URL(window.location.href).searchParams.get("code");
-      console.log(code);
+    console.log(userInfo.email);
+    if (userInfo.email) {
+      dispatch(loginSuccess(true));
+      navigate("/", { replace: true });
     }
-  }, [snsLogin]);
-
-  const dispatch = useDispatch<any>();
+  }, [userInfo]);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -136,14 +133,20 @@ const SignUp = () => {
     }
   };
 
-  //sns로그인 시 닉네임 넘어가기
-  const snsNicknameHandler = () => {
-    setSnsNickname(true);
-  };
-
-  const naverHandler = async () => {
-    await dispatch(naverLoginAsync());
-    setSnsLogin(true);
+  // sns 회원가입
+  const snsLoginSubmit = () => {
+    if (user.nickname) {
+      dispatch(
+        addUserNaverLoginAsync({
+          token: userInfo.token,
+          nickname: user.nickname,
+        })
+      );
+      dispatch(loginSuccess(true));
+      navigate("/", { replace: true });
+    } else {
+      alert("닉네임을 입력해주세요");
+    }
   };
 
   return (
@@ -162,34 +165,21 @@ const SignUp = () => {
           </span>
           <img className="tutorial-img" src="image/tutorial.png" />
         </div>
-        <div className="tutorial-start">
-          <span className="tutorial-maintitle signupTitle">회원가입</span>
-          <div className="loginBox">
-            <div className="btn-social" onClick={snsNicknameHandler}>
+        <div className="tutorial-start signup-start">
+          {snsNickname === false && (
+            <>
+              <span className="tutorial-maintitle signupTitle">회원가입</span>
+              <div className="loginBox">
+                {/* <div className="btn-social" onClick={snsNicknameHandler}>
               <img className="google-img" src="image/google.png" />
               <span>구글로 시작하기</span>
-            </div>
-            {/* <div
-              id="g_id_onload"
-              data-client_id="337820958103-d43avd5b12sbr020j8q26jpflvsq53ng.apps.googleusercontent.com"
-              data-ux_mode="popup"
-              data-auto_select="true"
-              data-login_uri="http://localhost:8080/google"
-            ></div>
-            <div
-              className="g_id_signin"
-              data-type="standard"
-              data-size="large"
-              data-theme="outline"
-              data-text="sign_in_with"
-              data-shape="rectangular"
-              data-logo_alignment="left"
-            ></div> */}
-            <div className="btn-social" onClick={naverHandler}>
-              <img className="naver-img" src="image/naver-icon-file.png" />
-              <span>네이버로 시작하기</span>
-            </div>
-          </div>
+            </div> */}
+
+                <NaverLogin />
+              </div>
+            </>
+          )}
+
           {!certification && snsNickname === false && (
             <div className="loginBox signupBox">
               <input
@@ -248,7 +238,8 @@ const SignUp = () => {
             </div>
           )}
           {snsNickname && (
-            <div className="loginBox">
+            <div className="loginBox snsloginBox">
+              <span className="tutorial-maintitle signupTitle">회원가입</span>
               <input
                 type="text"
                 className="inputNextBox nicknameBox"
@@ -257,7 +248,7 @@ const SignUp = () => {
                 name="nickname"
                 onChange={handleChange}
               ></input>
-              <button className="getStart" onClick={handleSubmit}>
+              <button className="getStart" onClick={snsLoginSubmit}>
                 시작하기
               </button>
             </div>

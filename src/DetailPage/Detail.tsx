@@ -6,20 +6,26 @@ import DetailHeader from "./DetailHeader";
 import Category from "./Category";
 import "./Detail.css";
 import { RootState } from "../store";
-import { Memo, MemosState } from "../store/main-slice";
+import { Memo, MemosState, getMemoListAsync } from "../store/main-slice";
 import { getCellListAsync } from "../store/category-slice";
 import moment from "moment";
 
 const Detail = () => {
-  const { id } = useParams();
+  // const { id } = useParams();
+  const id = localStorage.getItem("noteId");
   const dispatch = useDispatch<any>();
+  const localEmail = localStorage.getItem("email")!;
+
+  // useEffect(() => {
+  //   dispatch(getMemoListAsync(localEmail));
+  // }, []);
 
   const mainItems: MemosState = useSelector(
     (state: RootState) => state.main.memoData
   );
 
   const detailItems = mainItems.find((it) => it.noteId === parseInt(id!))!;
-  console.log(detailItems);
+  console.log(mainItems);
   const navigate = useNavigate();
 
   return (

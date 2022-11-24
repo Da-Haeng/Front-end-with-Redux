@@ -32,8 +32,20 @@ const Main = () => {
   }));
 
   useEffect(() => {
+    if (localStorage.getItem("code") === null) {
+      navigate("/", { replace: true });
+    }
     dispatch(getMemoListAsync(userInfo.email));
-  }, [userInfo]);
+    console.log(userInfo);
+  }, []);
+  //[userinfo]지웠음
+
+  // useEffect(() => {
+  //   const getUserLocal = async()=>{
+  //     await dispatch(getUserInfoAtLocal());
+  //   }
+  //   getUserLocal();
+  // }, [userInfo]);
 
   return (
     <div className="main">

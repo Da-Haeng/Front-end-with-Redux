@@ -16,7 +16,7 @@ function SideBar() {
     userInfo: state.user.userInfo,
   }));
 
-  useEffect(() => {}, [userInfo]);
+  // useEffect(() => {}, [userInfo]);
 
   const [modalOpen, setModalOpen] = useState<boolean>(false);
 

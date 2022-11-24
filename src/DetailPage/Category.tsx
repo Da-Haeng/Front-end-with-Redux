@@ -27,7 +27,6 @@ const Category = (props: CategoryProps) => {
     dispatch(getCellListAsync(categoryIndex));
   });
 
-  console.log(categoryItems);
   // const categoryItems = categoryItems.filter((it) => it.noteId === noteId);
   // const categoryData = categoryItems.map((it) => it.document);
   // const categoryData = categoryItems.reduce((it) => it);

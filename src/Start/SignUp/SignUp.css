@@ -61,6 +61,7 @@
 
 .signupTitle {
   font-size: 19px;
+  margin-bottom: 15px;
 }
 
 .signupBox {
@@ -69,4 +70,12 @@
 
 .nicknameBox {
   margin-top: 50px;
+}
+
+.signup-start {
+  margin-top: 10px;
+}
+
+.snsloginBox {
+  margin-top: 80px !important;
 }

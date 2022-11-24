@@ -55,8 +55,6 @@ const MemoList = () => {
     dataId.current += 1;
   };
 
-  console.log(memoData);
-
   let defaultData: Memo = {
     user: userInfo.email,
     noteId: dataId.current,

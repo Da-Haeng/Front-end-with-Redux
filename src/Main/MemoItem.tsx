@@ -32,7 +32,9 @@ const MemoItem = (props: any) => {
     userInfo: state.user.userInfo,
   }));
 
-  console.log(props);
+  const memoData = useSelector((state: any) => ({
+    memoData: state.main.memoData,
+  }));
 
   useEffect(() => {
     dispatch(getMemoListAsync(userInfo.email));
@@ -49,7 +51,9 @@ const MemoItem = (props: any) => {
   const navigate = useNavigate();
   const goDetail = async () => {
     await dispatch(getCategoryListAsync(props.noteId));
+    localStorage.setItem("noteId", props.noteId);
     navigate(`/detail/${props.noteId}`);
+    // navigate("/detail");
   };
 
   const [isEdit, setEdit] = useState(false);
