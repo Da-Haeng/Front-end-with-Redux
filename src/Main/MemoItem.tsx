@@ -37,7 +37,7 @@ const MemoItem = (props: any) => {
   }));
 
   useEffect(() => {
-    dispatch(getMemoListAsync(userInfo.email));
+    //dispatch(getMemoListAsync(userInfo.email));
   }, [userInfo, update]);
 
   const removeItemHandler = async (event: any) => {
@@ -48,11 +48,16 @@ const MemoItem = (props: any) => {
     setUpdate(!update);
   };
 
+  const categoryItems: Document = useSelector(
+    (state: any) => state.category.document
+  );
+  console.log(categoryItems);
+
   const navigate = useNavigate();
   const goDetail = async () => {
     await dispatch(getCategoryListAsync(props.noteId));
     localStorage.setItem("noteId", props.noteId);
-    navigate(`/detail/${props.noteId}`);
+    navigate(`/detail/${props.noteId}`, { state: props });
     // navigate("/detail");
   };
 

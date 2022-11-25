@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import SideBar from "../CommonPage/SideBar/SideBar";
 import DetailHeader from "./DetailHeader";
@@ -7,53 +7,87 @@ import Category from "./Category";
 import "./Detail.css";
 import { RootState } from "../store";
 import { Memo, MemosState, getMemoListAsync } from "../store/main-slice";
-import { getCellListAsync } from "../store/category-slice";
+import {
+  getCellListAsync,
+  getCategoryListAsync,
+} from "../store/category-slice";
 import moment from "moment";
 
+interface RouteState {
+  lastUpdate: Date;
+  noteId: number;
+  noteName: string;
+  startDate: Date;
+  endDate: Date;
+  noteDescription: string;
+  noteColor: number;
+}
+
 const Detail = () => {
+  const { state } = useLocation();
+
   // const { id } = useParams();
   const id = localStorage.getItem("noteId");
   const dispatch = useDispatch<any>();
   const localEmail = localStorage.getItem("email")!;
 
-  // useEffect(() => {
-  //   dispatch(getMemoListAsync(localEmail));
-  // }, []);
+  const getCategoryHandler = async () => {
+    await dispatch(getCategoryListAsync(parseInt(id!)));
+  };
 
-  const mainItems: MemosState = useSelector(
-    (state: RootState) => state.main.memoData
-  );
+  useEffect(() => {
+    console.log("hi");
+    getCategoryHandler();
+  }, []);
 
-  const detailItems = mainItems.find((it) => it.noteId === parseInt(id!))!;
-  console.log(mainItems);
+  // const mainItems: MemosState = useSelector(
+  //   (state: RootState) => state.main.memoData
+  // );
+
+  const mainItems = state as RouteState;
+
+  // const detailItems = mainItems.find((it) => it.noteId === parseInt(id!))!;
   const navigate = useNavigate();
 
+  const categoryItems: Document = useSelector(
+    (state: any) => state.category.document
+  );
+
+  if (!mainItems && !categoryItems) {
+    return <div>hi</div>;
+  }
   return (
-    <div className="DetailPage">
-      <div className="side-memu">
-        <SideBar />
-      </div>
-      <div className="memo-container">
-        <div className="memo-header">
-          {mainItems && <DetailHeader title={detailItems.noteName} />}
-        </div>
-        <div className="memo-content">
-          {mainItems && <h1>{detailItems.noteName}</h1>}
-          <div>
-            {mainItems && (
-              <span>{moment(detailItems.startDate).format("YYYY/MM/DD")}</span>
-            )}
-            <span>~</span>
-            {mainItems && (
-              <span>{moment(detailItems.endDate).format("YYYY/MM/DD")}</span>
-            )}
+    <>
+      {mainItems && categoryItems && (
+        <div className="DetailPage">
+          <div className="side-memu">
+            <SideBar />
+          </div>
+          <div className="memo-container">
+            <div className="memo-header">
+              {mainItems && <DetailHeader title={mainItems.noteName} />}
+            </div>
+            <div className="memo-content">
+              {mainItems && <h1>{mainItems.noteName}</h1>}
+              <div>
+                {mainItems && (
+                  <span>
+                    {moment(mainItems.startDate).format("YYYY/MM/DD")}
+                  </span>
+                )}
+                <span>~</span>
+                {mainItems && (
+                  <span>{moment(mainItems.endDate).format("YYYY/MM/DD")}</span>
+                )}
+              </div>
+            </div>
+            <div className="memo-category">
+              <Category noteId={parseInt(id!)} categoryItems={categoryItems} />
+            </div>
           </div>
         </div>
-        <div className="memo-category">
-          <Category noteId={parseInt(id!)} />
-        </div>
-      </div>
-    </div>
+      )}
+    </>
   );
 };
 

@@ -572,6 +572,7 @@ const categorySlice = createSlice({
     builder
       .addCase(getCategoryListAsync.fulfilled, (state, action) => {
         state.document = action.payload;
+        console.log(action.payload);
       })
       .addCase(getCellListAsync.fulfilled, (state, action) => {
         state.cell = action.payload;

@@ -15,8 +15,10 @@ import Redirect from "./Start/SignUp/Redirect";
 import { useEffect } from "react";
 import { getUserInfoAtLocal } from "./store/user-slice";
 import { getMemoListAsync, MemosState } from "./store/main-slice";
+import { getCategoryListAsync } from "./store/category-slice";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "./store";
+import { render } from "@testing-library/react";
 
 declare global {
   interface Window {
@@ -27,22 +29,23 @@ declare global {
 const App = () => {
   const dispatch = useDispatch<any>();
   const localEmail = localStorage.getItem("email")!;
-  console.log(localEmail);
-  const getMemoHandler = async () => {
-    await dispatch(getMemoListAsync(localEmail));
-    console.log("메모");
+  const noteId = localStorage.getItem("noteId")!;
+
+  const getHandler = async () => {
+    await dispatch(getUserInfoAtLocal());
+    // await dispatch(getCategoryListAsync(parseInt(noteId)));
   };
 
   if (localEmail) {
     try {
-      dispatch(getUserInfoAtLocal());
-      getMemoHandler();
+      getHandler();
+      console.log("app");
     } catch (e) {}
   } else {
   }
-  // const mainItems: MemosState = useSelector(
-  //   (state: RootState) => state.main.memoData
-  // );
+
+  useEffect(() => {});
+
   return (
     <BrowserRouter>
       <Routes>

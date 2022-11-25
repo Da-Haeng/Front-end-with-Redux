@@ -35,9 +35,8 @@ const Main = () => {
     if (localStorage.getItem("code") === null) {
       navigate("/", { replace: true });
     }
-    dispatch(getMemoListAsync(userInfo.email));
-    console.log(userInfo);
-  }, []);
+    // dispatch(getMemoListAsync(userInfo.email));
+  }, [userInfo]);
   //[userinfo]지웠음
 
   // useEffect(() => {

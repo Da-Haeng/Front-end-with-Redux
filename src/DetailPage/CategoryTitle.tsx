@@ -16,22 +16,26 @@ const CategoryTitle = (props: any) => {
   const dispatch = useDispatch<any>();
 
   const categoryData: Document = props.categoryItems;
-  const categoryIndex = categoryData[0];
 
   const noteId = props.noteId;
-
   const categoryLength = categoryData.length + 1;
+  const categoryIndex = categoryData[0];
+
+  const [categoryIndexNum, setCategoryIndexNum] = useState(0);
 
   const dataId = useRef(categoryLength);
 
-  const [Highlight, setHighlight] = useState(categoryIndex.categoryId);
-  const [categoryId, setCategoryId] = useState(categoryIndex.categoryId);
+  const [Highlight, setHighlight] = useState(categoryIndexNum);
+  const [categoryId, setCategoryId] = useState(categoryIndexNum);
   const [categoryName, setCategoryName] = useState("");
   const [editTitle, setEditTitle] = useState(false);
 
   useEffect(() => {
-    setHighlight(categoryIndex.categoryId);
-    setCategoryId(categoryIndex.categoryId);
+    if (categoryIndex) {
+      setCategoryIndexNum(categoryIndex.categoryId);
+    }
+    setHighlight(categoryIndexNum);
+    setCategoryId(categoryIndexNum);
   }, [categoryData]);
 
   const onHighlight = async (id: number) => {
@@ -84,59 +88,64 @@ const CategoryTitle = (props: any) => {
       })
     );
   };
+  if (!categoryData) {
+    return <div></div>;
+  }
 
   return (
     <>
-      <div className="category_container">
-        {categoryData &&
-          categoryData.map((it) => (
-            <>
-              <span
-                id={String(it.categoryId)}
-                className={
-                  Highlight === it.categoryId
-                    ? "category_title_highlight"
-                    : "category_title"
-                }
-                onClick={() => onHighlight(it.categoryId)}
-              >
-                {it.categoryName}
-              </span>
-            </>
-          ))}
-        <span className="cateogory_create" onClick={addItemHandler}>
-          + 카테고리 추가
-        </span>
-      </div>
-
-      <div className="CategorySetSmall">
-        <div className="editTitle">
-          <span onClick={editTitleHandler}>제목 수정</span>
-          <span onClick={deleteCategoryHandler}>페이지 삭제</span>
-        </div>
-
-        {editTitle && (
-          <div className="edittitle_box">
-            <input
-              type="text"
-              value={categoryName}
-              autoFocus
-              className="edittitle"
-              size={10}
-              onChange={(e) => setCategoryName(e.target.value)}
-            />
-            <span onClick={editTitlecomplete}>수정 완료</span>
+      {categoryData && (
+        <>
+          <div className="category_container">
+            {categoryData &&
+              categoryData.map((it) => (
+                <>
+                  <span
+                    id={String(it.categoryId)}
+                    className={
+                      Highlight === it.categoryId
+                        ? "category_title_highlight"
+                        : "category_title"
+                    }
+                    onClick={() => onHighlight(it.categoryId)}
+                  >
+                    {it.categoryName}
+                  </span>
+                </>
+              ))}
+            <span className="cateogory_create" onClick={addItemHandler}>
+              + 카테고리 추가
+            </span>
           </div>
-        )}
-      </div>
+          <div className="CategorySetSmall">
+            <div className="editTitle">
+              <span onClick={editTitleHandler}>제목 수정</span>
+              <span onClick={deleteCategoryHandler}>페이지 삭제</span>
+            </div>
 
-      <div className="category_context">
-        {categoryData && (
-          <CategoryContent noteId={noteId} categoryId={categoryId} />
-        )}
-      </div>
+            {editTitle && (
+              <div className="edittitle_box">
+                <input
+                  type="text"
+                  value={categoryName}
+                  autoFocus
+                  className="edittitle"
+                  size={10}
+                  onChange={(e) => setCategoryName(e.target.value)}
+                />
+                <span onClick={editTitlecomplete}>수정 완료</span>
+              </div>
+            )}
+          </div>
+          <div className="category_context">
+            {categoryData && (
+              <CategoryContent noteId={noteId} categoryId={categoryId} />
+            )}
+          </div>
+        </>
+      )}
     </>
   );
 };
 
-export default React.memo(CategoryTitle);
+export default CategoryTitle;
