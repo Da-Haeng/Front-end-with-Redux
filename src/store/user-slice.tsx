@@ -8,7 +8,8 @@ export type User = {
 };
 
 export type NaverUser = {
-  token: string;
+  code: string;
+  state: string;
   nickname: string;
 };
 
@@ -54,6 +55,7 @@ const initialState = {
 export const addUserAsync = createAsyncThunk(
   "user/addUserAsync",
   async (user: User) => {
+    console.log(user);
     return await fetch("http://localhost:8080/user/join", {
       method: "POST",
       headers: {
@@ -78,7 +80,8 @@ export const addUserNaverLoginAsync = createAsyncThunk(
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        token: NaverUser.token,
+        code: NaverUser.code,
+        state: NaverUser.state,
         nickname: NaverUser.nickname,
       }),
     }).then((res) => res);
@@ -256,7 +259,14 @@ const userSlice = createSlice({
     naverLoginToken(state, action) {
       state.userInfo = {
         ...state.userInfo,
-        token: action.payload,
+        code: action.payload.code,
+        state: action.payload.state,
+        //테스트하려고 임의로 넣어둠
+        // email: "sshzi26@naver.com",
+        // nickname: "융지",
+        // id_token: "0",
+        // notificationCheck: "0",
+        // password: "123",
       };
       state.snsNickname = true;
     },
@@ -275,6 +285,11 @@ const userSlice = createSlice({
     loginSuccess(state, action) {
       state.success = action.payload;
     },
+    logoutSuccess(state, action) {
+      state.success = action.payload;
+      state.snsNickname = false;
+      state.userInfo = {};
+    },
     getUserInfoAtLocal(state) {
       state.userInfo = {
         ...state.userInfo,
@@ -285,6 +300,21 @@ const userSlice = createSlice({
         password: localStorage.getItem("password"),
       };
       state.success = true;
+    },
+    Naver(state) {
+      state.userInfo = {
+        ...state.userInfo,
+        email: "sshzi26@naver.com",
+        nickname: "융지",
+        id_token: "0",
+        notificationCheck: 0,
+        password: "123",
+      };
+      localStorage.setItem("email", "sshzi26@naver.com");
+      localStorage.setItem("nickname", "융지");
+      localStorage.setItem("id_token", "0");
+      localStorage.setItem("notificationCheck", "0");
+      localStorage.setItem("password", "123");
     },
   },
   extraReducers: (builder) => {
@@ -302,6 +332,7 @@ const userSlice = createSlice({
       })
       .addCase(addUserAsync.fulfilled, (state, action) => {
         state.join = true;
+        state.success = true;
       })
       .addCase(addUserAsync.rejected, (state, action) => {
         console.log("catch");
@@ -317,7 +348,7 @@ const userSlice = createSlice({
           action.payload.notificationCheck
         );
         localStorage.setItem("password", action.payload.password);
-
+        state.success = true;
         console.log(action.payload);
       })
       .addCase(memberFindAsync.fulfilled, (state, action) => {
@@ -341,23 +372,27 @@ const userSlice = createSlice({
         console.log("g");
       })
       .addCase(snsLoginCheckAsync.fulfilled, (state, action) => {
-        console.log(action);
+        console.log(action.payload);
+        state.userInfo = {
+          ...state.userInfo,
+          email: action.payload.email,
+          nickname: action.payload.nickname,
+          id_token: action.payload.id_token,
+          notificationCheck: action.payload.notificationCheck,
+          password: action.payload.password,
+        };
+      })
+      .addCase(addUserNaverLoginAsync.fulfilled, (state, action) => {
+        state.join = true;
+        state.success = true;
+        state.userInfo = { ...action.payload };
+        localStorage.setItem("email", "sshzi26@naver.com");
+        localStorage.setItem("nickname", "가융지");
+        localStorage.setItem("id_token", "0");
+        localStorage.setItem("notificationCheck", "0");
+        localStorage.setItem("password", "123");
       });
   },
-
-  // extraReducers: {
-  //   [emailCertificationAsync.pending.type]: (state, action) => {
-  //     console.log("emailCertification_pending");
-  //   },
-  //   [emailCertificationAsync.fulfilled.type]: (state, action) => {
-  //     console.log("emailCertification_fulfilled");
-  //     console.log(action.payload.checkNum);
-  //     state.checknum = action.payload.checkNum;
-  //   },
-  //   [emailCertificationAsync.rejected.type]: (state, action) => {
-  //     console.log("emailCertification_rejected");
-  //   },
-  // },
 });
 export let {
   naverLoginToken,
@@ -365,6 +400,8 @@ export let {
   getUserInfoAtLocal,
   // naverLoginNickname,
   loginSuccess,
+  logoutSuccess,
+  Naver,
 } = userSlice.actions;
 export const userActions = userSlice.actions;
 export default userSlice;

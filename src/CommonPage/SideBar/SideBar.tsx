@@ -6,17 +6,17 @@ import { faSignOut } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "./SideBar.css";
 import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import SetModal from "./setModal";
-import { useSelector } from "react-redux";
+import { logoutSuccess } from "../../store/user-slice";
 
 function SideBar() {
   const navigate = useNavigate();
+  const dispatch = useDispatch<any>();
 
   const { userInfo } = useSelector((state: any) => ({
     userInfo: state.user.userInfo,
   }));
-
-  // useEffect(() => {}, [userInfo]);
 
   const [modalOpen, setModalOpen] = useState<boolean>(false);
 
@@ -26,6 +26,14 @@ function SideBar() {
   const closeModal = () => {
     setModalOpen(false);
   };
+
+  const logoutHandler = () => {
+    localStorage.clear();
+    dispatch(logoutSuccess(false));
+    alert("로그아웃되었습니다");
+    navigate("/", { replace: true });
+  };
+
   return (
     <div className="sidebar">
       <div className="sidebar-profile">
@@ -53,7 +61,11 @@ function SideBar() {
         <FontAwesomeIcon icon={faBell} className="sidebar-btn faBell" />
       </div>
       <div className="sidebar-btn-bottom">
-        <FontAwesomeIcon icon={faSignOut} className="sidebar-btn faSignOut" />
+        <FontAwesomeIcon
+          onClick={logoutHandler}
+          icon={faSignOut}
+          className="sidebar-btn faSignOut"
+        />
       </div>
 
       <SetModal open={modalOpen} close={closeModal} userInfo={userInfo} />

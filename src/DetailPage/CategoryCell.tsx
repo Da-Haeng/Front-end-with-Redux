@@ -27,7 +27,6 @@ const CategoryCell = (props: CategoryCellProps) => {
   const dispatch = useDispatch<any>();
 
   const cellItems: CellItem = useSelector((state: any) => state.category.cell);
-
   const cell = cellItems?.cell;
 
   const categoryId = props.categoryId;
@@ -103,7 +102,6 @@ const CategoryCell = (props: CategoryCellProps) => {
       dispatch(
         addItemToCellAsync({
           index: index,
-          lineId: categoryLength + 1,
           categoryId: categoryId,
         })
       );
@@ -122,7 +120,6 @@ const CategoryCell = (props: CategoryCellProps) => {
     dispatch(
       addItemToCellAsync({
         index: index,
-        lineId: categoryLength + 1,
         categoryId: categoryId,
       })
     );

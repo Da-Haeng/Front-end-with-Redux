@@ -11,6 +11,7 @@ import { getMemoListAsync } from "../store/main-slice";
 import "./Main.css";
 import MemoList from "./MemoList";
 import TodoContainer from "./TodoList/TodoContainer";
+import { setUserAsync } from "../store/user-slice";
 
 const Main = () => {
   const navigate = useNavigate();
@@ -18,6 +19,21 @@ const Main = () => {
   const tutorialGo = () => {
     navigate("/");
   };
+
+  const [user, setUser] = useState({
+    email: "",
+    password: "",
+  });
+
+  // useEffect(() => {
+  //   setUser({
+  //     ...user,
+  //     email: localStorage.getItem("email")!,
+  //     password: localStorage.getItem("password")!,
+  //   });
+  //   console.log(user);
+  //   dispatch(setUserAsync(user));
+  // }, [user]);
 
   const dispatch = useDispatch<any>();
   const [addTodo, setAddTodo] = useState(false);
@@ -31,12 +47,12 @@ const Main = () => {
     userInfo: state.user.userInfo,
   }));
 
-  useEffect(() => {
-    if (localStorage.getItem("code") === null) {
-      navigate("/", { replace: true });
-    }
-    // dispatch(getMemoListAsync(userInfo.email));
-  }, [userInfo]);
+  // useEffect(() => {
+  //   if (localStorage.getItem("code") === null) {
+  //     navigate("/", { replace: true });
+  //   }
+  //   // dispatch(getMemoListAsync(userInfo.email));
+  // }, [userInfo]);
   //[userinfo]지웠음
 
   // useEffect(() => {

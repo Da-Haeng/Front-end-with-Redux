@@ -20,6 +20,7 @@ const CategoryContent = (props: CategoryContentProps) => {
   const categoryId = props.categoryId;
 
   const categoryContent = cellItems?.cell;
+  console.log(categoryContent);
   const categoryLength = categoryContent?.length;
 
   return (

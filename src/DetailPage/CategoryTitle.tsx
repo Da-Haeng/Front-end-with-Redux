@@ -23,8 +23,6 @@ const CategoryTitle = (props: any) => {
 
   const [categoryIndexNum, setCategoryIndexNum] = useState(0);
 
-  const dataId = useRef(categoryLength);
-
   const [Highlight, setHighlight] = useState(categoryIndexNum);
   const [categoryId, setCategoryId] = useState(categoryIndexNum);
   const [categoryName, setCategoryName] = useState("");
@@ -33,9 +31,10 @@ const CategoryTitle = (props: any) => {
   useEffect(() => {
     if (categoryIndex) {
       setCategoryIndexNum(categoryIndex.categoryId);
+      setHighlight(categoryIndexNum);
+      setCategoryId(categoryIndexNum);
+      dispatch(getCellListAsync(categoryIndexNum));
     }
-    setHighlight(categoryIndexNum);
-    setCategoryId(categoryIndexNum);
   }, [categoryData]);
 
   const onHighlight = async (id: number) => {
@@ -52,19 +51,22 @@ const CategoryTitle = (props: any) => {
   }, [categoryId]);
 
   let defaultData: Category = {
-    categoryId: dataId.current,
+    categoryId: categoryData.length + 1,
     categoryName: "카테고리명",
-    lineId: 1,
-    text: "입력해주세요",
-    type: "h3",
-    color: "black",
-    bgcolor: "basicbg",
-    font: "basic",
+    noteId: noteId,
+    // lineId: 1,
+    // text: "입력해주세요",
+    // type: "h3",
+    // color: "black",
+    // bgcolor: "basicbg",
+    // font: "basic",
   };
 
-  const addItemHandler = () => {
-    dispatch(addItemToCategoryAsync(defaultData));
-    dataId.current += 1;
+  const addItemHandler = async () => {
+    console.log(defaultData.categoryId);
+    await dispatch(addItemToCategoryAsync(defaultData));
+    // dataId.current += 1;
+    await dispatch(getCategoryListAsync(noteId));
   };
 
   const deleteCategoryHandler = async () => {
@@ -80,11 +82,11 @@ const CategoryTitle = (props: any) => {
 
   const editTitlecomplete = () => {
     setEditTitle(!editTitle);
-    console.log(categoryName);
     dispatch(
       editTitletoCategoryAsync({
         categoryId: categoryId,
         categoryName: categoryName,
+        noteId: noteId,
       })
     );
   };

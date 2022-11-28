@@ -14,7 +14,6 @@ export type Document = [
   {
     categoryId: number;
     categoryName: string;
-    noteId: number;
   }
 ];
 
@@ -30,17 +29,7 @@ export type Item = {
 export type Category = {
   categoryId: number;
   categoryName: string;
-  lineId: number;
-  text: string;
-  type: string;
-  color: string;
-  bgcolor: string;
-  font: string;
-};
-
-export type CategoryTitle = {
-  categoryId: number;
-  categoryName: string;
+  noteId: number;
 };
 
 export type CellEdit = {
@@ -55,7 +44,6 @@ export type CellEdit = {
 
 export type CellAdd = {
   index: number;
-  lineId: number;
   categoryId: number;
 };
 
@@ -289,12 +277,7 @@ export const addItemToCategoryAsync = createAsyncThunk(
       body: JSON.stringify({
         categoryId: category.categoryId,
         categoryName: category.categoryName,
-        lineId: category.lineId,
-        text: category.text,
-        type: category.type,
-        color: category.color,
-        bgcolor: category.bgcolor,
-        font: category.font,
+        noteId: category.noteId,
       }),
     }).then((res) => res.json());
   }
@@ -319,7 +302,8 @@ export const removeItemToCategoryAsync = createAsyncThunk(
 // category 타이틀 수정
 export const editTitletoCategoryAsync = createAsyncThunk(
   "category/editTitletoCategoryAsync",
-  async (category: CategoryTitle) => {
+  async (category: Category) => {
+    console.log(category);
     return await fetch("http://localhost:8080/category/update", {
       method: "POST",
       headers: {
@@ -328,6 +312,7 @@ export const editTitletoCategoryAsync = createAsyncThunk(
       body: JSON.stringify({
         categoryId: category.categoryId,
         categoryName: category.categoryName,
+        notedId: category.noteId,
       }),
     }).then((res) => res.json());
   }
@@ -344,7 +329,6 @@ export const addItemToCellAsync = createAsyncThunk(
       },
       body: JSON.stringify({
         index: cell.index,
-        lineId: cell.lineId,
         categoryId: cell.categoryId,
       }),
     }).then((res) => res.json());
@@ -572,10 +556,18 @@ const categorySlice = createSlice({
     builder
       .addCase(getCategoryListAsync.fulfilled, (state, action) => {
         state.document = action.payload;
-        console.log(action.payload);
       })
       .addCase(getCellListAsync.fulfilled, (state, action) => {
         state.cell = action.payload;
+        console.log(state.cell);
+      })
+      .addCase(addItemToCategoryAsync.fulfilled, (state, action) => {
+        console.log(action.payload);
+      })
+      .addCase(addItemToCellAsync.fulfilled, (state, action) => {
+        console.log(action.payload);
+      })
+      .addCase(editTitletoCategoryAsync.fulfilled, (state, action) => {
         console.log(action.payload);
       });
   },

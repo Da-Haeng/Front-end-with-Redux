@@ -22,8 +22,6 @@ const Category = (props: CategoryProps) => {
 
   const dispatch = useDispatch<any>();
 
-  console.log(categoryItems);
-
   // const getCategoryHandler = async () => {
   //   await dispatch(getCategoryListAsync(props.noteId));
   // };

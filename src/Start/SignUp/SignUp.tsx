@@ -7,6 +7,9 @@ import {
   User,
   loginSuccess,
   addUserNaverLoginAsync,
+  snsLoginCheckAsync,
+  Naver,
+  setUserAsync,
 } from "../../store/user-slice";
 import { useDispatch, useSelector } from "react-redux";
 import React, { ChangeEvent, useEffect, useMemo, useState } from "react";
@@ -65,14 +68,14 @@ const SignUp = () => {
       dispatch(emailCertificationAsync(user.email));
       alert("인증번호가 전송되었습니다");
     }
-    if (join === true && emailcheck === "NOT EXIST") {
-      navigate("/login", { replace: true });
-    }
+    // if (join === true && emailcheck === "NOT EXIST") {
+    //   navigate("/login", { replace: true });
+    // }
   }, [emailcheckState]);
 
   // sns로그인 후 유저정보 확인하고 닉네임 쓸지말지
   useEffect(() => {
-    console.log(userInfo.email);
+    console.log(userInfo);
     if (userInfo.email) {
       dispatch(loginSuccess(true));
       navigate("/", { replace: true });
@@ -82,6 +85,7 @@ const SignUp = () => {
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setUser({ ...user, [name]: value });
+    console.log(user);
   };
   const handleCodeChange = (e: ChangeEvent<HTMLInputElement>) => {
     setCode(e.target.value);
@@ -128,6 +132,8 @@ const SignUp = () => {
   const handleSubmit = () => {
     if (user.password === passwordCheck) {
       dispatch(addUserAsync(user));
+      alert("회원가입되었습니다.");
+      navigate("/login", { replace: true });
     } else {
       alert("비밀번호가 동일하지 않습니다.");
     }
@@ -136,18 +142,27 @@ const SignUp = () => {
   // sns 회원가입
   const snsLoginSubmit = () => {
     if (user.nickname) {
-      dispatch(
-        addUserNaverLoginAsync({
-          token: userInfo.token,
-          nickname: user.nickname,
-        })
-      );
+      // dispatch(
+      //   addUserNaverLoginAsync({
+      //     code: userInfo.code,
+      //     state: userInfo.state,
+      //     nickname: user.nickname,
+      //   })
+      // );
+      // 백 완료하면 이걸로 쓰기
+
+      dispatch(Naver());
+      // 백완료하면 이거 삭제
+
       dispatch(loginSuccess(true));
+      alert("로그인되었습니다.");
       navigate("/", { replace: true });
-    } else {
-      alert("닉네임을 입력해주세요");
     }
   };
+
+  if (userInfo.email) {
+    return <div>hi</div>;
+  }
 
   return (
     <div className="tutorial">
@@ -180,7 +195,7 @@ const SignUp = () => {
             </>
           )}
 
-          {!certification && snsNickname === false && (
+          {!certification && snsNickname === false && !userInfo.email && (
             <div className="loginBox signupBox">
               <input
                 type="email"
@@ -204,7 +219,7 @@ const SignUp = () => {
               </button>
             </div>
           )}
-          {certification && snsNickname === false && (
+          {certification && snsNickname === false && !userInfo.email && (
             <div className="loginBox">
               <span className="tutorial-maintitle signupTitle">인증완료</span>
               <div className="loginBox">

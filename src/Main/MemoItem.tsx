@@ -16,6 +16,7 @@ import DatePicker from "react-datepicker";
 import { ko } from "date-fns/esm/locale";
 import "react-datepicker/dist/react-datepicker.css";
 import { getCategoryListAsync } from "../store/category-slice";
+import moment from "moment";
 
 const MemoItem = (props: any) => {
   const dispatch = useDispatch<any>();
@@ -25,8 +26,10 @@ const MemoItem = (props: any) => {
   const [newDescription, setNewDescription] = useState(props.noteDescription);
   const [newColor, setNewColor] = useState(props.noteColor);
   const [update, setUpdate] = useState(false);
-  const [startDate, setStartDate] = useState(new Date());
-  const [endDate, setEndDate] = useState(new Date());
+  // const [startDate, setStartDate] = useState(new Date());
+  // const [endDate, setEndDate] = useState(new Date());
+  const [startDate, setStartDate] = useState(new Date(props.startDate));
+  const [endDate, setEndDate] = useState(new Date(props.endDate));
 
   const { userInfo } = useSelector((state: any) => ({
     userInfo: state.user.userInfo,
@@ -37,7 +40,7 @@ const MemoItem = (props: any) => {
   }));
 
   useEffect(() => {
-    //dispatch(getMemoListAsync(userInfo.email));
+    dispatch(getMemoListAsync(userInfo.email));
   }, [userInfo, update]);
 
   const removeItemHandler = async (event: any) => {
@@ -51,7 +54,6 @@ const MemoItem = (props: any) => {
   const categoryItems: Document = useSelector(
     (state: any) => state.category.document
   );
-  console.log(categoryItems);
 
   const navigate = useNavigate();
   const goDetail = async () => {
@@ -71,8 +73,8 @@ const MemoItem = (props: any) => {
       editMemoAsync({
         noteId: props.noteId,
         noteName: newTitle,
-        startDate: startDate,
-        endDate: endDate,
+        startDate: moment(startDate).format("YYYY-MM-DD"),
+        endDate: moment(endDate).format("YYYY-MM-DD"),
         noteDescription: newDescription,
         noteColor: newColor,
       })

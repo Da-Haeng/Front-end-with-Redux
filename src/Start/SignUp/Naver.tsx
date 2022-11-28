@@ -4,6 +4,7 @@ import {
   naverLoginToken,
   snsLoginCheckAsync,
   naverLoginEmail,
+  Naver,
   // naverLoginNickname,
 } from "../../store/user-slice";
 
@@ -34,8 +35,6 @@ const NaverLogin = () => {
         const username = naverLogin.user.getName();
         // 정보 전체를 아래처럼 state 에 저장하여 추출하여 사용가능하다.
         // setUserInfo(naverLogin.user)
-        console.log(userid);
-        console.log(username);
         // dispatch(naverLoginEmail(userid));
         // dispatch(naverLoginNickname(username));
       }
@@ -54,8 +53,10 @@ const NaverLogin = () => {
     console.log(code);
     localStorage.setItem("code", code);
     localStorage.setItem("state", state);
-    dispatch(naverLoginToken(code));
-    dispatch(snsLoginCheckAsync({ code: code, state: state })); // 백한테 토큰 보내줘서 유저정보 받아오기
+    dispatch(naverLoginToken({ code: code, state: state }));
+    //dispatch(snsLoginCheckAsync({ code: code, state: state })); // 백한테 토큰 보내줘서 유저정보 받아오기 백 완료되면 이걸로 쓰기
+
+    dispatch(Naver());
   };
 
   const start = () => {

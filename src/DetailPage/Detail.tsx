@@ -36,7 +36,6 @@ const Detail = () => {
   };
 
   useEffect(() => {
-    console.log("hi");
     getCategoryHandler();
   }, []);
 

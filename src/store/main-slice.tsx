@@ -6,8 +6,8 @@ export type Memo = {
   user: string;
   noteId: number;
   noteName: string;
-  startDate: Date;
-  endDate: Date;
+  startDate: string;
+  endDate: string;
   noteDescription: string;
   noteColor: number;
 };
@@ -66,6 +66,7 @@ export const getMemoListAsync = createAsyncThunk(
 export const addMemoAsync = createAsyncThunk(
   "main/addMemoAsync",
   async (memo: Memo) => {
+    console.log(memo);
     return await fetch("http://localhost:8080/note/insert", {
       method: "POST",
       headers: {
@@ -151,7 +152,6 @@ const mainSlice = createSlice({
     builder
       .addCase(getMemoListAsync.fulfilled, (state, action) => {
         state.memoData = action.payload;
-        console.log(state.memoData);
       })
       .addCase(addMemoAsync.fulfilled, (state, action) => {
         state.update = !state.update;

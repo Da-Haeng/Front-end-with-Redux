@@ -13,6 +13,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faL, faPlus } from "@fortawesome/free-solid-svg-icons";
 import { RootState } from "../store";
 import { useMemo } from "react";
+import moment from "moment";
 
 const MemoList = () => {
   const dataId = useRef(4);
@@ -59,8 +60,8 @@ const MemoList = () => {
     user: userInfo.email,
     noteId: dataId.current,
     noteName: "",
-    startDate: startDate,
-    endDate: endDate,
+    startDate: moment(startDate).format("YYYY-MM-DD"),
+    endDate: moment(endDate).format("YYYY-MM-DD"),
     noteDescription: "",
     noteColor: 0,
   };
@@ -75,7 +76,11 @@ const MemoList = () => {
         ))}
 
       <div className="main-memo" onClick={addItemHandler}>
-        <FontAwesomeIcon icon={faPlus} className="plus-icon" />
+        <FontAwesomeIcon
+          icon={faPlus}
+          className="plus-icon"
+          onClick={addItemHandler}
+        />
       </div>
     </div>
   );
