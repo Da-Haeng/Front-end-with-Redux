@@ -49,6 +49,7 @@ const initialState = {
   emailSelect: [],
   shareMember: [],
   snsNickname: false,
+  result: "",
 };
 
 // 회원추가
@@ -247,12 +248,13 @@ export const memberExitAsync = createAsyncThunk(
 export const dahaengExitAsync = createAsyncThunk(
   "user/dahaengExitAsync",
   async (email: string) => {
-    return await fetch("http://localhost:8080/member/delete", {
+    console.log(email);
+    return await fetch("http://localhost:8080/user/delete", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ email: email }),
+      body: JSON.stringify({ email }),
     }).then((res) => res.json());
   }
 );
@@ -341,9 +343,11 @@ const userSlice = createSlice({
       })
       .addCase(setUserAsync.fulfilled, (state, action) => {
         state.success = true;
-        state.userInfo = { ...action.payload };
-        localStorage.setItem("email", action.payload.email);
-        localStorage.setItem("nickname", action.payload.nickname);
+        state.userInfo = { ...action.payload.user };
+        state.result = action.payload.result;
+        console.log(action.payload);
+        localStorage.setItem("email", action.payload.user.email);
+        localStorage.setItem("nickname", action.payload.user.nickname);
         // localStorage.setItem("id_token", action.payload.id_token);
         // localStorage.setItem(
         //   "notificationCheck",
@@ -389,6 +393,9 @@ const userSlice = createSlice({
         state.userInfo = { ...action.payload };
         localStorage.setItem("email", "sshzi26@naver.com");
         localStorage.setItem("nickname", "가융지");
+      })
+      .addCase(dahaengExitAsync.fulfilled, (state, action) => {
+        console.log(action.payload);
       });
   },
 });

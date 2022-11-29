@@ -155,9 +155,8 @@ const MemoItem = (props: any) => {
             "main-memotitle-right",
             `main-memotitle-right-${newColor}`,
           ].join(" ")}
-          onClick={handleToggleColor}
         >
-          {isColor ? (
+          {/* {isColor ? (
             <div className="main-memotitle-colorwidget">
               <div
                 className="main-memotitle-color-1"
@@ -178,7 +177,7 @@ const MemoItem = (props: any) => {
             </div>
           ) : (
             <></>
-          )}
+          )} */}
         </div>
       </div>
 

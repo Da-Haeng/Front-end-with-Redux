@@ -11,6 +11,7 @@ import {
   addItemToCellAsync,
   BulletPointAsync,
   getCellListAsync,
+  cellEditHandler,
 } from "../store/category-slice";
 import { RootState } from "../store";
 
@@ -50,23 +51,33 @@ const CategoryCell = (props: CategoryCellProps) => {
 
   const [spanToInput, setSpanToInput] = useState(false);
 
-  useEffect(() => {
-    dispatch(
-      editCellToCategoryAsync({
-        categoryId: categoryId,
-        lineId: cellId,
-        text: cellText,
-        type: cellType,
-        color: cellColor,
-        bgcolor: cellBgColor,
-        font: cellFont,
-      })
-    );
-    dispatch(getCellListAsync(categoryId));
-  }, [cellText, cellType, cellColor, cellBgColor, cellFont]);
+  const index = cell?.findIndex((it) => it.lineId === cellId);
+  console.log(cellText);
+  console.log(index);
 
-  useMemo(() => {
-    if (props) {
+  // const cellEditHandler = async () => {
+  //   await dispatch(getCellListAsync(categoryId));
+  // };
+
+  // useEffect(() => {
+  //   // dispatch(
+  //   //   editCellToCategoryAsync({
+  //   //     categoryId: categoryId,
+  //   //     lineId: cellId,
+  //   //     text: cellText,
+  //   //     type: cellType,
+  //   //     color: cellColor,
+  //   //     bgcolor: cellBgColor,
+  //   //     font: cellFont,
+  //   //     index: index,
+  //   //   })
+  //   // );
+  //   dispatch(getCellListAsync(categoryId));
+  // }, [cellText, cellType, cellColor, cellBgColor, cellFont]);
+
+  useEffect(() => {
+    if (props.item) {
+      console.log(props.item);
       setCellText(text);
       setCellId(lineId);
       setCellType(type);
@@ -95,17 +106,44 @@ const CategoryCell = (props: CategoryCellProps) => {
     setBgColor(!bgColor);
   };
 
-  const onKeyPress = (e: any) => {
+  // const onKeyPress = (e: any) => {
+  //   if (e.key === "Enter") {
+  //     setSpanToInput(false);
+  //     const index = cell?.findIndex((it) => it.lineId === cellId);
+  //     dispatch(
+  //       addItemToCellAsync({
+  //         index: index,
+  //         categoryId: categoryId,
+  //       })
+  //     );
+  //     dispatch(getCellListAsync(categoryId));
+  //   }
+  //   if (e.key === "Backspace" && cellText.length === 0) {
+  //     dispatch(
+  //       deleteCellToCategoryAsync({ lineId: cellId, categoryId: categoryId })
+  //     );
+  //     dispatch(getCellListAsync(categoryId));
+  //   }
+  // };
+
+  const onKeyPress = async (e: any) => {
     if (e.key === "Enter") {
       setSpanToInput(false);
-      const index = cell?.findIndex((it) => it.lineId === cellId);
-      dispatch(
-        addItemToCellAsync({
-          index: index,
+      console.log(cellText);
+      console.log(index);
+      await dispatch(
+        editCellToCategoryAsync({
           categoryId: categoryId,
+          lineId: cellId,
+          text: cellText,
+          type: cellType,
+          color: cellColor,
+          bgcolor: cellBgColor,
+          font: cellFont,
+          index: index,
         })
       );
-      dispatch(getCellListAsync(categoryId));
+      dispatch(cellEditHandler());
     }
     if (e.key === "Backspace" && cellText.length === 0) {
       dispatch(
@@ -115,15 +153,16 @@ const CategoryCell = (props: CategoryCellProps) => {
     }
   };
 
-  const addCellHandler = () => {
+  const addCellHandler = async () => {
+    console.log("추가");
     const index = cell?.findIndex((it) => it.lineId === cellId);
-    dispatch(
+    await dispatch(
       addItemToCellAsync({
         index: index,
         categoryId: categoryId,
       })
     );
-    dispatch(getCellListAsync(categoryId));
+    dispatch(cellEditHandler());
   };
 
   const effectCellHandler = () => {
@@ -136,25 +175,62 @@ const CategoryCell = (props: CategoryCellProps) => {
     }
   };
 
-  const styleSizeHandler = (e: any) => {
+  const styleSizeHandler = async (e: any) => {
     setCellType(e);
     setCellEffect(false);
-    e.preventDefault();
+    console.log(e);
+    await dispatch(
+      editCellToCategoryAsync({
+        categoryId: categoryId,
+        lineId: cellId,
+        text: cellText,
+        type: e,
+        color: cellColor,
+        bgcolor: cellBgColor,
+        font: cellFont,
+        index: index,
+      })
+    );
+    // e.preventDefault();
   };
 
-  const styleColorHandler = (e: any) => {
+  const styleColorHandler = async (e: any) => {
     setCellColor(e);
     setCellEffect(false);
     e.preventDefault();
+    await dispatch(
+      editCellToCategoryAsync({
+        categoryId: categoryId,
+        lineId: cellId,
+        text: cellText,
+        type: cellType,
+        color: e,
+        bgcolor: cellBgColor,
+        font: cellFont,
+        index: index,
+      })
+    );
   };
 
-  const styleBgColorHandler = (e: any) => {
+  const styleBgColorHandler = async (e: any) => {
     setCellBgColor(e);
     setCellEffect(false);
     e.preventDefault();
+    await dispatch(
+      editCellToCategoryAsync({
+        categoryId: categoryId,
+        lineId: cellId,
+        text: cellText,
+        type: cellType,
+        color: cellColor,
+        bgcolor: e,
+        font: cellFont,
+        index: index,
+      })
+    );
   };
 
-  const styleFontrHandler = (e: any) => {
+  const styleFontrHandler = async (e: any) => {
     if (e === "bold") {
       if (cellFont === "bold") {
         setCellFont("basic");
@@ -184,19 +260,31 @@ const CategoryCell = (props: CategoryCellProps) => {
       }
     }
     setCellEffect(false);
+    await dispatch(
+      editCellToCategoryAsync({
+        categoryId: categoryId,
+        lineId: cellId,
+        text: cellText,
+        type: cellType,
+        color: cellColor,
+        bgcolor: cellBgColor,
+        font: e,
+        index: index,
+      })
+    );
     e.preventDefault();
   };
 
-  const BulletPointHandler = () => {
+  const BulletPointHandler = async () => {
     const bulletText = "• ".concat(cellText);
-    dispatch(
+    await dispatch(
       BulletPointAsync({
         categoryId: categoryId,
         lineId: cellId,
         text: bulletText,
       })
     );
-    dispatch(getCellListAsync(categoryId));
+    // dispatch(getCellListAsync(categoryId));
   };
 
   const spanToInputHandler = () => {

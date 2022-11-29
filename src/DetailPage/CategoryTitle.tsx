@@ -10,12 +10,19 @@ import {
   Document,
   getCategoryListAsync,
   editTitletoCategoryAsync,
+  cellEditHandler,
+  CellItem,
 } from "../store/category-slice";
 
 const CategoryTitle = (props: any) => {
   const dispatch = useDispatch<any>();
 
   const categoryData: Document = props.categoryItems;
+  const cellEdit: boolean = useSelector(
+    (state: any) => state.category.cellEdit
+  );
+
+  const cellItems: CellItem = useSelector((state: any) => state.category.cell);
 
   const noteId = props.noteId;
   const categoryLength = categoryData.length + 1;
@@ -28,6 +35,8 @@ const CategoryTitle = (props: any) => {
   const [categoryName, setCategoryName] = useState("");
   const [editTitle, setEditTitle] = useState(false);
 
+  const [cateoryawait, setCategoryAwait] = useState(false);
+
   useEffect(() => {
     if (categoryIndex) {
       setCategoryIndexNum(categoryIndex.categoryId);
@@ -35,7 +44,15 @@ const CategoryTitle = (props: any) => {
       setCategoryId(categoryIndexNum);
       dispatch(getCellListAsync(categoryIndexNum));
     }
-  }, [categoryData]);
+  }, [categoryData, cateoryawait]);
+
+  useEffect(() => {
+    console.log(cellEdit);
+    if (cellEdit) {
+      dispatch(getCellListAsync(categoryId));
+    }
+  }, [cellEdit]);
+  console.log(cellItems);
 
   const onHighlight = async (id: number) => {
     setHighlight(id);
@@ -50,10 +67,9 @@ const CategoryTitle = (props: any) => {
     }
   }, [categoryId]);
 
-  let defaultData: Category = {
-    categoryId: categoryData.length + 1,
-    categoryName: "카테고리명",
-    noteId: noteId,
+  let defaultData: any = {
+    // categoryName: "카테고리명",
+    // noteId: noteId,
     // lineId: 1,
     // text: "입력해주세요",
     // type: "h3",
@@ -64,9 +80,10 @@ const CategoryTitle = (props: any) => {
 
   const addItemHandler = async () => {
     console.log(defaultData.categoryId);
-    await dispatch(addItemToCategoryAsync(defaultData));
+    await dispatch(addItemToCategoryAsync(noteId));
     // dataId.current += 1;
     await dispatch(getCategoryListAsync(noteId));
+    setCategoryAwait(!cateoryawait);
   };
 
   const deleteCategoryHandler = async () => {
@@ -74,21 +91,24 @@ const CategoryTitle = (props: any) => {
     await dispatch(getCategoryListAsync(noteId));
     // setHighlight(categoryIndex.categoryId);
     // setCategoryId(categoryIndex.categoryId);
+    await dispatch(cellEditHandler());
+    setCategoryAwait(!cateoryawait);
   };
 
   const editTitleHandler = () => {
     setEditTitle(!editTitle);
   };
 
-  const editTitlecomplete = () => {
+  const editTitlecomplete = async () => {
     setEditTitle(!editTitle);
-    dispatch(
+    console.log(categoryName);
+    await dispatch(
       editTitletoCategoryAsync({
         categoryId: categoryId,
         categoryName: categoryName,
-        noteId: noteId,
       })
     );
+    dispatch(getCategoryListAsync(noteId));
   };
   if (!categoryData) {
     return <div></div>;

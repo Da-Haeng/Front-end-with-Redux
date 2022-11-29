@@ -153,7 +153,12 @@ const SignUp = () => {
   const handleSubmit = () => {
     if (user.password === passwordCheck) {
       dispatch(addUserAsync(user));
-      Swal.fire({ icon: "success", text: "회원가입되었습니다.", width: 400 });
+      Swal.fire({
+        icon: "success",
+        title: "회원가입 완료",
+        text: "다시 로그인하세요.",
+        width: 400,
+      });
       navigate("/login", { replace: true });
     } else {
       Swal.fire({

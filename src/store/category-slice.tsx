@@ -29,7 +29,6 @@ export type Item = {
 export type Category = {
   categoryId: number;
   categoryName: string;
-  noteId: number;
 };
 
 export type CellEdit = {
@@ -40,6 +39,7 @@ export type CellEdit = {
   color: string;
   bgcolor: string;
   font: string;
+  index: number;
 };
 
 export type CellAdd = {
@@ -61,6 +61,7 @@ export type BulletAdd = {
 const initialState = {
   document: [],
   cell: [],
+  cellEdit: false,
 };
 
 export type CategoryState = Document[];
@@ -268,16 +269,14 @@ export const getCellListAsync = createAsyncThunk(
 // category 추가
 export const addItemToCategoryAsync = createAsyncThunk(
   "category/addItemToCategoryAsync",
-  async (category: Category) => {
+  async (noteId: any) => {
     return await fetch("http://localhost:8080/category/insert", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        categoryId: category.categoryId,
-        categoryName: category.categoryName,
-        noteId: category.noteId,
+        noteId,
       }),
     }).then((res) => res.json());
   }
@@ -304,7 +303,7 @@ export const editTitletoCategoryAsync = createAsyncThunk(
   "category/editTitletoCategoryAsync",
   async (category: Category) => {
     console.log(category);
-    return await fetch("http://localhost:8080/category/update", {
+    return await fetch("http://localhost:8080/category/edit-title", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -312,7 +311,6 @@ export const editTitletoCategoryAsync = createAsyncThunk(
       body: JSON.stringify({
         categoryId: category.categoryId,
         categoryName: category.categoryName,
-        notedId: category.noteId,
       }),
     }).then((res) => res.json());
   }
@@ -322,13 +320,13 @@ export const editTitletoCategoryAsync = createAsyncThunk(
 export const addItemToCellAsync = createAsyncThunk(
   "category/addItemToCellAsync",
   async (cell: CellAdd) => {
-    return await fetch("http://localhost:8080/", {
+    return await fetch("http://localhost:8080/line/insert", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        index: cell.index,
+        lineindex: cell.index,
         categoryId: cell.categoryId,
       }),
     }).then((res) => res.json());
@@ -339,7 +337,8 @@ export const addItemToCellAsync = createAsyncThunk(
 export const editCellToCategoryAsync = createAsyncThunk(
   "category/editCellToCategoryAsync",
   async (cell: CellEdit) => {
-    return await fetch("http://localhost:8080/", {
+    console.log(cell);
+    return await fetch("http://localhost:8080/line/update", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -352,6 +351,7 @@ export const editCellToCategoryAsync = createAsyncThunk(
         color: cell.color,
         bgcolor: cell.bgcolor,
         font: cell.font,
+        lineindex: cell.index,
       }),
     }).then((res) => res.json());
   }
@@ -378,7 +378,7 @@ export const deleteCellToCategoryAsync = createAsyncThunk(
 export const BulletPointAsync = createAsyncThunk(
   "category/BulletPointAsync",
   async (cell: BulletAdd) => {
-    return await fetch("http://localhost:8080/", {
+    return await fetch("http://localhost:8080/line/changetext", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -551,6 +551,10 @@ const categorySlice = createSlice({
     //     }
     //   });
     // },
+    cellEditHandler(state) {
+      state.cellEdit = !state.cellEdit;
+      console.log(state.cellEdit);
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -559,7 +563,7 @@ const categorySlice = createSlice({
       })
       .addCase(getCellListAsync.fulfilled, (state, action) => {
         state.cell = action.payload;
-        console.log(state.cell);
+        console.log("셀셀");
       })
       .addCase(addItemToCategoryAsync.fulfilled, (state, action) => {
         console.log(action.payload);
@@ -569,8 +573,13 @@ const categorySlice = createSlice({
       })
       .addCase(editTitletoCategoryAsync.fulfilled, (state, action) => {
         console.log(action.payload);
+      })
+      .addCase(editCellToCategoryAsync.fulfilled, (state, action) => {
+        console.log(action.payload);
       });
   },
 });
+
+export let { cellEditHandler } = categorySlice.actions;
 export const categoryActions = categorySlice.actions;
 export default categorySlice;

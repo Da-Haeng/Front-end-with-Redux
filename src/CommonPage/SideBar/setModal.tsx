@@ -7,6 +7,7 @@ import {
   User,
   editUserPassWordAsync,
   dahaengExitAsync,
+  logoutSuccess,
 } from "../../store/user-slice";
 import "./setModal.css";
 import { useNavigate } from "react-router-dom";
@@ -89,6 +90,7 @@ const SetModal = (props: PropsType) => {
           text: "다음에 다시 찾아주세요 :)",
           width: 400,
         });
+        dispatch(logoutSuccess(false));
         navigate("/", { replace: true });
       } else {
         Swal.fire({ icon: "error", text: "취소되었습니다.", width: 400 });
