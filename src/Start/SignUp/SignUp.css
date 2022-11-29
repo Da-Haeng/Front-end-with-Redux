@@ -36,6 +36,7 @@
   color: #ff0000;
   margin: 4px 0;
   margin-bottom: 15px;
+  cursor: pointer;
 }
 .emailFinishBtn {
   width: 350px;
@@ -47,6 +48,7 @@
   color: #00499e;
   padding: 10px;
   margin: 4px 0;
+  cursor: pointer;
 }
 .getStart {
   width: 350px;
@@ -57,6 +59,7 @@
   font-size: 16px;
   color: #8a3a00;
   padding: 10px;
+  cursor: pointer;
 }
 
 .signupTitle {

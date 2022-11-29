@@ -9,6 +9,7 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import SetModal from "./setModal";
 import { logoutSuccess } from "../../store/user-slice";
+import Swal from "sweetalert2";
 
 function SideBar() {
   const navigate = useNavigate();
@@ -30,7 +31,7 @@ function SideBar() {
   const logoutHandler = () => {
     localStorage.clear();
     dispatch(logoutSuccess(false));
-    alert("로그아웃되었습니다");
+    Swal.fire({ icon: "success", text: "로그아웃되었습니다.", width: 400 });
     navigate("/", { replace: true });
   };
 

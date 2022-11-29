@@ -7,6 +7,7 @@ import {
   memberInviteAsync,
   memberShareAsync,
 } from "../../store/user-slice";
+import Swal from "sweetalert2";
 
 type ModalDefaultType = {
   open: boolean;
@@ -62,7 +63,7 @@ const SettingModal = (props: ModalDefaultType) => {
     const noteId = parseInt(id!);
     console.log(email);
     dispatch(memberInviteAsync({ email: email, noteId: noteId }));
-    alert("멤버를 추가하였습니다.");
+    Swal.fire({ icon: "success", text: "멤버를 초대하였습니다.", width: 400 });
     close();
   };
 

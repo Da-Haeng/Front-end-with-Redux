@@ -243,14 +243,19 @@ export const memberExitAsync = createAsyncThunk(
   }
 );
 
-// //회원 정보 조회
-// export const getUserInfoAsync = createAsyncThunk(
-//   "GET_USERINFO",
-//   async (user: {email: string}) => {
-//     const response = await axios.get("");
-//     return response.data;
-//   }
-// )
+//탈퇴하기
+export const dahaengExitAsync = createAsyncThunk(
+  "user/dahaengExitAsync",
+  async (email: string) => {
+    return await fetch("http://localhost:8080/member/delete", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ email: email }),
+    }).then((res) => res.json());
+  }
+);
 
 const userSlice = createSlice({
   name: "user",
@@ -295,9 +300,9 @@ const userSlice = createSlice({
         ...state.userInfo,
         email: localStorage.getItem("email"),
         nickname: localStorage.getItem("nickname"),
-        id_token: localStorage.getItem("id_token"),
-        notificationCheck: localStorage.getItem("notificationCheck"),
-        password: localStorage.getItem("password"),
+        // id_token: localStorage.getItem("id_token"),
+        // notificationCheck: localStorage.getItem("notificationCheck"),
+        // password: localStorage.getItem("password"),
       };
       state.success = true;
     },
@@ -312,9 +317,6 @@ const userSlice = createSlice({
       };
       localStorage.setItem("email", "sshzi26@naver.com");
       localStorage.setItem("nickname", "융지");
-      localStorage.setItem("id_token", "0");
-      localStorage.setItem("notificationCheck", "0");
-      localStorage.setItem("password", "123");
     },
   },
   extraReducers: (builder) => {
@@ -342,12 +344,12 @@ const userSlice = createSlice({
         state.userInfo = { ...action.payload };
         localStorage.setItem("email", action.payload.email);
         localStorage.setItem("nickname", action.payload.nickname);
-        localStorage.setItem("id_token", action.payload.id_token);
-        localStorage.setItem(
-          "notificationCheck",
-          action.payload.notificationCheck
-        );
-        localStorage.setItem("password", action.payload.password);
+        // localStorage.setItem("id_token", action.payload.id_token);
+        // localStorage.setItem(
+        //   "notificationCheck",
+        //   action.payload.notificationCheck
+        // );
+        // localStorage.setItem("password", action.payload.password);
         state.success = true;
         console.log(action.payload);
       })
@@ -359,7 +361,6 @@ const userSlice = createSlice({
       })
       .addCase(memberShareAsync.fulfilled, (state, action) => {
         state.shareMember = action.payload;
-        console.log("memberShare");
       })
       .addCase(editUserNicknameAsync.fulfilled, (state, action) => {
         state.userInfo = {
@@ -388,9 +389,6 @@ const userSlice = createSlice({
         state.userInfo = { ...action.payload };
         localStorage.setItem("email", "sshzi26@naver.com");
         localStorage.setItem("nickname", "가융지");
-        localStorage.setItem("id_token", "0");
-        localStorage.setItem("notificationCheck", "0");
-        localStorage.setItem("password", "123");
       });
   },
 });

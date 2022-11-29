@@ -25,7 +25,7 @@ const DetailHeader = ({ title }: DetailHeaderProps) => {
         className="memo-setting"
         onClick={onSetting}
       />
-      {isSetting && <DetailSetting />}
+      {isSetting && <DetailSetting title={title} />}
     </div>
   );
 };

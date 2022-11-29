@@ -10,6 +10,7 @@ import {
 import { getMemoListAsync } from "../../store/main-slice";
 import NaverLogin from "../SignUp/Naver";
 import { loginSuccess } from "../../store/user-slice";
+import Swal from "sweetalert2";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -30,7 +31,7 @@ const Login = () => {
     if (Object.keys(userInfo).length > 1) {
       console.log(userInfo);
       dispatch(loginSuccess(true));
-      alert("로그인 되었습니다.");
+      Swal.fire({ icon: "success", text: "로그인되었습니다.", width: 400 });
       navigate("/main", { replace: true });
     } else {
       console.log("비었음");
@@ -50,10 +51,18 @@ const Login = () => {
 
   const handleSubmit = () => {
     if (!login.email || !login.password) {
-      alert("로그인 정보를 입력해주세요");
+      Swal.fire({
+        icon: "error",
+        text: "로그인 정보를 입력해주세요.",
+        width: 400,
+      });
     } else {
       if (!emailCheck(login.email)) {
-        alert("이메일 형식에 맞게 입력해세요!");
+        Swal.fire({
+          icon: "error",
+          text: "이메일 형식에 맞게 입력해주세요.",
+          width: 400,
+        });
         return false;
       } else {
         dispatch(setUserAsync(login));

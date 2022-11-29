@@ -64,10 +64,19 @@ const Detail = () => {
           </div>
           <div className="memo-container">
             <div className="memo-header">
-              {mainItems && <DetailHeader title={mainItems.noteName} />}
+              {mainItems && mainItems.noteName !== "" ? (
+                <DetailHeader title={mainItems.noteName} />
+              ) : (
+                <DetailHeader title="메모장 이름" />
+              )}
             </div>
             <div className="memo-content">
-              {mainItems && <h1>{mainItems.noteName}</h1>}
+              {mainItems && mainItems.noteName !== "" ? (
+                <h1>{mainItems.noteName}</h1>
+              ) : (
+                <h1>메모장 이름</h1>
+              )}
+
               <div>
                 {mainItems && (
                   <span>

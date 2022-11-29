@@ -135,7 +135,7 @@ const CategoryTitle = (props: any) => {
                   size={10}
                   onChange={(e) => setCategoryName(e.target.value)}
                 />
-                <span onClick={editTitlecomplete}>수정 완료</span>
+                <span onClick={editTitlecomplete}>수정하기</span>
               </div>
             )}
           </div>

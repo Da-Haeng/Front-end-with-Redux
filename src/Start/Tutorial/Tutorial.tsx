@@ -14,12 +14,19 @@ function Tutorial() {
   console.log(success);
   console.log(userInfo);
 
+  const reloadHandler = () => {
+    window.location.reload();
+  };
+
   return (
     <div className="tutorial">
       <div className="tutorial-header">
-        <Link to="/" className="tutorial-title">
+        {/* <Link to="/" className="tutorial-title">
           DA:HAENG
-        </Link>
+        </Link> */}
+        <span className="tutorial-title" onClick={reloadHandler}>
+          DA:HAENG
+        </span>
         <div className="header-button">
           {success === false && (
             <Link to="/signup" className="tutorial-btn">

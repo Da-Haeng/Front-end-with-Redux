@@ -8487,6 +8487,11 @@
     "picocolors" "^1.0.0"
     "stable" "^0.1.8"
 
+"sweetalert2@^11.6.14":
+  "integrity" "sha512-W8+vtsucIJg5BrFhHcqguNZMzmHGvVZVAYHaMGQ9dzrleOMZcHCGmnB46L9qUNdx5snr1GpMUVFjNuki7EBbuQ=="
+  "resolved" "https://registry.npmjs.org/sweetalert2/-/sweetalert2-11.6.14.tgz"
+  "version" "11.6.14"
+
 "symbol-tree@^3.2.4":
   "integrity" "sha512-9QNk5KwDF+Bvz+PyObkmSYjI5ksVUYtjW7AU22r2NKcfLJcXp96hkDWU3+XndOsUb+AQ9QhfzfCT2O+CNWT5Tw=="
   "resolved" "https://registry.npmjs.org/symbol-tree/-/symbol-tree-3.2.4.tgz"

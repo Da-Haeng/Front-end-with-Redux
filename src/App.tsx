@@ -38,7 +38,6 @@ const App = () => {
   if (localEmail) {
     try {
       getHandler();
-      console.log("app");
     } catch (e) {}
   } else {
   }

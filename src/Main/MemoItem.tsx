@@ -1,13 +1,13 @@
 import { useDispatch, useSelector } from "react-redux";
 import { useState, useEffect } from "react";
 import {
-  mainActions,
-  Memo,
   removeMemoAsync,
   editMemoAsync,
   editMemoColorAsync,
   getMemoListAsync,
 } from "../store/main-slice";
+import { memberShareAsync } from "../store/user-slice";
+
 import { faPencil, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useNavigate } from "react-router-dom";
@@ -17,6 +17,7 @@ import { ko } from "date-fns/esm/locale";
 import "react-datepicker/dist/react-datepicker.css";
 import { getCategoryListAsync } from "../store/category-slice";
 import moment from "moment";
+import Swal from "sweetalert2";
 
 const MemoItem = (props: any) => {
   const dispatch = useDispatch<any>();
@@ -79,6 +80,11 @@ const MemoItem = (props: any) => {
         noteColor: newColor,
       })
     );
+    Swal.fire({
+      icon: "success",
+      text: "수정되었습니다.",
+      width: 400,
+    });
     setUpdate(!update);
   };
 
@@ -281,12 +287,7 @@ const MemoItem = (props: any) => {
           />
         </div>
 
-        <div className="main-memomember">
-          {/* <span>융</span>
-                <span>다</span>
-                <span>슬</span>
-                <span>지</span> */}
-        </div>
+        {/* <div className="main-memomember">{MemberList}</div> */}
       </div>
     </div>
   );

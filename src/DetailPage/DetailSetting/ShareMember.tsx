@@ -23,7 +23,6 @@ const ShareMember = (props: ModalDefaultType) => {
     shareMember: state.user.shareMember,
   }));
   const MemberList = shareMember.map((it: any) => it.nickname);
-  console.log(MemberList);
 
   return (
     // 모달이 열릴때 openModal 클래스가 생성된다.

@@ -9,6 +9,7 @@ import {
   mainActions,
   Memo,
 } from "../store/main-slice";
+import { memberShareAsync } from "../store/user-slice";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faL, faPlus } from "@fortawesome/free-solid-svg-icons";
 import { RootState } from "../store";

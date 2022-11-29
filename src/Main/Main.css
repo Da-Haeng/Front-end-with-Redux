@@ -44,6 +44,10 @@
   margin-right: 35px;
 }
 
+.main-memo input {
+  cursor: pointer;
+}
+
 .main-memotitle {
   cursor: pointer;
   display: flex;

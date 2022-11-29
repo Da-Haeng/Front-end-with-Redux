@@ -15,6 +15,7 @@ import { useDispatch, useSelector } from "react-redux";
 import React, { ChangeEvent, useEffect, useMemo, useState } from "react";
 import { spawn } from "child_process";
 import NaverLogin from "./Naver";
+import Swal from "sweetalert2";
 
 import Main from "../../Main/Main";
 
@@ -63,10 +64,18 @@ const SignUp = () => {
     console.log(emailcheck);
     if (join === false && emailcheck === "EXIST") {
       setUser({ ...user, email: "" });
-      alert("이미 등록된 이메일입니다");
+      Swal.fire({
+        icon: "error",
+        text: "이미 등록된 이메일입니다.",
+        width: 400,
+      });
     } else if (join === false && emailcheck === "NOT EXIST") {
       dispatch(emailCertificationAsync(user.email));
-      alert("인증번호가 전송되었습니다");
+      Swal.fire({
+        icon: "success",
+        text: "인증번호가 전송되었습니다.",
+        width: 400,
+      });
     }
     // if (join === true && emailcheck === "NOT EXIST") {
     //   navigate("/login", { replace: true });
@@ -101,11 +110,15 @@ const SignUp = () => {
 
   const handleCertification = async () => {
     if (!user.email) {
-      alert("이메일을 입력해주세요.");
+      Swal.fire({ icon: "error", text: "이메일을 입력해주세요.", width: 400 });
       return false;
     } else {
       if (!emailCheck(user.email)) {
-        alert("이메일 형식에 맞게 입력해세요!");
+        Swal.fire({
+          icon: "error",
+          text: "이메일 형식에 맞게 입력해주세요.",
+          width: 400,
+        });
         return false;
       } else {
         console.log(user.email);
@@ -117,12 +130,20 @@ const SignUp = () => {
 
   const handleCodeCheck = () => {
     if (!code) {
-      alert("인증 코드를 입력해주세요.");
+      Swal.fire({
+        icon: "error",
+        text: "인증 번호를 입력해주세요.",
+        width: 400,
+      });
     } else {
       if (checknum === code) {
         setCertification(true);
       } else {
-        alert("인증코드가 올바르지 않습니다.");
+        Swal.fire({
+          icon: "error",
+          text: "인증 번호가 일치하지 않습니다.",
+          width: 400,
+        });
       }
     }
     console.log(user);
@@ -132,10 +153,14 @@ const SignUp = () => {
   const handleSubmit = () => {
     if (user.password === passwordCheck) {
       dispatch(addUserAsync(user));
-      alert("회원가입되었습니다.");
+      Swal.fire({ icon: "success", text: "회원가입되었습니다.", width: 400 });
       navigate("/login", { replace: true });
     } else {
-      alert("비밀번호가 동일하지 않습니다.");
+      Swal.fire({
+        icon: "error",
+        text: "비밀번호가 일치하지 않습니다.",
+        width: 400,
+      });
     }
   };
 
@@ -155,7 +180,7 @@ const SignUp = () => {
       // 백완료하면 이거 삭제
 
       dispatch(loginSuccess(true));
-      alert("로그인되었습니다.");
+      Swal.fire({ icon: "success", text: "로그인되었습니다.", width: 400 });
       navigate("/", { replace: true });
     }
   };
@@ -247,7 +272,7 @@ const SignUp = () => {
                   onChange={handlePasswordChange}
                 ></input>
                 <button className="getStart" onClick={handleSubmit}>
-                  시작하기
+                  가입하기
                 </button>
               </div>
             </div>
@@ -264,7 +289,7 @@ const SignUp = () => {
                 onChange={handleChange}
               ></input>
               <button className="getStart" onClick={snsLoginSubmit}>
-                시작하기
+                가입하기
               </button>
             </div>
           )}
