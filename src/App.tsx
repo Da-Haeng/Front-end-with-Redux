@@ -32,7 +32,7 @@ const App = () => {
 
   const getHandler = async () => {
     await dispatch(getUserInfoAtLocal());
-    // await dispatch(getCategoryListAsync(parseInt(noteId)));
+    await dispatch(getCategoryListAsync(parseInt(noteId)));
   };
 
   if (localEmail) {

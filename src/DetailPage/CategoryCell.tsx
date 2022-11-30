@@ -11,7 +11,6 @@ import {
   addItemToCellAsync,
   BulletPointAsync,
   getCellListAsync,
-  cellEditHandler,
 } from "../store/category-slice";
 import { RootState } from "../store";
 
@@ -20,6 +19,7 @@ type CategoryCellProps = {
   categoryId: number;
   item: Cell;
   categoryLength: number;
+  cellItems: CellItem;
 };
 
 const CategoryCell = (props: CategoryCellProps) => {
@@ -27,7 +27,7 @@ const CategoryCell = (props: CategoryCellProps) => {
 
   const dispatch = useDispatch<any>();
 
-  const cellItems: CellItem = useSelector((state: any) => state.category.cell);
+  const cellItems = props.cellItems;
   const cell = cellItems?.cell;
 
   const categoryId = props.categoryId;
@@ -43,8 +43,6 @@ const CategoryCell = (props: CategoryCellProps) => {
 
   const [cellEffect, setCellEffect] = useState(false);
 
-  const [cellItem, setCellItem] = useState(cell);
-
   const [textStyle, setTextStyle] = useState(false);
   const [textColor, setTextColor] = useState(false);
   const [bgColor, setBgColor] = useState(false);
@@ -52,32 +50,28 @@ const CategoryCell = (props: CategoryCellProps) => {
   const [spanToInput, setSpanToInput] = useState(false);
 
   const index = cell?.findIndex((it) => it.lineId === cellId);
-  console.log(cellText);
-  console.log(index);
 
   // const cellEditHandler = async () => {
   //   await dispatch(getCellListAsync(categoryId));
   // };
 
   // useEffect(() => {
-  //   // dispatch(
-  //   //   editCellToCategoryAsync({
-  //   //     categoryId: categoryId,
-  //   //     lineId: cellId,
-  //   //     text: cellText,
-  //   //     type: cellType,
-  //   //     color: cellColor,
-  //   //     bgcolor: cellBgColor,
-  //   //     font: cellFont,
-  //   //     index: index,
-  //   //   })
-  //   // );
-  //   dispatch(getCellListAsync(categoryId));
-  // }, [cellText, cellType, cellColor, cellBgColor, cellFont]);
+  //   dispatch(
+  //     editCellToCategoryAsync({
+  //       categoryId: categoryId,
+  //       lineId: cellId,
+  //       text: cellText,
+  //       type: cellType,
+  //       color: cellColor,
+  //       bgcolor: cellBgColor,
+  //       font: cellFont,
+  //       index: index,
+  //     })
+  //   );
+  // }, [cellText]);
 
   useEffect(() => {
     if (props.item) {
-      console.log(props.item);
       setCellText(text);
       setCellId(lineId);
       setCellType(type);
@@ -129,8 +123,6 @@ const CategoryCell = (props: CategoryCellProps) => {
   const onKeyPress = async (e: any) => {
     if (e.key === "Enter") {
       setSpanToInput(false);
-      console.log(cellText);
-      console.log(index);
       await dispatch(
         editCellToCategoryAsync({
           categoryId: categoryId,
@@ -143,26 +135,21 @@ const CategoryCell = (props: CategoryCellProps) => {
           index: index,
         })
       );
-      dispatch(cellEditHandler());
     }
     if (e.key === "Backspace" && cellText.length === 0) {
       dispatch(
         deleteCellToCategoryAsync({ lineId: cellId, categoryId: categoryId })
       );
-      dispatch(getCellListAsync(categoryId));
     }
   };
 
   const addCellHandler = async () => {
-    console.log("추가");
-    const index = cell?.findIndex((it) => it.lineId === cellId);
     await dispatch(
       addItemToCellAsync({
         index: index,
         categoryId: categoryId,
       })
     );
-    dispatch(cellEditHandler());
   };
 
   const effectCellHandler = () => {
@@ -191,13 +178,12 @@ const CategoryCell = (props: CategoryCellProps) => {
         index: index,
       })
     );
-    // e.preventDefault();
   };
 
   const styleColorHandler = async (e: any) => {
     setCellColor(e);
     setCellEffect(false);
-    e.preventDefault();
+    setTextColor(false);
     await dispatch(
       editCellToCategoryAsync({
         categoryId: categoryId,
@@ -215,7 +201,9 @@ const CategoryCell = (props: CategoryCellProps) => {
   const styleBgColorHandler = async (e: any) => {
     setCellBgColor(e);
     setCellEffect(false);
-    e.preventDefault();
+    setBgColor(false);
+
+    console.log(cellEffect);
     await dispatch(
       editCellToCategoryAsync({
         categoryId: categoryId,
@@ -260,6 +248,8 @@ const CategoryCell = (props: CategoryCellProps) => {
       }
     }
     setCellEffect(false);
+    setTextStyle(false);
+
     await dispatch(
       editCellToCategoryAsync({
         categoryId: categoryId,
@@ -272,7 +262,6 @@ const CategoryCell = (props: CategoryCellProps) => {
         index: index,
       })
     );
-    e.preventDefault();
   };
 
   const BulletPointHandler = async () => {
@@ -305,13 +294,13 @@ const CategoryCell = (props: CategoryCellProps) => {
         />
         {cellEffect && (
           <div className="cellEffect">
-            <span onClick={() => styleSizeHandler("h3")}>
+            <span onClick={() => styleSizeHandler("h1")}>
               &nbsp;&nbsp;&nbsp;&nbsp;제목 1&nbsp;&nbsp;&nbsp;&nbsp;
             </span>
             <span onClick={() => styleSizeHandler("h2")}>
               &nbsp;&nbsp;&nbsp;&nbsp;제목 2&nbsp;&nbsp;&nbsp;&nbsp;
             </span>
-            <span onClick={() => styleSizeHandler("h1")}>
+            <span onClick={() => styleSizeHandler("h3")}>
               &nbsp;&nbsp;&nbsp;&nbsp;제목 3&nbsp;&nbsp;&nbsp;&nbsp;
             </span>
             <span onClick={TextStyletHandler}>Text Style</span>
@@ -441,6 +430,12 @@ const CategoryCell = (props: CategoryCellProps) => {
                   onClick={() => styleBgColorHandler("pink_bg")}
                 >
                   <span className="colorA colorA_pink">Bg</span>분홍색
+                </span>
+                <span
+                  className="colorSpan"
+                  onClick={() => styleBgColorHandler("basicbg")}
+                >
+                  <span className="colorA colorA_black">Bg</span>투명색
                 </span>
               </div>
             )}

@@ -345,7 +345,7 @@ const userSlice = createSlice({
         state.success = true;
         state.userInfo = { ...action.payload.user };
         state.result = action.payload.result;
-        console.log(action.payload);
+        console.log(action.payload.result);
         localStorage.setItem("email", action.payload.user.email);
         localStorage.setItem("nickname", action.payload.user.nickname);
         // localStorage.setItem("id_token", action.payload.id_token);

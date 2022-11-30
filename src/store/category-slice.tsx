@@ -61,7 +61,7 @@ export type BulletAdd = {
 const initialState = {
   document: [],
   cell: [],
-  cellEdit: false,
+  update: false,
 };
 
 export type CategoryState = Document[];
@@ -361,7 +361,7 @@ export const editCellToCategoryAsync = createAsyncThunk(
 export const deleteCellToCategoryAsync = createAsyncThunk(
   "category/deleteCellToCategoryAsync",
   async (cell: CellDelete) => {
-    return await fetch("http://localhost:8080/", {
+    return await fetch("http://localhost:8080/line/delete", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -395,167 +395,7 @@ export const BulletPointAsync = createAsyncThunk(
 const categorySlice = createSlice({
   name: "category",
   initialState: initialState,
-  reducers: {
-    // addItemToCategory: (
-    //   state,
-    //   {
-    //     payload,
-    //   }: PayloadAction<{
-    //     categoryId: number;
-    //     categoryTitle: string;
-    //     mainId: number;
-    //   }>
-    // ) => {
-    //   const newItem = payload;
-    //   return produce(state, (draft) => {
-    //     const find = draft.items.find((item) => item.noteId === newItem.mainId);
-    //     if (find) {
-    //       find.document.push({
-    //         categoryId: newItem.categoryId,
-    //         categoryTitle: newItem.categoryTitle,
-    //         cell: [
-    //           {
-    //             id: 1,
-    //             text: "입력해주세요",
-    //             type: "h3",
-    //             color: "black",
-    //             bgcolor: "basicbg",
-    //             font: "basic",
-    //           },
-    //         ],
-    //       });
-    //     }
-    //   });
-    // },
-    // addCellToCategory: (
-    //   state,
-    //   {
-    //     payload,
-    //   }: PayloadAction<{
-    //     index: any;
-    //     id: number;
-    //     categoryId: number;
-    //     mainId: number;
-    //   }>
-    // ) => {
-    //   return produce(state, (draft) => {
-    //     const newItem = payload;
-    //     const find = draft.items.find((item) => item.noteId === newItem.mainId);
-    //     const category = find?.document.find(
-    //       (item) => item.categoryId === newItem.categoryId
-    //     );
-    //     if (category) {
-    //       category.cell.splice(newItem.index + 1, 0, {
-    //         id: newItem.id,
-    //         text: "입력해주세요",
-    //         type: "h3",
-    //         color: "black",
-    //         bgcolor: "basicbg",
-    //         font: "basic",
-    //       });
-    //     }
-    //   });
-    // },
-    // editCellToCategory: (
-    //   state,
-    //   {
-    //     payload,
-    //   }: PayloadAction<{
-    //     id: number;
-    //     text: string;
-    //     categoryId: number;
-    //     mainId: number;
-    //     type: string;
-    //     color: string;
-    //     bgcolor: string;
-    //     font: string;
-    //   }>
-    // ) => {
-    //   return produce(state, (draft) => {
-    //     const newItem = payload;
-    //     const find = draft.items.find((item) => item.noteId === newItem.mainId);
-    //     const category = find?.document.find(
-    //       (item) => item.categoryId === newItem.categoryId
-    //     );
-    //     const cell = category?.cell.find((item) => item.id === newItem.id);
-    //     if (cell) {
-    //       cell.text = newItem.text;
-    //       cell.type = newItem.type;
-    //       cell.color = newItem.color;
-    //       cell.bgcolor = newItem.bgcolor;
-    //       cell.font = newItem.font;
-    //     }
-    //   });
-    // },
-    // bulletPointToCell: (
-    //   state,
-    //   {
-    //     payload,
-    //   }: PayloadAction<{
-    //     id: number;
-    //     categoryId: number;
-    //     mainId: number;
-    //   }>
-    // ) => {
-    //   return produce(state, (draft) => {
-    //     const newItem = payload;
-    //     const find = draft.items.find((item) => item.noteId === newItem.mainId);
-    //     const category = find?.document.find(
-    //       (item) => item.categoryId === newItem.categoryId
-    //     );
-    //     const cell = category?.cell.find((item) => item.id === newItem.id);
-    //     if (cell) {
-    //       cell.text = "• ".concat(cell.text);
-    //     }
-    //   });
-    // },
-    // deleteCellToCategory: (
-    //   state,
-    //   {
-    //     payload,
-    //   }: PayloadAction<{
-    //     id: number;
-    //     categoryId: number;
-    //     mainId: number;
-    //   }>
-    // ) => {
-    //   return produce(state, (draft) => {
-    //     const newItem = payload;
-    //     const find = draft.items.find((item) => item.noteId === newItem.mainId);
-    //     const category = find?.document.find(
-    //       (item) => item.categoryId === newItem.categoryId
-    //     );
-    //     if (category) {
-    //       category.cell = category.cell.filter(
-    //         (item) => item.id !== newItem.id
-    //       );
-    //     }
-    //   });
-    // },
-    // removeItemToCategory: (
-    //   state,
-    //   {
-    //     payload,
-    //   }: PayloadAction<{
-    //     categoryId: number;
-    //     mainId: number;
-    //   }>
-    // ) => {
-    //   return produce(state, (draft) => {
-    //     const newItem = payload;
-    //     const find = draft.items.find((item) => item.noteId === newItem.mainId);
-    //     if (find) {
-    //       find.document = find.document.filter(
-    //         (item) => item.categoryId !== newItem.categoryId
-    //       );
-    //     }
-    //   });
-    // },
-    cellEditHandler(state) {
-      state.cellEdit = !state.cellEdit;
-      console.log(state.cellEdit);
-    },
-  },
+  reducers: {},
   extraReducers: (builder) => {
     builder
       .addCase(getCategoryListAsync.fulfilled, (state, action) => {
@@ -566,20 +406,28 @@ const categorySlice = createSlice({
         console.log("셀셀");
       })
       .addCase(addItemToCategoryAsync.fulfilled, (state, action) => {
-        console.log(action.payload);
+        state.update = !state.update;
       })
       .addCase(addItemToCellAsync.fulfilled, (state, action) => {
-        console.log(action.payload);
+        state.update = !state.update;
       })
       .addCase(editTitletoCategoryAsync.fulfilled, (state, action) => {
-        console.log(action.payload);
+        state.update = !state.update;
       })
       .addCase(editCellToCategoryAsync.fulfilled, (state, action) => {
-        console.log(action.payload);
+        state.update = !state.update;
+      })
+      .addCase(removeItemToCategoryAsync.fulfilled, (state, action) => {
+        state.update = !state.update;
+      })
+      .addCase(deleteCellToCategoryAsync.fulfilled, (state, action) => {
+        state.update = !state.update;
+      })
+      .addCase(BulletPointAsync.fulfilled, (state, action) => {
+        state.update = !state.update;
       });
   },
 });
 
-export let { cellEditHandler } = categorySlice.actions;
 export const categoryActions = categorySlice.actions;
 export default categorySlice;

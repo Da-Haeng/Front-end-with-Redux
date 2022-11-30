@@ -11,8 +11,6 @@ function Tutorial() {
     success: state.user.success,
     userInfo: state.user.userInfo,
   }));
-  console.log(success);
-  console.log(userInfo);
 
   const reloadHandler = () => {
     window.location.reload();

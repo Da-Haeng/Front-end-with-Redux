@@ -31,13 +31,11 @@ const Detail = () => {
   const dispatch = useDispatch<any>();
   const localEmail = localStorage.getItem("email")!;
 
-  const getCategoryHandler = async () => {
-    await dispatch(getCategoryListAsync(parseInt(id!)));
-  };
+  const update: boolean = useSelector((state: any) => state.category.update);
 
   useEffect(() => {
-    getCategoryHandler();
-  }, []);
+    dispatch(getCategoryListAsync(parseInt(id!)));
+  }, [update]);
 
   // const mainItems: MemosState = useSelector(
   //   (state: RootState) => state.main.memoData

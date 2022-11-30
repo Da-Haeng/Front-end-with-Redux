@@ -44,7 +44,9 @@ const MemoList = () => {
     memoData: state.main.memoData,
   }));
 
-  const [update, setUpdate] = useState(false);
+  const update: boolean = useSelector((state: any) => state.main.update);
+
+  console.log(update);
 
   useEffect(() => {
     defaultData.user = userInfo.email;
@@ -53,7 +55,7 @@ const MemoList = () => {
 
   const addItemHandler = async () => {
     await dispatch(addMemoAsync(defaultData));
-    setUpdate(!update);
+    // setUpdate(!update);
     dataId.current += 1;
   };
 

@@ -147,11 +147,16 @@ export const removeMemoAsync = createAsyncThunk(
 const mainSlice = createSlice({
   name: "main",
   initialState: initialState,
-  reducers: {},
+  reducers: {
+    updateHandler(state) {
+      state.update = !state.update;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(getMemoListAsync.fulfilled, (state, action) => {
         state.memoData = action.payload;
+        console.log("aa");
       })
       .addCase(addMemoAsync.fulfilled, (state, action) => {
         state.update = !state.update;

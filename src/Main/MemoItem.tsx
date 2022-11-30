@@ -26,7 +26,7 @@ const MemoItem = (props: any) => {
   const [newTitle, setNewTitle] = useState(props.noteName);
   const [newDescription, setNewDescription] = useState(props.noteDescription);
   const [newColor, setNewColor] = useState(props.noteColor);
-  const [update, setUpdate] = useState(false);
+  //const [update, setUpdate] = useState(false);
   // const [startDate, setStartDate] = useState(new Date());
   // const [endDate, setEndDate] = useState(new Date());
   const [startDate, setStartDate] = useState(new Date(props.startDate));
@@ -40,16 +40,12 @@ const MemoItem = (props: any) => {
     memoData: state.main.memoData,
   }));
 
-  useEffect(() => {
-    dispatch(getMemoListAsync(userInfo.email));
-  }, [userInfo, update]);
-
   const removeItemHandler = async (event: any) => {
     event.stopPropagation();
     await dispatch(
       removeMemoAsync({ memoId: props.noteId, email: userInfo.email })
     );
-    setUpdate(!update);
+    // setUpdate(!update);
   };
 
   const categoryItems: Document = useSelector(
@@ -85,7 +81,7 @@ const MemoItem = (props: any) => {
       text: "수정되었습니다.",
       width: 400,
     });
-    setUpdate(!update);
+    // setUpdate(!update);
   };
 
   const toggleEditHandler = (event: any) => {
@@ -104,7 +100,7 @@ const MemoItem = (props: any) => {
         noteColor: newColor,
       })
     );
-    setUpdate(!update);
+    // setUpdate(!update);
   };
 
   const handleToggleColor = (e: any) => {
@@ -113,7 +109,11 @@ const MemoItem = (props: any) => {
   };
 
   return (
-    <div className="main-memo" onClick={goDetail}>
+    <div
+      className="main-memo"
+      onClick={goDetail}
+      style={{ backgroundColor: props.noteColor }}
+    >
       <div className="main-memotitle">
         {isEdit ? (
           <div className="main-memotitle-left">

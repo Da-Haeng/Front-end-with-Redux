@@ -8,19 +8,19 @@ import "./Detail.css";
 type CategoryContentProps = {
   noteId: number;
   categoryId: number;
+  cellItems: CellItem;
 };
 
 const CategoryContent = (props: CategoryContentProps) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const cellItems: CellItem = useSelector((state: any) => state.category.cell);
+  const cellItems = props.cellItems;
 
   const noteId = props.noteId;
   const categoryId = props.categoryId;
 
   const categoryContent = cellItems?.cell;
-  console.log(categoryContent);
   const categoryLength = categoryContent?.length;
 
   return (
@@ -30,6 +30,7 @@ const CategoryContent = (props: CategoryContentProps) => {
           <CategoryCell
             noteId={noteId}
             item={it}
+            cellItems={cellItems}
             categoryId={categoryId}
             categoryLength={categoryLength}
           />
