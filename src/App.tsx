@@ -11,6 +11,7 @@ import Tutorial from "./Start/Tutorial/Tutorial";
 import SignUp from "./Start/SignUp/SignUp";
 import Login from "./Start/Login/Login";
 import NaverLogin from "./Start/SignUp/Naver";
+import FindPW from "./Start/Login/FindPW";
 import { useEffect } from "react";
 import { getUserInfoAtLocal } from "./store/user-slice";
 import { getMemoListAsync, MemosState } from "./store/main-slice";
@@ -53,6 +54,7 @@ const App = () => {
         <Route path="/naver" element={<NaverLogin />}></Route>
         <Route path="/main" element={<Main />}></Route>
         <Route path="/detail/:id" element={<Detail />}></Route>
+        <Route path="/findPW" element={<FindPW />}></Route>
       </Routes>
     </BrowserRouter>
   );

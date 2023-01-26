@@ -259,6 +259,21 @@ export const dahaengExitAsync = createAsyncThunk(
   }
 );
 
+//비밀번호 찾기
+export const findPasswordAsync = createAsyncThunk(
+  "user/findPasswordAsync",
+  async (email: string) => {
+    console.log(email);
+    return await fetch("http://localhost:8080/user/make-randompassword", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ email }),
+    }).then((res) => res.json());
+  }
+);
+
 const userSlice = createSlice({
   name: "user",
   initialState: initialState,
@@ -395,6 +410,9 @@ const userSlice = createSlice({
         localStorage.setItem("nickname", "가융지");
       })
       .addCase(dahaengExitAsync.fulfilled, (state, action) => {
+        console.log(action.payload);
+      })
+      .addCase(findPasswordAsync.fulfilled, (state, action) => {
         console.log(action.payload);
       });
   },

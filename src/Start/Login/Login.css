@@ -103,8 +103,13 @@
   color: #5d5d5d;
   margin-top: 5px;
   margin-bottom: 30px;
+  cursor: pointer;
 }
 
 .snsBox {
   margin-bottom: 40px;
+}
+
+.findPWBox {
+  margin-top: 80px;
 }

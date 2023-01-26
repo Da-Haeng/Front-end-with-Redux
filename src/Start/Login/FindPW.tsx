@@ -9,17 +9,22 @@ import {
 } from "../../store/user-slice";
 import { getMemoListAsync } from "../../store/main-slice";
 import NaverLogin from "../SignUp/Naver";
-import { loginSuccess } from "../../store/user-slice";
+import {
+  loginSuccess,
+  emailOverlapAsync,
+  findPasswordAsync,
+} from "../../store/user-slice";
 import Swal from "sweetalert2";
 
-const Login = () => {
+const FindPW = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch<any>();
 
-  const [login, setLogin] = useState({
-    email: "",
-    password: "",
-  });
+  const [email, setEmail] = useState("");
+
+  const { emailcheck } = useSelector((state: any) => ({
+    emailcheck: state.user.emailCheck,
+  }));
 
   const { userInfo, error, success, result } = useSelector((state: any) => ({
     userInfo: state.user.userInfo,
@@ -27,6 +32,9 @@ const Login = () => {
     success: state.user.success,
     result: state.user.result,
   }));
+
+  const [emailcheckState, setEmailCheckState] = useState(true);
+  const [findPWSuccess, setFindPWSuccess] = useState(false);
 
   // useEffect(() => {
   //   if (Object.keys(userInfo).length > 1) {
@@ -40,33 +48,12 @@ const Login = () => {
   //   console.log(result);
   // }, [userInfo]);
 
-  useEffect(() => {
-    if (Object.keys(userInfo).length > 1) {
-      if (result == "SUCCESS") {
-        console.log(userInfo);
-        dispatch(loginSuccess(true));
-        Swal.fire({ icon: "success", text: "로그인되었습니다.", width: 400 });
-        navigate("/main", { replace: true });
-      } else {
-        Swal.fire({
-          icon: "error",
-          text: "비밀번호가 일치하지 않습니다.",
-          width: 400,
-        });
-      }
-    } else {
-      console.log("비었음");
-    }
-    console.log(result);
-  }, [userInfo]);
-
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setLogin({ ...login, [name]: value });
+    setEmail(e.target.value);
   };
 
   const handleFindPW = () => {
-    navigate("/findPW", { replace: true });
+    navigate("/main", { replace: true });
   };
 
   const emailCheck = (email: string) => {
@@ -75,15 +62,16 @@ const Login = () => {
     return reg.test(email);
   };
 
-  const handleSubmit = () => {
-    if (!login.email || !login.password) {
+  const handleSubmit = async () => {
+    console.log(email);
+    if (!email) {
       Swal.fire({
         icon: "error",
-        text: "로그인 정보를 입력해주세요.",
+        text: "이메일을 입력해주세요.",
         width: 400,
       });
     } else {
-      if (!emailCheck(login.email)) {
+      if (!emailCheck(email)) {
         Swal.fire({
           icon: "error",
           text: "이메일 형식에 맞게 입력해주세요.",
@@ -91,9 +79,41 @@ const Login = () => {
         });
         return false;
       } else {
-        dispatch(setUserAsync(login));
+        await dispatch(emailOverlapAsync(email));
+        setEmailCheckState(!emailcheckState);
+        setFindPWSuccess(true);
       }
     }
+  };
+
+  useEffect(() => {
+    // {
+    //   join && navigate("/main", { replace: true });
+    // }
+    console.log(emailcheck);
+    if (emailcheck === "NOT EXIST") {
+      Swal.fire({
+        icon: "error",
+        text: "가입하지 않은 이메일입니다.",
+        width: 400,
+      });
+      setEmail("");
+    } else if (emailcheck === "EXIST") {
+      dispatch(findPasswordAsync(email));
+      Swal.fire({
+        icon: "success",
+        text: "인증번호가 전송되었습니다.",
+        width: 400,
+      });
+    }
+    // if (join === true && emailcheck === "NOT EXIST") {
+    //   navigate("/login", { replace: true });
+    // }
+  }, [emailcheckState]);
+
+  const handleLogin = () => {
+    navigate("/login", { replace: true });
+    window.location.reload();
   };
 
   return (
@@ -113,37 +133,31 @@ const Login = () => {
           <img className="tutorial-img" src="image/tutorial.png" />
         </div>
 
-        <div className="tutorial-start login-start">
-          <span className="tutorial-maintitle signupTitle">로그인</span>
-          <div className="loginBox snsBox">
-            <NaverLogin />
-          </div>
+        <div className="tutorial-start findPWBox">
+          <span className="tutorial-maintitle signupTitle">비밀번호 찾기</span>
+
           <div className="loginBox">
             <input
               className="inputBox emailLoginBox"
               placeholder="이메일을 입력하세요"
-              value={login.email}
+              value={email}
               name="email"
               onChange={handleChange}
             ></input>
-            <input
-              type="password"
-              className="inputBox"
-              placeholder="비밀번호를 입력하세요"
-              value={login.password}
-              name="password"
-              onChange={handleChange}
-            ></input>
-            <span className="passwordFind" onClick={handleFindPW}>
-              비밀번호 찾기
-            </span>
-            <button className="loginBtn" onClick={handleSubmit}>
-              로그인 하기
-            </button>
+
+            {findPWSuccess ? (
+              <button className="loginBtn" onClick={handleLogin}>
+                로그인
+              </button>
+            ) : (
+              <button className="loginBtn" onClick={handleSubmit}>
+                비밀번호 찾기
+              </button>
+            )}
           </div>
         </div>
       </div>
     </div>
   );
 };
-export default Login;
+export default FindPW;
