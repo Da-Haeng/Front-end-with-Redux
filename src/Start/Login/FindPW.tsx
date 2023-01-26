@@ -81,7 +81,6 @@ const FindPW = () => {
       } else {
         await dispatch(emailOverlapAsync(email));
         setEmailCheckState(!emailcheckState);
-        setFindPWSuccess(true);
       }
     }
   };
@@ -105,6 +104,7 @@ const FindPW = () => {
         text: "인증번호가 전송되었습니다.",
         width: 400,
       });
+      setFindPWSuccess(true);
     }
     // if (join === true && emailcheck === "NOT EXIST") {
     //   navigate("/login", { replace: true });
