@@ -19,11 +19,16 @@ const CategoryTitle = (props: any) => {
   const categoryData: Document = props.categoryItems;
 
   const update: boolean = useSelector((state: any) => state.category.update);
+  const DeleteUpdate: boolean = useSelector(
+    (state: any) => state.category.delete
+  );
 
   const cellItems: CellItem = useSelector((state: any) => state.category.cell);
 
   const noteId = props.noteId;
   const categoryIndex = categoryData[0];
+
+  const [effectState, setEffectState] = useState(false);
 
   // const [categoryIndexNum, setCategoryIndexNum] = useState(0);
 
@@ -34,23 +39,59 @@ const CategoryTitle = (props: any) => {
 
   const [cateoryawait, setCategoryAwait] = useState(false);
 
+  const [categoryIndexNum, setCategoryIndexNum] = useState(0);
+
+  const categoryIdnow = localStorage.getItem("categoryId")!;
+
+  // useEffect(() => {
+  //   if (categoryIndex) {
+  //     const categoryIndexNum = categoryIndex.categoryId;
+  //     setHighlight(categoryIndexNum);
+  //     setCategoryId(categoryIndexNum);
+  //     dispatch(getCellListAsync(categoryIndexNum));
+  //   }
+  // }, [categoryData, cateoryawait]);
+
+  useEffect(() => {
+    if (categoryIndex) {
+      setCategoryIndexNum(categoryIndex.categoryId);
+    }
+  }, [categoryData]);
+
+  useEffect(() => {
+    if (categoryIndex) {
+      setHighlight(categoryIndexNum);
+      setCategoryId(categoryIndexNum);
+      setEffectState(!effectState);
+      //dispatch(getCellListAsync(categoryIndexNum));
+    }
+  }, [categoryIndexNum]);
+
   useEffect(() => {
     if (categoryIndex) {
       const categoryIndexNum = categoryIndex.categoryId;
       setHighlight(categoryIndexNum);
       setCategoryId(categoryIndexNum);
-      dispatch(getCellListAsync(categoryIndexNum));
+      setEffectState(!effectState);
+      //dispatch(getCellListAsync(categoryIndexNum));
     }
-  }, [categoryData, cateoryawait]);
+  }, [DeleteUpdate]);
+
+  useEffect(() => {
+    dispatch(getCellListAsync(categoryIndexNum));
+  }, [effectState]);
 
   useEffect(() => {
     dispatch(getCellListAsync(categoryId));
+    // const categoryIdnow = localStorage.getItem("categoryId")!;
+    // dispatch(getCellListAsync(parseInt(categoryIdnow)));
   }, [update]);
 
   const onHighlight = async (id: number) => {
     setHighlight(id);
     setCategoryId(id);
     await dispatch(getCellListAsync(id));
+    localStorage.setItem("categoryId", id.toString());
   };
 
   useEffect(() => {

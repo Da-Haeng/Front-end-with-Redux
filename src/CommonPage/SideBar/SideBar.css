@@ -20,12 +20,31 @@
 .profile-name {
   font-size: 24px;
   color: #fff;
-  background-color: #ff5c00;
   border-radius: 50%;
   width: 50px;
   height: 50px;
   text-align: center;
   line-height: 50px;
+}
+
+.profile-name-0 {
+  background-color: #ff0000 !important;
+}
+
+.profile-name-1 {
+  background-color: #5d00ff !important;
+}
+
+.profile-name-2 {
+  background-color: #ff5c00;
+}
+
+.profile-name-3 {
+  background-color: #2bb70c;
+}
+
+.profile-name-4 {
+  background-color: #ffd900;
 }
 
 .profile-info {

@@ -355,7 +355,7 @@ const userSlice = createSlice({
         // );
         // localStorage.setItem("password", action.payload.password);
         state.success = true;
-        console.log(action.payload);
+        console.log(state.userInfo);
       })
       .addCase(memberFindAsync.fulfilled, (state, action) => {
         state.emailSelect = action.payload;

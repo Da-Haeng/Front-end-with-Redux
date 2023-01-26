@@ -91,6 +91,7 @@ const SetModal = (props: PropsType) => {
           width: 400,
         });
         dispatch(logoutSuccess(false));
+
         navigate("/", { replace: true });
       } else {
         Swal.fire({ icon: "error", text: "취소되었습니다.", width: 400 });

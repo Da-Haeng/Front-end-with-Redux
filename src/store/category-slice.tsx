@@ -62,6 +62,7 @@ const initialState = {
   document: [],
   cell: [],
   update: false,
+  delete: false,
 };
 
 export type CategoryState = Document[];
@@ -418,7 +419,7 @@ const categorySlice = createSlice({
         state.update = !state.update;
       })
       .addCase(removeItemToCategoryAsync.fulfilled, (state, action) => {
-        state.update = !state.update;
+        state.delete = !state.delete;
       })
       .addCase(deleteCellToCategoryAsync.fulfilled, (state, action) => {
         state.update = !state.update;
