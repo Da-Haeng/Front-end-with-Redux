@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useEffect, useState } from "react";
+import React, { ChangeEvent, useCallback, useEffect, useState } from "react";
 import "./Login.css";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
@@ -28,6 +28,8 @@ const Login = () => {
     result: state.user.result,
   }));
 
+  const [loginState, setLoginState] = useState(false);
+
   // useEffect(() => {
   //   if (Object.keys(userInfo).length > 1) {
   //     console.log(userInfo);
@@ -41,24 +43,29 @@ const Login = () => {
   // }, [userInfo]);
 
   useEffect(() => {
-    if (Object.keys(userInfo).length > 1) {
-      if (result == "SUCCESS") {
-        console.log(userInfo);
-        dispatch(loginSuccess(true));
-        Swal.fire({ icon: "success", text: "로그인되었습니다.", width: 400 });
-        navigate("/main", { replace: true });
-      } else {
-        Swal.fire({
-          icon: "error",
-          text: "비밀번호가 일치하지 않습니다.",
-          width: 400,
-        });
-      }
+    console.log(result);
+
+    if (result == "SUCCESS") {
+      console.log(userInfo);
+      dispatch(loginSuccess(true));
+      Swal.fire({ icon: "success", text: "로그인되었습니다.", width: 400 });
+      navigate("/main", { replace: true });
+    } else if (result == "PW_FAIL") {
+      Swal.fire({
+        icon: "error",
+        text: "비밀번호가 일치하지 않습니다.",
+        width: 400,
+      });
+    } else if (result == "ID_FAIL") {
+      Swal.fire({
+        icon: "error",
+        text: "가입하지 않은 이메일입니다.",
+        width: 400,
+      });
     } else {
       console.log("비었음");
     }
-    console.log(result);
-  }, [userInfo]);
+  }, [loginState]);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -75,7 +82,7 @@ const Login = () => {
     return reg.test(email);
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (!login.email || !login.password) {
       Swal.fire({
         icon: "error",
@@ -91,9 +98,14 @@ const Login = () => {
         });
         return false;
       } else {
-        dispatch(setUserAsync(login));
+        await dispatch(setUserAsync(login));
+        setLoginState(!loginState);
       }
     }
+  };
+
+  const loginHandler = async () => {
+    await dispatch(setUserAsync(login));
   };
 
   return (
@@ -147,3 +159,6 @@ const Login = () => {
   );
 };
 export default Login;
+function unwrap(): any {
+  throw new Error("Function not implemented.");
+}

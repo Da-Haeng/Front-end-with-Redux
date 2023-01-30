@@ -50,7 +50,6 @@ const SignUp = () => {
     // id_token: false,
   });
 
-  console.log(success);
   const [code, setCode] = useState("");
   const [passwordCheck, setPasswordCheck] = useState("");
   const [certification, setCertification] = useState(false);

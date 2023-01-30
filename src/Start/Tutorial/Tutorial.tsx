@@ -1,8 +1,9 @@
 import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
-import { User } from "../../store/user-slice";
 import { useDispatch, useSelector } from "react-redux";
 import "./Tutorial.css";
+import { zz } from "../../store/user-slice";
+import axios from "axios";
 
 function Tutorial() {
   const dispatch = useDispatch<any>();
@@ -12,8 +13,36 @@ function Tutorial() {
     userInfo: state.user.userInfo,
   }));
 
-  const reloadHandler = () => {
+  // const reloadHandler = async () => {
+  //   //window.location.reload();
+  //   await axios
+  //     .get("/o/oauth2/v2/auth", {
+  //       params: {
+  //         scope: "https://www.googleapis.com/auth/userinfo.email",
+  //         include_granted_scopes: true,
+  //         response_type: "code",
+  //         state: "state_parameter_passthrough_value",
+  //         redirect_uri:
+  //           "http://semtle.catholic.ac.kr:8080/codev/user/google/login",
+  //         client_id:
+  //           "413806176191-5ubglt67tr3gdl7u45l4qmepgcj5h71k.apps.googleusercontent.com",
+  //       },
+  //     })
+  //     .then((res) => {
+  //       console.log(res.data);
+  //     });
+  // };
+
+  const reloadHandler = async () => {
     window.location.reload();
+    // await axios
+    //   .get(
+    //     "/codev/project/projects/1?coLocationTag=&coPartTag=&coKeyword&coProcessTag=&coSortingTag="
+    //   )
+    //   .then((res) => {
+    //     console.log(res.data);
+    //   });
+    //dispatch(zz());
   };
 
   return (

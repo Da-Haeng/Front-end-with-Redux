@@ -1,7 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { CellItem } from "../store/category-slice";
+import {
+  CellItem,
+  addItemToCellAsync,
+  editTitletoCategoryAsync,
+} from "../store/category-slice";
 import CategoryCell from "./CategoryCell";
 import "./Detail.css";
 
@@ -21,20 +25,27 @@ const CategoryContent = (props: CategoryContentProps) => {
   const categoryId = props.categoryId;
 
   const categoryContent = cellItems?.cell;
+  const cellLength = categoryContent?.length;
+  console.log(cellLength);
+
   const categoryLength = categoryContent?.length;
 
   return (
     <div className="CategoryContent">
       <div className="CategoryCell">
-        {categoryContent?.map((it) => (
-          <CategoryCell
-            noteId={noteId}
-            item={it}
-            cellItems={cellItems}
-            categoryId={categoryId}
-            categoryLength={categoryLength}
-          />
-        ))}
+        {cellLength === 0 ? (
+          <span>글추가</span>
+        ) : (
+          categoryContent?.map((it) => (
+            <CategoryCell
+              noteId={noteId}
+              item={it}
+              cellItems={cellItems}
+              categoryId={categoryId}
+              categoryLength={categoryLength}
+            />
+          ))
+        )}
       </div>
     </div>
   );

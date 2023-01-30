@@ -57,7 +57,7 @@ export const addUserAsync = createAsyncThunk(
   "user/addUserAsync",
   async (user: User) => {
     console.log(user);
-    return await fetch("http://localhost:8080/user/join", {
+    return await fetch("http://localhost:8080/api/user/join", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -75,7 +75,7 @@ export const addUserAsync = createAsyncThunk(
 export const addUserNaverLoginAsync = createAsyncThunk(
   "user/addUserNaverLoginAsync",
   async (NaverUser: NaverUser) => {
-    return await fetch("http://localhost:8080/user/join", {
+    return await fetch("http://localhost:8080/api/user/join", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -94,7 +94,7 @@ export const addUserNaverLoginAsync = createAsyncThunk(
 export const snsLoginCheckAsync = createAsyncThunk(
   "user/snsLoginCheckAsync",
   async (NaverCheck: NaverCheck) => {
-    return await fetch("http://localhost:8080/naver/callback", {
+    return await fetch("http://localhost:8080/api/naver/callback", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -112,7 +112,7 @@ export const snsLoginCheckAsync = createAsyncThunk(
 export const setUserAsync = createAsyncThunk(
   "user/setUserAsync",
   async (user: loginUser) => {
-    return await fetch("http://localhost:8080/user/login", {
+    return await fetch("http://localhost:8080/api/user/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -129,7 +129,7 @@ export const setUserAsync = createAsyncThunk(
 export const emailCertificationAsync = createAsyncThunk(
   "user/emailCertificationAsync",
   async (email: string) => {
-    return await fetch("http://localhost:8080/user/mail-authentication", {
+    return await fetch("http://localhost:8080/api/user/mail-authentication", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -144,7 +144,7 @@ export const emailOverlapAsync = createAsyncThunk(
   "user/emailOverlapAsync",
   async (email: string) => {
     console.log(email);
-    return await fetch("http://localhost:8080/user/check-mail", {
+    return await fetch("http://localhost:8080/api/user/check-mail", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -158,7 +158,7 @@ export const emailOverlapAsync = createAsyncThunk(
 export const editUserNicknameAsync = createAsyncThunk(
   "user/editUserNicknameAsync",
   async (user: editNickname) => {
-    return await fetch("http://localhost:8080/user/edit-nickname", {
+    return await fetch("http://localhost:8080/api/user/edit-nickname", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -175,7 +175,7 @@ export const editUserNicknameAsync = createAsyncThunk(
 export const editUserPassWordAsync = createAsyncThunk(
   "user/editUserPassWordAsync",
   async (user: editPassword) => {
-    return await fetch("http://localhost:8080/user/edit-password", {
+    return await fetch("http://localhost:8080/api/user/edit-password", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -192,7 +192,7 @@ export const editUserPassWordAsync = createAsyncThunk(
 export const memberFindAsync = createAsyncThunk(
   "user/memberFindAsync",
   async (email: string) => {
-    return await fetch("http://localhost:8080/user/find-member", {
+    return await fetch("http://localhost:8080/api/user/find-member", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -206,7 +206,7 @@ export const memberFindAsync = createAsyncThunk(
 export const memberInviteAsync = createAsyncThunk(
   "user/memberInviteAsync",
   async (member: memberInvite) => {
-    return await fetch("http://localhost:8080/member/insert", {
+    return await fetch("http://localhost:8080/api/member/insert", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -220,7 +220,7 @@ export const memberInviteAsync = createAsyncThunk(
 export const memberShareAsync = createAsyncThunk(
   "user/memberShareAsync",
   async (noteId: any) => {
-    return await fetch("http://localhost:8080/user/memberlist", {
+    return await fetch("http://localhost:8080/api/user/memberlist", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -234,7 +234,7 @@ export const memberShareAsync = createAsyncThunk(
 export const memberExitAsync = createAsyncThunk(
   "user/memberExitAsync",
   async (member: memberInvite) => {
-    return await fetch("http://localhost:8080/member/delete", {
+    return await fetch("http://localhost:8080/api/member/delete", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -249,7 +249,7 @@ export const dahaengExitAsync = createAsyncThunk(
   "user/dahaengExitAsync",
   async (email: string) => {
     console.log(email);
-    return await fetch("http://localhost:8080/user/delete", {
+    return await fetch("http://localhost:8080/api/user/delete", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -264,7 +264,7 @@ export const findPasswordAsync = createAsyncThunk(
   "user/findPasswordAsync",
   async (email: string) => {
     console.log(email);
-    return await fetch("http://localhost:8080/user/make-randompassword", {
+    return await fetch("http://localhost:8080/api/user/make-randompassword", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -273,6 +273,18 @@ export const findPasswordAsync = createAsyncThunk(
     }).then((res) => res.json());
   }
 );
+
+export const zz = createAsyncThunk("user/zz", async () => {
+  return await fetch(
+    "../codev/project/projects/1?coLocationTag=&coPartTag=&coKeyword&coProcessTag=&coSortingTag=",
+    {
+      method: "get",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }
+  ).then((res) => res);
+});
 
 const userSlice = createSlice({
   name: "user",
@@ -311,6 +323,7 @@ const userSlice = createSlice({
       state.success = action.payload;
       state.snsNickname = false;
       state.userInfo = {};
+      state.result = "";
     },
     getUserInfoAtLocal(state) {
       state.userInfo = {
@@ -360,17 +373,17 @@ const userSlice = createSlice({
         state.success = true;
         state.userInfo = { ...action.payload.user };
         state.result = action.payload.result;
-        console.log(action.payload.result);
-        localStorage.setItem("email", action.payload.user.email);
-        localStorage.setItem("nickname", action.payload.user.nickname);
+        if (state.result == "SUCCESS") {
+          localStorage.setItem("email", action.payload.user.email);
+          localStorage.setItem("nickname", action.payload.user.nickname);
+        }
+
         // localStorage.setItem("id_token", action.payload.id_token);
         // localStorage.setItem(
         //   "notificationCheck",
         //   action.payload.notificationCheck
         // );
         // localStorage.setItem("password", action.payload.password);
-        state.success = true;
-        console.log(state.userInfo);
       })
       .addCase(memberFindAsync.fulfilled, (state, action) => {
         state.emailSelect = action.payload;
@@ -413,6 +426,9 @@ const userSlice = createSlice({
         console.log(action.payload);
       })
       .addCase(findPasswordAsync.fulfilled, (state, action) => {
+        console.log(action.payload);
+      })
+      .addCase(zz.fulfilled, (state, action) => {
         console.log(action.payload);
       });
   },

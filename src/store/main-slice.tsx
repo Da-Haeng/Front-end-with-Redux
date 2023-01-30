@@ -50,7 +50,7 @@ const MemosInitialState: MemosState = [
 export const getMemoListAsync = createAsyncThunk(
   "main/getMemoListAsync",
   async (userEmail: string) => {
-    return await fetch("http://localhost:8080/note/list", {
+    return await fetch("http://localhost:8080/api/note/list", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -67,7 +67,7 @@ export const addMemoAsync = createAsyncThunk(
   "main/addMemoAsync",
   async (memo: Memo) => {
     console.log(memo);
-    return await fetch("http://localhost:8080/note/insert", {
+    return await fetch("http://localhost:8080/api/note/insert", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -88,7 +88,7 @@ export const addMemoAsync = createAsyncThunk(
 export const editMemoAsync = createAsyncThunk(
   "main/editMemoAsync",
   async (updateMemo: any) => {
-    return await fetch("http://localhost:8080/note/update", {
+    return await fetch("http://localhost:8080/api/note/update", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -109,7 +109,7 @@ export const editMemoAsync = createAsyncThunk(
 export const editMemoColorAsync = createAsyncThunk(
   "main/editMemoColorAsync",
   async (updateMemo: any) => {
-    return await fetch("http://localhost:8080/note/update", {
+    return await fetch("http://localhost:8080/api/note/update", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -132,7 +132,7 @@ export const removeMemoAsync = createAsyncThunk(
   "main/removeMemoAsync",
   async (data: deleteProps) => {
     console.log(data.memoId);
-    return await fetch("http://localhost:8080/note/deleteCompletely", {
+    return await fetch("http://localhost:8080/api/note/deleteCompletely", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

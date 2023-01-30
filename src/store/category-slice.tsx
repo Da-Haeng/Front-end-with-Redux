@@ -239,7 +239,7 @@ const CategoryDataInitialState: CategoryState = [
 export const getCategoryListAsync = createAsyncThunk(
   "category/getCategoryListAsync",
   async (noteId: number) => {
-    return await fetch("http://localhost:8080/category/list", {
+    return await fetch("http://localhost:8080/api/category/list", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -255,7 +255,7 @@ export const getCategoryListAsync = createAsyncThunk(
 export const getCellListAsync = createAsyncThunk(
   "category/getCellListAsync",
   async (categoryId: number) => {
-    return await fetch("http://localhost:8080/category/getwithcell", {
+    return await fetch("http://localhost:8080/api/category/getwithcell", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -271,7 +271,7 @@ export const getCellListAsync = createAsyncThunk(
 export const addItemToCategoryAsync = createAsyncThunk(
   "category/addItemToCategoryAsync",
   async (noteId: any) => {
-    return await fetch("http://localhost:8080/category/insert", {
+    return await fetch("http://localhost:8080/api/category/insert", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -287,7 +287,7 @@ export const addItemToCategoryAsync = createAsyncThunk(
 export const removeItemToCategoryAsync = createAsyncThunk(
   "category/removeItemToCategoryAsync",
   async (categoryId: number) => {
-    return await fetch("http://localhost:8080/category/delete", {
+    return await fetch("http://localhost:8080/api/category/delete", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -304,7 +304,7 @@ export const editTitletoCategoryAsync = createAsyncThunk(
   "category/editTitletoCategoryAsync",
   async (category: Category) => {
     console.log(category);
-    return await fetch("http://localhost:8080/category/edit-title", {
+    return await fetch("http://localhost:8080/api/category/edit-title", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -321,7 +321,7 @@ export const editTitletoCategoryAsync = createAsyncThunk(
 export const addItemToCellAsync = createAsyncThunk(
   "category/addItemToCellAsync",
   async (cell: CellAdd) => {
-    return await fetch("http://localhost:8080/line/insert", {
+    return await fetch("http://localhost:8080/api/line/insert", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -339,7 +339,7 @@ export const editCellToCategoryAsync = createAsyncThunk(
   "category/editCellToCategoryAsync",
   async (cell: CellEdit) => {
     console.log(cell);
-    return await fetch("http://localhost:8080/line/update", {
+    return await fetch("http://localhost:8080/api/line/update", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -362,7 +362,7 @@ export const editCellToCategoryAsync = createAsyncThunk(
 export const deleteCellToCategoryAsync = createAsyncThunk(
   "category/deleteCellToCategoryAsync",
   async (cell: CellDelete) => {
-    return await fetch("http://localhost:8080/line/delete", {
+    return await fetch("http://localhost:8080/api/line/delete", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -379,7 +379,7 @@ export const deleteCellToCategoryAsync = createAsyncThunk(
 export const BulletPointAsync = createAsyncThunk(
   "category/BulletPointAsync",
   async (cell: BulletAdd) => {
-    return await fetch("http://localhost:8080/line/changetext", {
+    return await fetch("http://localhost:8080/api/line/changetext", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
