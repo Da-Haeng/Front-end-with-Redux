@@ -13,6 +13,7 @@ import {
   loginSuccess,
   emailOverlapAsync,
   findPasswordAsync,
+  FindPWtoLogin,
 } from "../../store/user-slice";
 import Swal from "sweetalert2";
 
@@ -113,15 +114,20 @@ const FindPW = () => {
 
   const handleLogin = () => {
     navigate("/login", { replace: true });
-    window.location.reload();
+    dispatch(FindPWtoLogin());
+  };
+
+  const mainClick = () => {
+    navigate("/", { replace: true });
+    dispatch(FindPWtoLogin());
   };
 
   return (
     <div className="tutorial">
       <div className="tutorial-header">
-        <Link to="/" className="tutorial-title">
+        <span onClick={mainClick} className="tutorial-title">
           DA:HAENG
-        </Link>
+        </span>
       </div>
       <div className="tutorial-content">
         <div className="tutorial-main">
@@ -147,7 +153,7 @@ const FindPW = () => {
 
             {findPWSuccess ? (
               <button className="loginBtn" onClick={handleLogin}>
-                로그인
+                로그인하러가기
               </button>
             ) : (
               <button className="loginBtn" onClick={handleSubmit}>

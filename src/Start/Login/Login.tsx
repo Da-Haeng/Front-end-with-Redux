@@ -21,29 +21,18 @@ const Login = () => {
     password: "",
   });
 
-  const { userInfo, error, success, result } = useSelector((state: any) => ({
-    userInfo: state.user.userInfo,
-    error: state.user.error,
-    success: state.user.success,
-    result: state.user.result,
-  }));
-
-  const [loginState, setLoginState] = useState(false);
-
-  // useEffect(() => {
-  //   if (Object.keys(userInfo).length > 1) {
-  //     console.log(userInfo);
-  //     dispatch(loginSuccess(true));
-  //     Swal.fire({ icon: "success", text: "로그인되었습니다.", width: 400 });
-  //     navigate("/main", { replace: true });
-  //   } else {
-  //     console.log("비었음");
-  //   }
-  //   console.log(result);
-  // }, [userInfo]);
+  const { userInfo, error, success, result, loginAlert } = useSelector(
+    (state: any) => ({
+      userInfo: state.user.userInfo,
+      error: state.user.error,
+      success: state.user.success,
+      result: state.user.result,
+      loginAlert: state.user.loginAlert,
+    })
+  );
 
   useEffect(() => {
-    console.log(result);
+    console.log(loginAlert);
 
     if (result == "SUCCESS") {
       console.log(userInfo);
@@ -56,16 +45,18 @@ const Login = () => {
         text: "비밀번호가 일치하지 않습니다.",
         width: 400,
       });
+      setLogin({ ...login, password: "" });
     } else if (result == "ID_FAIL") {
       Swal.fire({
         icon: "error",
         text: "가입하지 않은 이메일입니다.",
         width: 400,
       });
+      setLogin({ email: "", password: "" });
     } else {
       console.log("비었음");
     }
-  }, [loginState]);
+  }, [loginAlert]);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -99,7 +90,6 @@ const Login = () => {
         return false;
       } else {
         await dispatch(setUserAsync(login));
-        setLoginState(!loginState);
       }
     }
   };
@@ -108,12 +98,17 @@ const Login = () => {
     await dispatch(setUserAsync(login));
   };
 
+  const mainClick = () => {
+    navigate("/", { replace: true });
+    window.location.reload();
+  };
+
   return (
     <div className="tutorial">
       <div className="tutorial-header">
-        <Link to="/" className="tutorial-title">
+        <span className="tutorial-title" onClick={mainClick}>
           DA:HAENG
-        </Link>
+        </span>
       </div>
       <div className="tutorial-content">
         <div className="tutorial-main">

@@ -50,6 +50,7 @@ const initialState = {
   shareMember: [],
   snsNickname: false,
   result: "",
+  loginAlert: false,
 };
 
 // 회원추가
@@ -330,9 +331,7 @@ const userSlice = createSlice({
         ...state.userInfo,
         email: localStorage.getItem("email"),
         nickname: localStorage.getItem("nickname"),
-        // id_token: localStorage.getItem("id_token"),
-        // notificationCheck: localStorage.getItem("notificationCheck"),
-        // password: localStorage.getItem("password"),
+        userColor: localStorage.getItem("userColor"),
       };
       state.success = true;
     },
@@ -347,6 +346,9 @@ const userSlice = createSlice({
       };
       localStorage.setItem("email", "sshzi26@naver.com");
       localStorage.setItem("nickname", "융지");
+    },
+    FindPWtoLogin(state) {
+      state.emailCheck = "";
     },
   },
   extraReducers: (builder) => {
@@ -370,12 +372,15 @@ const userSlice = createSlice({
         console.log("catch");
       })
       .addCase(setUserAsync.fulfilled, (state, action) => {
-        state.success = true;
-        state.userInfo = { ...action.payload.user };
+        state.userInfo = action.payload.user;
+        console.log(state.userInfo);
         state.result = action.payload.result;
+        state.loginAlert = !state.loginAlert;
         if (state.result == "SUCCESS") {
           localStorage.setItem("email", action.payload.user.email);
           localStorage.setItem("nickname", action.payload.user.nickname);
+          localStorage.setItem("userColor", action.payload.user.userColor);
+          state.success = true;
         }
 
         // localStorage.setItem("id_token", action.payload.id_token);
@@ -441,6 +446,7 @@ export let {
   loginSuccess,
   logoutSuccess,
   Naver,
+  FindPWtoLogin,
 } = userSlice.actions;
 export const userActions = userSlice.actions;
 export default userSlice;

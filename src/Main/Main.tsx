@@ -39,6 +39,8 @@ const Main = () => {
   const [addTodo, setAddTodo] = useState(false);
   const [addCalender, setAddCalender] = useState(false);
 
+  console.log(addTodo);
+
   const { memoData } = useSelector((state: any) => ({
     memoData: state.main.memoData,
   }));
@@ -88,7 +90,6 @@ const Main = () => {
             onClick={() => setAddCalender(!addCalender)}
           />
         </div>
-        {/* {addCalender && <Calender />} */}
       </div>
     </div>
   );

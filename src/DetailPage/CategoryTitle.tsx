@@ -11,6 +11,7 @@ import {
   getCategoryListAsync,
   editTitletoCategoryAsync,
   CellItem,
+  addItemToCellAsync,
 } from "../store/category-slice";
 
 const CategoryTitle = (props: any) => {
@@ -24,6 +25,9 @@ const CategoryTitle = (props: any) => {
   );
 
   const cellItems: CellItem = useSelector((state: any) => state.category.cell);
+
+  const categoryContent = cellItems?.cell;
+  const cellLength = categoryContent?.length;
 
   const noteId = props.noteId;
   const categoryIndex = categoryData[0];
@@ -135,6 +139,9 @@ const CategoryTitle = (props: any) => {
     return <div></div>;
   }
 
+  const firstCellAddHandler = () => {
+    dispatch(addItemToCellAsync({ index: 0, categoryId: categoryId }));
+  };
   return (
     <>
       {categoryData && (
@@ -162,6 +169,11 @@ const CategoryTitle = (props: any) => {
           </div>
           <div className="CategorySetSmall">
             <div className="editTitle">
+              {cellLength == 0 ? (
+                <span onClick={firstCellAddHandler}>글 추가</span>
+              ) : (
+                <></>
+              )}
               <span onClick={editTitleHandler}>제목 수정</span>
               <span onClick={deleteCategoryHandler}>페이지 삭제</span>
             </div>

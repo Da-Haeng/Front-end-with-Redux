@@ -156,7 +156,6 @@ const mainSlice = createSlice({
     builder
       .addCase(getMemoListAsync.fulfilled, (state, action) => {
         state.memoData = action.payload;
-        console.log("aa");
       })
       .addCase(addMemoAsync.fulfilled, (state, action) => {
         state.update = !state.update;

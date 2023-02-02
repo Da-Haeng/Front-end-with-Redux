@@ -13,6 +13,8 @@ function Tutorial() {
     userInfo: state.user.userInfo,
   }));
 
+  const localEmail = localStorage.getItem("email")!;
+
   // const reloadHandler = async () => {
   //   //window.location.reload();
   //   await axios
@@ -35,14 +37,6 @@ function Tutorial() {
 
   const reloadHandler = async () => {
     window.location.reload();
-    // await axios
-    //   .get(
-    //     "/codev/project/projects/1?coLocationTag=&coPartTag=&coKeyword&coProcessTag=&coSortingTag="
-    //   )
-    //   .then((res) => {
-    //     console.log(res.data);
-    //   });
-    //dispatch(zz());
   };
 
   return (
@@ -55,17 +49,17 @@ function Tutorial() {
           DA:HAENG
         </span>
         <div className="header-button">
-          {success === false && (
+          {(success === false || !localEmail) && (
             <Link to="/signup" className="tutorial-btn">
               가입하기
             </Link>
           )}
-          {success === false && (
+          {(success === false || !localEmail) && (
             <Link to="/login" className="tutorial-btn">
               로그인
             </Link>
           )}
-          {success && (
+          {success && localEmail && (
             <Link to="/main" className="tutorial-btn">
               다행 메모장
             </Link>

@@ -47,6 +47,11 @@ export type CellAdd = {
   categoryId: number;
 };
 
+export type CellFirstAdd = {
+  index: number;
+  categoryId: number;
+};
+
 export type CellDelete = {
   lineId: number;
   categoryId: number;

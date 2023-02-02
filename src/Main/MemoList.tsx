@@ -46,8 +46,6 @@ const MemoList = () => {
 
   const update: boolean = useSelector((state: any) => state.main.update);
 
-  console.log(update);
-
   useEffect(() => {
     defaultData.user = userInfo.email;
     dispatch(getMemoListAsync(userInfo.email));
